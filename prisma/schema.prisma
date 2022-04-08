@@ -1,0 +1,41 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = "postgresql://postgres:lmfaolmfao@localhost:5432/postgres"
+}
+
+model User {
+  id           String  @unique
+  coins        Int     @default(0)
+  bankedCoins  Int     @default(0)
+  refreshToken String?
+  accessToken  String?
+}
+
+model Guild {
+  id        String   @unique
+  autorole  String?
+  modroles  String[]
+  modlog    String?
+  auditlog  String?
+  memberlog String?
+}
+
+model Marriges {
+  guildid  String   @unique
+  partners String[]
+  married  Boolean  @default(false)
+  divorced Boolean  @default(false)
+}
+
+model Bans {
+  guildid String
+  userid  String    @unique
+  reason  String
+  modid   String
+  time    DateTime?
+  timed   Boolean
+}

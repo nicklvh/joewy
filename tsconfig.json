@@ -1,0 +1,12 @@
+{
+  "extends": "@sapphire/ts-config/extra-strict-without-decorators",
+  "compilerOptions": {
+    "target": "ESNext",
+    "removeComments": true,
+    "outDir": "dist",
+    "rootDir": "src",
+    "tsBuildInfoFile": "dist/tsbuildinfo.json"
+  },
+  "include": ["src/**/*", "types"],
+  "exclude": ["node_modules"]
+}
