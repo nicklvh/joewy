@@ -3,20 +3,17 @@ import type { CommandInteraction } from "discord.js";
 import { fetch, FetchResultTypes } from "@sapphire/fetch";
 import { readFile } from "fs/promises";
 import { JoewyEmbed } from "../../structures";
+import { ApplyOptions } from "@sapphire/decorators";
 
+@ApplyOptions<Command.Options>({
+  description: "Shows a cute cat",
+  fullCategory: ["fun"],
+  chatInputCommand: {
+    register: true,
+    idHints: ["960537869133418556"],
+  },
+})
 export class CatCommand extends Command {
-  public constructor(context: Command.Context, options: Command.Options) {
-    super(context, {
-      ...options,
-      description: "Shows a cute cat",
-      fullCategory: ["fun"],
-      chatInputCommand: {
-        register: true,
-        idHints: ["960537869133418556"],
-      },
-    });
-  }
-
   public override async chatInputRun(interaction: CommandInteraction) {
     const raw: string = await readFile(
       `${process.cwd()}/assets/cats.json`,

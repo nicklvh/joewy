@@ -95,6 +95,13 @@
   resolved "https://registry.yarnpkg.com/@sapphire/async-queue/-/async-queue-1.3.1.tgz#9d861e626dbffae02d808e13f823d4510e450a78"
   integrity sha512-FFTlPOWZX1kDj9xCAsRzH5xEJfawg1lNoYAA+ecOWJMHOfiZYb1uXOI3ne9U4UILSEPwfE68p3T9wUHwIQfR0g==
 
+"@sapphire/decorators@^4.3.4":
+  version "4.3.4"
+  resolved "https://registry.yarnpkg.com/@sapphire/decorators/-/decorators-4.3.4.tgz#fc005d1d965964916777ecb27a1ba272a24c75b1"
+  integrity sha512-aQPlPqbALD8vl2oWAY4gmg2G8B7kjjWX7KVgdsscPqnHkVfQuIFKr9f8WSLZAkXNYC8SwhPNFKtZU0cOTznclA==
+  dependencies:
+    tslib "^2.3.1"
+
 "@sapphire/discord-utilities@^2.10.2", "@sapphire/discord-utilities@^2.10.3":
   version "2.10.3"
   resolved "https://registry.yarnpkg.com/@sapphire/discord-utilities/-/discord-utilities-2.10.3.tgz#1005c816bbf66e6ad99a0a882e95a8f622c79854"
@@ -167,6 +174,13 @@
     node-fetch "2.6.7"
     psl "^1.8.0"
     tslib "^2.3.1"
+
+"@sapphire/prettier-config@^1.4.2":
+  version "1.4.2"
+  resolved "https://registry.yarnpkg.com/@sapphire/prettier-config/-/prettier-config-1.4.2.tgz#3cbc29d99cb0eac5236701a3c8acf69c33ffee82"
+  integrity sha512-udZo9kW4/94Wst/Ha50qOHmgcLlpjwilPw1QLHqB0CBDqnnUOKufOKuY1/UZ71THTf7lKxrLdNZh2D4CRLtrMA==
+  dependencies:
+    prettier "^2.6.1"
 
 "@sapphire/ratelimits@^2.4.3":
   version "2.4.4"

@@ -1,16 +1,13 @@
+import { ApplyOptions } from "@sapphire/decorators";
 import { Command, ApplicationCommandRegistry } from "@sapphire/framework";
 import type { CommandInteraction, User } from "discord.js";
 import { JoewyEmbed, EconomyManager } from "../../structures";
 
+@ApplyOptions<Command.Options>({
+  description: "Check yours or somebody else's balance.",
+  fullCategory: ["economy"],
+})
 export class BalanceCommand extends Command {
-  public constructor(context: Command.Context, options: Command.Options) {
-    super(context, {
-      ...options,
-      description: "Check yours or somebody else's balance.",
-      fullCategory: ["economy"],
-    });
-  }
-
   public override registerApplicationCommands(
     registry: ApplicationCommandRegistry
   ): void {

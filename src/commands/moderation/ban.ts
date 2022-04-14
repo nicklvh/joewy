@@ -8,19 +8,16 @@ import type {
 } from "discord.js";
 import type { Guild } from "@prisma/client";
 import { JoewyEmbed } from "../../structures/JoewyEmbed";
+import { ApplyOptions } from "@sapphire/decorators";
 
+@ApplyOptions<Command.Options>({
+  description: "Ban a user from the server",
+  requiredClientPermissions: ["BAN_MEMBERS"],
+  requiredUserPermissions: ["BAN_MEMBERS"],
+  fullCategory: ["moderation"],
+  runIn: "GUILD_ANY",
+})
 export class BanCommand extends Command {
-  public constructor(context: Command.Context, options: Command.Options) {
-    super(context, {
-      ...options,
-      description: "Ban a user from the server",
-      requiredClientPermissions: ["BAN_MEMBERS"],
-      requiredUserPermissions: ["BAN_MEMBERS"],
-      fullCategory: ["moderation"],
-      runIn: "GUILD_ANY",
-    });
-  }
-
   public override registerApplicationCommands(
     registry: ApplicationCommandRegistry
   ): void {
@@ -107,7 +104,7 @@ export class BanCommand extends Command {
       .setTitle(`🔨 ${user.tag} banned`)
       .setThumbnail(user.displayAvatarURL({ size: 1024 }))
       .setDescription(
-        `🔨 \`${interaction.user.tag}\` banned \`${user.tag}\` for *${reason}*.`
+        `❯ Member: \`${user.tag}\` (\`${user.id}\`)\n❯ Reason: *${reason}*\n❯ Moderator: \`${interaction.user.tag}\` (\`${interaction.user.id}\``
       );
 
     return channel.send({ embeds: [modLogEmbed] });

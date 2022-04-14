@@ -3,20 +3,17 @@ import type { CommandInteraction } from "discord.js";
 import { fetch, FetchResultTypes } from "@sapphire/fetch";
 import { readFile } from "fs/promises";
 import { JoewyEmbed } from "../../structures";
+import { ApplyOptions } from "@sapphire/decorators";
 
+@ApplyOptions<Command.Options>({
+  description: "Shows a funny meme",
+  fullCategory: ["fun"],
+  chatInputCommand: {
+    register: true,
+    idHints: ["960537870588841995"],
+  },
+})
 export class MemeCommand extends Command {
-  public constructor(context: Command.Context, options: Command.Options) {
-    super(context, {
-      ...options,
-      description: "Shows a funny meme",
-      fullCategory: ["fun"],
-      chatInputCommand: {
-        register: true,
-        idHints: ["960537870588841995"],
-      },
-    });
-  }
-
   public override async chatInputRun(interaction: CommandInteraction) {
     const raw: string = await readFile(
       `${process.cwd()}/assets/memes.json`,

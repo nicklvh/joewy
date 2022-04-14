@@ -1,21 +1,19 @@
+import { ApplyOptions } from "@sapphire/decorators";
 import {
   Listener,
   ChatInputCommandDeniedPayload,
   UserError,
+  Events,
 } from "@sapphire/framework";
 import type { GuildMember } from "discord.js";
 import ms from "ms";
-import { JoewyEmbed } from "../../structures/JoewyEmbed";
+import { JoewyEmbed } from "../../structures";
 import { missingPerms } from "../../structures/missingPerms";
 
+@ApplyOptions<Listener.Options>({
+  event: Events.ChatInputCommandDenied,
+})
 export class ChatInputCommandDeniedListener extends Listener {
-  public constructor(context: Listener.Context, options: Listener.Options) {
-    super(context, {
-      ...options,
-      name: "chatInputCommandDenied",
-    });
-  }
-
   public async run(
     error: UserError,
     { interaction, context }: ChatInputCommandDeniedPayload
@@ -27,7 +25,7 @@ export class ChatInputCommandDeniedListener extends Listener {
       const embed: JoewyEmbed = new JoewyEmbed(false)
         .setTitle("Oops...")
         .setDescription(
-          `⏳ You're on cooldown! Please wait \`${ms(remaining as number, {
+          `⏳ You're on cool down! Please wait \`${ms(remaining as number, {
             long: true,
           })}\``
         );

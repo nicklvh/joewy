@@ -8,19 +8,16 @@ import type {
 } from "discord.js";
 import type { Guild } from "@prisma/client";
 import { JoewyEmbed } from "../../structures/JoewyEmbed";
+import { ApplyOptions } from "@sapphire/decorators";
 
+@ApplyOptions<Command.Options>({
+  description: "Kick a user from the server",
+  requiredClientPermissions: ["KICK_MEMBERS"],
+  requiredUserPermissions: ["KICK_MEMBERS"],
+  fullCategory: ["moderation"],
+  runIn: "GUILD_ANY",
+})
 export class KickCommand extends Command {
-  public constructor(context: Command.Context, options: Command.Options) {
-    super(context, {
-      ...options,
-      description: "Kick a user from the server",
-      requiredClientPermissions: ["KICK_MEMBERS"],
-      requiredUserPermissions: ["KICK_MEMBERS"],
-      fullCategory: ["moderation"],
-      runIn: "GUILD_ANY",
-    });
-  }
-
   public override registerApplicationCommands(
     registry: ApplicationCommandRegistry
   ): void {
@@ -89,13 +86,12 @@ export class KickCommand extends Command {
 
     if (!channel) return;
 
-    const modLogEmbed: JoewyEmbed = new JoewyEmbed()
+    const modlogEmbed: JoewyEmbed = new JoewyEmbed(true)
       .setTitle(`🔨 ${user.tag} kicked`)
-      .setThumbnail(user.displayAvatarURL({ size: 1024 }))
       .setDescription(
-        `🔨 \`${interaction.user.tag}\` kicked \`${user.tag}\` for *${reason}*.`
+        `❯ Member: \`${user.tag}\` (${user.id})\`\n❯ Reason: *${reason}*\n❯ Moderator: \`${interaction.user.tag}\` (\`${interaction.user.id}\`)`
       );
 
-    return channel.send({ embeds: [modLogEmbed] });
+    return channel.send({ embeds: [modlogEmbed] });
   }
 }

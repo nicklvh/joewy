@@ -1,23 +1,20 @@
+import { ApplyOptions } from "@sapphire/decorators";
 import { Command } from "@sapphire/framework";
 import { Time } from "@sapphire/time-utilities";
 import type { CommandInteraction } from "discord.js";
 import { readFile } from "fs/promises";
 import { JoewyEmbed, EconomyManager } from "../../structures";
 
+@ApplyOptions<Command.Options>({
+  description: "Work for some coins.",
+  chatInputCommand: {
+    register: true,
+    idHints: ["960239802475749457"],
+  },
+  cooldownDelay: Time.Minute * 15,
+  fullCategory: ["economy"],
+})
 export class WorkCommand extends Command {
-  public constructor(context: Command.Context, options: Command.Options) {
-    super(context, {
-      ...options,
-      description: "Work for some coins.",
-      chatInputCommand: {
-        register: true,
-        idHints: ["960239802475749457"],
-      },
-      cooldownDelay: Time.Minute * 15,
-      fullCategory: ["economy"],
-    });
-  }
-
   public override async chatInputRun(
     interaction: CommandInteraction
   ): Promise<void> {

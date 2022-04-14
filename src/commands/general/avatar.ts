@@ -1,16 +1,13 @@
 import { Command, ApplicationCommandRegistry } from "@sapphire/framework";
 import type { CommandInteraction, User } from "discord.js";
 import { JoewyEmbed } from "../../structures/JoewyEmbed";
+import { ApplyOptions } from "@sapphire/decorators";
 
+@ApplyOptions<Command.Options>({
+  description: "Get the avatar of a user.",
+  fullCategory: ["general"],
+})
 export class AvatarCommand extends Command {
-  public constructor(context: Command.Context, options: Command.Options) {
-    super(context, {
-      ...options,
-      description: "Get the avatar of a user.",
-      fullCategory: ["general"],
-    });
-  }
-
   public override registerApplicationCommands(
     registry: ApplicationCommandRegistry
   ): void {

@@ -22,6 +22,7 @@ model Guild {
   modlog    String?
   auditlog  String?
   memberlog String?
+  caseid Int? @default(0)
 }
 
 model Marriges {
@@ -38,4 +39,12 @@ model Bans {
   modid   String
   time    DateTime?
   timed   Boolean
+}
+
+model Warns {
+    guildid String
+    userid String
+    reason String
+    time DateTime @unique
+    modid String
 }
