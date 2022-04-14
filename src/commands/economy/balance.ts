@@ -34,14 +34,16 @@ export class BalanceCommand extends Command {
 
     const balance: number = await EconomyManager.getBalance(user.id);
 
-    const embed: JoewyEmbed = new JoewyEmbed(false)
-      .setTitle(`Balance for ${user.tag}`)
+    const embed: JoewyEmbed = new JoewyEmbed(true)
+      .setAuthor({
+        name: `Balance for ${user.tag}`,
+        iconURL: interaction.user.displayAvatarURL(),
+      })
       .setDescription(
-        `Coins: \`${balance}\`\nBanked Coins: \`${await EconomyManager.getBankedBalance(
+        `**❯ Coins:** \`${balance}\`\n**❯ Bank:** \`${await EconomyManager.getBankedBalance(
           user.id
         )}\``
-      )
-      .setThumbnail(user.displayAvatarURL());
+      );
 
     return interaction.reply({ embeds: [embed] });
   }

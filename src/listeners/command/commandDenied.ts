@@ -23,7 +23,10 @@ export class ChatInputCommandDeniedListener extends Listener {
       const { remaining } = error.context as any;
 
       const embed: JoewyEmbed = new JoewyEmbed(false)
-        .setTitle("Oops...")
+        .setAuthor({
+          name: "Oops...",
+          iconURL: interaction.user.displayAvatarURL(),
+        })
         .setDescription(
           `⏳ You're on cool down! Please wait \`${ms(remaining as number, {
             long: true,
@@ -33,7 +36,10 @@ export class ChatInputCommandDeniedListener extends Listener {
       return interaction.reply({ embeds: [embed], ephemeral: true });
     } else if (error.identifier === "preconditionGuildOnly") {
       const embed: JoewyEmbed = new JoewyEmbed(false)
-        .setTitle("Oops...")
+        .setAuthor({
+          name: "Oops...",
+          iconURL: interaction.user.displayAvatarURL(),
+        })
         .setDescription(
           `🔨 The \`${context.commandName}\` command can only be used in a server.`
         );
@@ -43,7 +49,10 @@ export class ChatInputCommandDeniedListener extends Listener {
       const { missing } = error.context as any;
 
       const embed: JoewyEmbed = new JoewyEmbed(false)
-        .setTitle("Oops...")
+        .setAuthor({
+          name: "Oops...",
+          iconURL: interaction.user.displayAvatarURL(),
+        })
         .setDescription(
           `⚠ You're missing the following permissions: ${missingPerms(
             interaction.member as GuildMember,
@@ -56,7 +65,10 @@ export class ChatInputCommandDeniedListener extends Listener {
       const { missing } = error.context as any;
 
       const embed: JoewyEmbed = new JoewyEmbed(false)
-        .setTitle("Oops...")
+        .setAuthor({
+          name: "Oops...",
+          iconURL: interaction.user.displayAvatarURL(),
+        })
         .setDescription(
           `⚠ I'm missing the following permissions: ${missingPerms(
             interaction.guild?.me as GuildMember,

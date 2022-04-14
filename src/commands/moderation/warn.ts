@@ -58,7 +58,10 @@ export class WarnCommand extends Command {
     });
 
     const embed: JoewyEmbed = new JoewyEmbed(true)
-      .setTitle(`Warned ${user.tag}`)
+      .setAuthor({
+        name: `🔨 Warned ${user.tag}`,
+        iconURL: user.displayAvatarURL(),
+      })
       .setDescription(`Reason: *${reason}*`)
       .setThumbnail(user.displayAvatarURL());
 
@@ -76,8 +79,11 @@ export class WarnCommand extends Command {
       return;
     }
 
-    const userEmbed: JoewyEmbed = new JoewyEmbed()
-      .setTitle(`🔨 ${user.tag} warned`)
+    const userEmbed: JoewyEmbed = new JoewyEmbed(true)
+      .setAuthor({
+        name: `🔨 ${user.tag} warned`,
+        iconURL: user.displayAvatarURL(),
+      })
       .setThumbnail(user.displayAvatarURL({ size: 1024 }))
       .setDescription(
         `🔨 You have been warned in \`${
@@ -96,9 +102,12 @@ export class WarnCommand extends Command {
     if (!modlog) return;
 
     const modlogEmbed: JoewyEmbed = new JoewyEmbed(true)
-      .setTitle(`🔨 ${user.tag} warned`)
+      .setAuthor({
+        name: `🔨 ${user.tag} warned`,
+        iconURL: user.displayAvatarURL(),
+      })
       .setDescription(
-        `❯ Member: \`${user.tag}\` (${user.id})\`\n❯ Reason: *${reason}*\n❯ Moderator: \`${interaction.user.tag}\` (\`${interaction.user.id}\`)`
+        `**❯ Member:** \`${user.tag}\` (${user.id})\`\n**❯ Reason:** *${reason}*\n**❯ Moderator:** \`${interaction.user.tag}\` (\`${interaction.user.id}\`)`
       );
 
     await modlog.send({ embeds: [modlogEmbed] });

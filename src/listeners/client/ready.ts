@@ -1,7 +1,7 @@
 import type { Bans } from "@prisma/client";
 import { ApplyOptions } from "@sapphire/decorators";
 import { Events, Listener } from "@sapphire/framework";
-import type { Guild, GuildMember } from "discord.js";
+import type { Guild } from "discord.js";
 
 @ApplyOptions<Listener.Options>({
   event: Events.ClientReady,
@@ -20,9 +20,16 @@ export class ReadyListener extends Listener {
         );
         if (!guild) return;
 
-        const member: GuildMember = await guild.members.fetch(ban.userid);
+        if (ban.time! < new Date()) {
+          const wait =
+            ban.time!.getMilliseconds() - new Date().getMilliseconds();
 
-        await guild.bans.remove(member, "Time up");
+          setTimeout(async () => {
+            await guild.bans.remove(ban.userid, "Time up");
+          }, wait);
+        }
+
+        await guild.bans.remove(ban.userid, "Time up");
       });
     });
 

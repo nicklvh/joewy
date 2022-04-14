@@ -57,9 +57,12 @@ export class AvatarCommand extends Command {
     const format: any = interaction.options.getString("format") || "png";
     const size: any = interaction.options.getInteger("size") || 1024;
 
-    const embed: JoewyEmbed = new JoewyEmbed()
+    const embed: JoewyEmbed = new JoewyEmbed(true)
       .setImage(user.displayAvatarURL({ size, format }))
-      .setTitle(`${user.tag}'s avatar`);
+      .setAuthor({
+        name: `${user.tag}'s avatar`,
+        iconURL: user.displayAvatarURL(),
+      });
 
     return interaction.reply({ embeds: [embed] });
   }

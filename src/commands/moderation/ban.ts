@@ -37,6 +37,11 @@ export class BanCommand extends Command {
               .setName("reason")
               .setDescription("The reason for the ban")
               .setRequired(false)
+          )
+          .addNumberOption((builder) =>
+            builder
+              .setName("time")
+              .setDescription(`The amount of time to ban this user for`)
           ),
       { idHints: ["960134829033287700"] }
     );
@@ -62,8 +67,11 @@ export class BanCommand extends Command {
       },
     });
 
-    const embed: JoewyEmbed = new JoewyEmbed()
-      .setTitle(`🔨 ${user.tag} banned`)
+    const embed: JoewyEmbed = new JoewyEmbed(true)
+      .setAuthor({
+        name: `🔨 ${user.tag} banned`,
+        iconURL: user.displayAvatarURL(),
+      })
       .setThumbnail(user.displayAvatarURL({ size: 1024 }))
       .setDescription(
         `🔨 You have banned \`${user.tag}\` from the server for *${reason}*.`
@@ -71,8 +79,11 @@ export class BanCommand extends Command {
 
     await interaction.reply({ embeds: [embed] });
 
-    const userEmbed: JoewyEmbed = new JoewyEmbed()
-      .setTitle(`🔨 ${user.tag} banned`)
+    const userEmbed: JoewyEmbed = new JoewyEmbed(true)
+      .setAuthor({
+        name: `🔨 ${user.tag} banned`,
+        iconURL: user.displayAvatarURL(),
+      })
       .setThumbnail(user.displayAvatarURL({ size: 1024 }))
       .setDescription(
         `🔨 You have been banned from \`${
@@ -100,11 +111,14 @@ export class BanCommand extends Command {
 
     if (!channel) return;
 
-    const modLogEmbed: JoewyEmbed = new JoewyEmbed()
-      .setTitle(`🔨 ${user.tag} banned`)
+    const modLogEmbed: JoewyEmbed = new JoewyEmbed(true)
+      .setAuthor({
+        name: `🔨 ${user.tag} banned`,
+        iconURL: user.displayAvatarURL(),
+      })
       .setThumbnail(user.displayAvatarURL({ size: 1024 }))
       .setDescription(
-        `❯ Member: \`${user.tag}\` (\`${user.id}\`)\n❯ Reason: *${reason}*\n❯ Moderator: \`${interaction.user.tag}\` (\`${interaction.user.id}\``
+        `**❯ Member:** \`${user.tag}\` (\`${user.id}\`)\n**❯ Reason:** *${reason}*\n**❯ Moderator:** \`${interaction.user.tag}\` (\`${interaction.user.id}\``
       );
 
     return channel.send({ embeds: [modLogEmbed] });

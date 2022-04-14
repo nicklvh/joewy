@@ -32,8 +32,11 @@ export class MemeCommand extends Command {
     if (!children)
       return interaction.reply({
         embeds: [
-          new JoewyEmbed(false)
-            .setTitle("Oops...")
+          new JoewyEmbed(true)
+            .setAuthor({
+              name: "Oops...",
+              iconURL: interaction.user.displayAvatarURL(),
+            })
             .setDescription("Something went wrong! Try again later"),
         ],
       });
@@ -41,8 +44,11 @@ export class MemeCommand extends Command {
     const selected: any =
       children[Math.floor(Math.random() * children.length)].data!;
 
-    const embed: JoewyEmbed = new JoewyEmbed()
-      .setTitle(`📷 ${selected.title}`)
+    const embed: JoewyEmbed = new JoewyEmbed(true)
+      .setAuthor({
+        name: `📷 ${selected.title}`,
+        iconURL: interaction.user.displayAvatarURL(),
+      })
       .setImage(selected.url ? selected.url : selected.thumbnail)
       .setFooter({
         text: `Provided to you by r/${selected.subreddit} | 👍 ${selected.ups} 👎 ${selected.downs}`,
@@ -52,7 +58,10 @@ export class MemeCommand extends Command {
       return interaction.reply({
         embeds: [
           new JoewyEmbed(false)
-            .setTitle("Oops...")
+            .setAuthor({
+              name: "Oops...",
+              iconURL: interaction.user.displayAvatarURL(),
+            })
             .setDescription("Something went wrong! Try again later"),
         ],
       });

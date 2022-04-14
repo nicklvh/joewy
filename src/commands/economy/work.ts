@@ -32,11 +32,18 @@ export class WorkCommand extends Command {
 
     await EconomyManager.addCoins(interaction.user.id, coins);
 
-    const embed: JoewyEmbed = new JoewyEmbed(false)
+    const embed: JoewyEmbed = new JoewyEmbed(true)
+      .setAuthor({
+        name: "Tiring...",
+        iconURL: interaction.user.displayAvatarURL(),
+      })
       .setDescription(
-        `💰 You worked as a \`${job}\` and earned ${coins} coins!`
-      )
-      .setThumbnail(interaction.user.displayAvatarURL());
+        `💰 You worked as a \`${job}\` and earned ${coins} coins!\n\n**❯ Coins:** ${await EconomyManager.getBalance(
+          interaction.user.id
+        )}\n**❯ Bank:** ${await EconomyManager.getBankedBalance(
+          interaction.user.id
+        )}`
+      );
 
     return interaction.reply({ embeds: [embed] });
   }

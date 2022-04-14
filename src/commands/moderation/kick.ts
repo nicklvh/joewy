@@ -50,8 +50,11 @@ export class KickCommand extends Command {
     const reason: string =
       interaction.options.getString("reason") || "No reason provided";
 
-    const embed: JoewyEmbed = new JoewyEmbed()
-      .setTitle(`🔨 ${user.tag} kicked`)
+    const embed: JoewyEmbed = new JoewyEmbed(true)
+      .setAuthor({
+        name: `🔨 ${user.tag} kicked`,
+        iconURL: user.displayAvatarURL(),
+      })
       .setThumbnail(user.displayAvatarURL({ size: 1024 }))
       .setDescription(
         `🔨 You have kicked \`${user.tag}\` from the server for *${reason}*.`
@@ -59,8 +62,11 @@ export class KickCommand extends Command {
 
     await interaction.reply({ embeds: [embed] });
 
-    const userEmbed: JoewyEmbed = new JoewyEmbed()
-      .setTitle(`🔨 ${user.tag} kicked`)
+    const userEmbed: JoewyEmbed = new JoewyEmbed(true)
+      .setAuthor({
+        name: `🔨 ${user.tag} kicked`,
+        iconURL: user.displayAvatarURL(),
+      })
       .setThumbnail(user.displayAvatarURL({ size: 1024 }))
       .setDescription(
         `🔨 You have been kicked from \`${
@@ -87,9 +93,12 @@ export class KickCommand extends Command {
     if (!channel) return;
 
     const modlogEmbed: JoewyEmbed = new JoewyEmbed(true)
-      .setTitle(`🔨 ${user.tag} kicked`)
+      .setAuthor({
+        name: `🔨 ${user.tag} kicked`,
+        iconURL: user.displayAvatarURL(),
+      })
       .setDescription(
-        `❯ Member: \`${user.tag}\` (${user.id})\`\n❯ Reason: *${reason}*\n❯ Moderator: \`${interaction.user.tag}\` (\`${interaction.user.id}\`)`
+        `**❯ Member:** \`${user.tag}\` (${user.id})\`\n**❯ Reason:** *${reason}*\n**❯ Moderator:** \`${interaction.user.tag}\` (\`${interaction.user.id}\`)`
       );
 
     return channel.send({ embeds: [modlogEmbed] });

@@ -11,7 +11,7 @@ import { Time } from "@sapphire/time-utilities";
 export class Client extends SapphireClient {
   public constructor() {
     super({
-      intents: ["GUILDS", "GUILD_MESSAGES", "GUILD_MEMBERS"],
+      intents: ["GUILDS", "GUILD_MESSAGES", "GUILD_MEMBERS", "GUILD_PRESENCES"],
       partials: ["MESSAGE", "GUILD_MEMBER", "USER", "CHANNEL", "REACTION"],
       presence: {
         status: "idle",
@@ -42,7 +42,7 @@ export class Client extends SapphireClient {
         prefix: "api/",
         origin: "*",
         listenOptions: {
-          port: 3000,
+          port: 4444,
         },
       },
     });

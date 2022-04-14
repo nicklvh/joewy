@@ -13,7 +13,7 @@ import { ApplyOptions } from "@sapphire/decorators";
 })
 export class PingCommand extends Command {
   public override chatInputRun(interaction: CommandInteraction): Promise<void> {
-    const embed: JoewyEmbed = new JoewyEmbed(false).setDescription(
+    const embed: JoewyEmbed = new JoewyEmbed().setDescription(
       `Pong! Latency is \`${this.container.client.ws.ping}ms\``
     );
 

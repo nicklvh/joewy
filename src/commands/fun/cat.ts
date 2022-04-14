@@ -33,7 +33,10 @@ export class CatCommand extends Command {
       return interaction.reply({
         embeds: [
           new JoewyEmbed(false)
-            .setTitle("Oops...")
+            .setAuthor({
+              name: "Oops...",
+              iconURL: interaction.user.displayAvatarURL(),
+            })
             .setDescription("Something went wrong! Try again later"),
         ],
       });
@@ -41,7 +44,7 @@ export class CatCommand extends Command {
     const selected: any =
       children[Math.floor(Math.random() * children.length)].data!;
 
-    const embed: JoewyEmbed = new JoewyEmbed()
+    const embed: JoewyEmbed = new JoewyEmbed(true)
       .setTitle(`📷 ${selected.title}`)
       .setImage(selected.url ? selected.url : selected.thumbnail)
       .setFooter({
@@ -52,7 +55,10 @@ export class CatCommand extends Command {
       return interaction.reply({
         embeds: [
           new JoewyEmbed(false)
-            .setTitle("Oops...")
+            .setAuthor({
+              name: "Oops...",
+              iconURL: interaction.user.displayAvatarURL(),
+            })
             .setDescription("Something went wrong! Try again later"),
         ],
       });

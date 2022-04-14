@@ -37,24 +37,31 @@ export class DepositCommand extends Command {
       amount!
     );
 
-    const embed: JoewyEmbed = new JoewyEmbed();
+    const embed: JoewyEmbed = new JoewyEmbed(true);
 
     if (!result) {
-      embed.setTitle("Oops...").setDescription(`You don't have enough coins!`);
+      embed
+        .setAuthor({
+          name: "Oops...",
+          iconURL: interaction.user.displayAvatarURL(),
+        })
+        .setDescription(`You don't have enough coins!`);
 
       return interaction.reply({ embeds: [embed] });
     }
 
     embed
-      .setTitle(`Deposit for ${interaction.user.tag}`)
+      .setAuthor({
+        name: `Deposit for ${interaction.user.tag}`,
+        iconURL: interaction.user.displayAvatarURL(),
+      })
       .setDescription(
-        `Deposited \`${amount}\` coins into your bank.\n\nYou now have \`${await EconomyManager.getBalance(
+        `Deposited \`${amount}\` coins into your bank.\n\n**❯ Coins:** \`${await EconomyManager.getBalance(
           interaction.user.id
-        )}\` coins\nBanked Balance: \`${await EconomyManager.getBankedBalance(
+        )}\`\n**❯ Bank:** \`${await EconomyManager.getBankedBalance(
           interaction.user.id
         )}\``
-      )
-      .setThumbnail(interaction.user.displayAvatarURL());
+      );
 
     return interaction.reply({ embeds: [embed] });
   }

@@ -38,22 +38,28 @@ export class WithdrawCommand extends Command {
       amount!
     );
 
-    const embed: JoewyEmbed = new JoewyEmbed();
+    const embed: JoewyEmbed = new JoewyEmbed(true);
 
     if (!result) {
       embed
-        .setTitle("Oops...")
+        .setAuthor({
+          name: "Oops...",
+          iconURL: interaction.user.displayAvatarURL(),
+        })
         .setDescription(`You don't have enough coins in your bank!`);
 
       return interaction.reply({ embeds: [embed] });
     }
 
     embed
-      .setTitle(`Withdraw for ${interaction.user.tag}`)
+      .setAuthor({
+        name: `Withdrawal for ${interaction.user.tag}`,
+        iconURL: interaction.user.displayAvatarURL(),
+      })
       .setDescription(
-        `Withdrew \`${amount}\` coins from your bank.\n\nYou now have \`${await EconomyManager.getBalance(
+        `Withdrew \`${amount}\` coins from your bank.\n\n**❯ Coins:** \`${await EconomyManager.getBalance(
           interaction.user.id
-        )}\` coins\nBanked Balance: \`${await EconomyManager.getBankedBalance(
+        )}\`\n**❯ Bank:** \`${await EconomyManager.getBankedBalance(
           interaction.user.id
         )}\``
       )
