@@ -43,10 +43,6 @@ export class ServerInfoCommand extends Command {
       interaction.guild.ownerId
     );
 
-    console.log(
-      `<t:${interaction.guild?.createdTimestamp.toString().substring(0, 11)}:D>`
-    );
-
     const embed = new JoewyEmbed()
       .setAuthor({
         name: `Server Information | ${interaction.guild!.name}`,
