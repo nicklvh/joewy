@@ -18,7 +18,6 @@ export class ChatInputCommandDeniedListener extends Listener {
     error: UserError,
     { interaction, context }: ChatInputCommandDeniedPayload
   ): Promise<void> {
-    console.log(error.identifier);
     if (error.identifier === "preconditionCooldown") {
       const { remaining } = error.context as any;
 
@@ -28,7 +27,7 @@ export class ChatInputCommandDeniedListener extends Listener {
           iconURL: interaction.user.displayAvatarURL(),
         })
         .setDescription(
-          `⏳ You're on cool down! Please wait \`${ms(remaining as number, {
+          `You're on cool down! Please wait \`${ms(remaining as number, {
             long: true,
           })}\``
         );
@@ -41,7 +40,7 @@ export class ChatInputCommandDeniedListener extends Listener {
           iconURL: interaction.user.displayAvatarURL(),
         })
         .setDescription(
-          `🔨 The \`${context.commandName}\` command can only be used in a server.`
+          `The \`${context.commandName}\` command can only be used in a server.`
         );
 
       return interaction.reply({ embeds: [embed], ephemeral: true });
@@ -54,7 +53,7 @@ export class ChatInputCommandDeniedListener extends Listener {
           iconURL: interaction.user.displayAvatarURL(),
         })
         .setDescription(
-          `⚠ You're missing the following permissions: ${missingPerms(
+          `You're missing the following permissions: ${missingPerms(
             interaction.member as GuildMember,
             missing
           )}`
@@ -70,7 +69,7 @@ export class ChatInputCommandDeniedListener extends Listener {
           iconURL: interaction.user.displayAvatarURL(),
         })
         .setDescription(
-          `⚠ I'm missing the following permissions: ${missingPerms(
+          `I'm missing the following permissions: ${missingPerms(
             interaction.guild?.me as GuildMember,
             missing
           )}`

@@ -45,7 +45,9 @@ export class CatCommand extends Command {
       children[Math.floor(Math.random() * children.length)].data!;
 
     const embed: JoewyEmbed = new JoewyEmbed(true)
-      .setTitle(`📷 ${selected.title}`)
+      .setAuthor({
+        name: `📷 ${selected.title}`,
+      })
       .setImage(selected.url ? selected.url : selected.thumbnail)
       .setFooter({
         text: `Provided to you by r/${selected.subreddit} | 👍 ${selected.ups} 👎 ${selected.downs}`,

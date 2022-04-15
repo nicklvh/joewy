@@ -95,9 +95,9 @@ export class WarnCommand extends Command {
 
     if (!guild.modlog) return;
 
-    const modlog = interaction.guild!.channels.fetch(
+    const modlog = (await interaction.guild!.channels.fetch(
       guild.modlog
-    ) as unknown as TextChannel;
+    )) as TextChannel;
 
     if (!modlog) return;
 

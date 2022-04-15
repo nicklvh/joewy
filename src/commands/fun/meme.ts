@@ -47,7 +47,6 @@ export class MemeCommand extends Command {
     const embed: JoewyEmbed = new JoewyEmbed(true)
       .setAuthor({
         name: `📷 ${selected.title}`,
-        iconURL: interaction.user.displayAvatarURL(),
       })
       .setImage(selected.url ? selected.url : selected.thumbnail)
       .setFooter({
