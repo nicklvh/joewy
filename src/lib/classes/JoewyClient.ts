@@ -1,21 +1,33 @@
-import { SapphireClient } from "@sapphire/framework";
-import { join } from "path";
-import { connect } from "mongoose";
+import {
+  ApplicationCommandRegistries,
+  RegisterBehavior,
+  SapphireClient,
+} from '@sapphire/framework';
+import { join } from 'path';
+import { connect } from 'mongoose';
 
 export class JoewyClient extends SapphireClient {
   public constructor() {
     super({
-      intents: ["Guilds"],
-      baseUserDirectory: join(process.cwd(), "dist", "core"),
+      intents: ['Guilds'],
+      baseUserDirectory: join(process.cwd(), 'dist', 'core'),
     });
   }
 
-  public async start(token: string, databaseURI: string): Promise<string> {
+  public async start(token: string, databaseURI: string) {
+    ApplicationCommandRegistries.setDefaultBehaviorWhenNotIdentical(
+      RegisterBehavior.Overwrite,
+    );
+
+    await super.login(token);
     await this.dbInit(databaseURI);
-    return super.login(token);
   }
 
-  private dbInit(databaseURI: string) {
-    return connect(databaseURI);
+  private async dbInit(databaseURI: string) {
+    try {
+      return await connect(databaseURI);
+    } catch (error) {
+      return this.logger.error(error);
+    }
   }
 }
