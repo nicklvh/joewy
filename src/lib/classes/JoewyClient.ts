@@ -1,16 +1,26 @@
 import {
   ApplicationCommandRegistries,
+  BucketScope,
+  LogLevel,
   RegisterBehavior,
   SapphireClient,
 } from '@sapphire/framework';
 import { join } from 'path';
 import { connect } from 'mongoose';
+import { Time } from '@sapphire/time-utilities';
 
 export class JoewyClient extends SapphireClient {
   public constructor() {
     super({
       intents: ['Guilds'],
       baseUserDirectory: join(process.cwd(), 'dist', 'core'),
+      logger: {
+        level: LogLevel.Debug,
+      },
+      defaultCooldown: {
+        scope: BucketScope.User,
+        delay: Time.Second * 5,
+      },
     });
   }
 
