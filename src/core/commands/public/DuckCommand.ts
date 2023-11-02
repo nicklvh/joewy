@@ -25,7 +25,9 @@ export class DuckCommand extends Command {
     );
   }
 
-  public async run(interaction: Command.ChatInputCommandInteraction) {
+  public override async chatInputRun(
+    interaction: Command.ChatInputCommandInteraction,
+  ) {
     const data = await fetch<DuckResponse>(
       'https://random-d.uk/api/v2/quack',
       FetchResultTypes.JSON,
