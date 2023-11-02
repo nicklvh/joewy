@@ -4,5 +4,7 @@
 
 Joewy will replace all your bots in your discord server with it's **intense list of features**, such as:
 
-- **Customizable moderation system:** to moderate your server, and stop rule breakers
-- **Economy system:** for fun with all your discord members
+- **Moderation System:** to moderate your server, and stop rule breakers
+- **Economy System:** for fun with all your discord members
+- **Pet Commands:** to look at cute animals in awe
+- **Starboard:** show ⭐ messages
