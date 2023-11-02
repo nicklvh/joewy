@@ -1,6 +1,6 @@
 {
   "name": "joewy",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Custom discord bot made in Sapphire JS.",
   "main": "dist/index.js",
   "scripts": {
@@ -31,6 +31,7 @@
   "dependencies": {
     "@sapphire/fetch": "^2.4.1",
     "@sapphire/framework": "^4.7.2",
+    "@sapphire/time-utilities": "^1.7.10",
     "discord.js": "^14.13.0",
     "dotenv": "^16.3.1",
     "mongoose": "^8.0.0"
