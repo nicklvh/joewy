@@ -1,13 +1,12 @@
-import { Listener } from "@sapphire/framework";
-import mongoose from "mongoose";
+import { Listener } from '@sapphire/framework';
+import { connection } from 'mongoose';
 
-// @FIXME: This is not working
 export class ConnectingListener extends Listener {
   public constructor(context: Listener.Context, options: Listener.Options) {
     super(context, {
       ...options,
-      emitter: mongoose.connection,
-      event: "connected",
+      emitter: connection,
+      event: 'connected',
     });
   }
 
