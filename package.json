@@ -1,0 +1,37 @@
+{
+  "name": "joewy",
+  "version": "1.0.0",
+  "description": "Custom discord bot made in Sapphire JS.",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "tsc && cls && node dist/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nicklvh/joewy.git"
+  },
+  "keywords": [
+    "discord-bot",
+    "sapphirejs",
+    "discordjs"
+  ],
+  "author": "nicklvh",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/nicklvh/joewy/issues"
+  },
+  "homepage": "https://github.com/nicklvh/joewy",
+  "devDependencies": {
+    "@sapphire/eslint-config": "^5.0.2",
+    "@sapphire/ts-config": "^5.0.0",
+    "@types/node": "^20.8.10",
+    "typescript": "^5.2.2"
+  },
+  "dependencies": {
+    "@sapphire/framework": "^4.7.2",
+    "discord.js": "^14.13.0",
+    "dotenv": "^16.3.1",
+    "mongoose": "^8.0.0"
+  }
+}
