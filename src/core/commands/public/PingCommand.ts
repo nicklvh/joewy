@@ -27,7 +27,7 @@ export class PingCommand extends Command {
         new EmbedBuilder()
           .setAuthor({
             name: 'Pong! 🏓',
-            iconURL: interaction.user.avatarURL({ extension: 'png' })!,
+            iconURL: interaction.user.avatarURL()!,
           })
           .addFields([
             { name: 'Ping', value: `\`${this.container.client.ws.ping}ms\`` },

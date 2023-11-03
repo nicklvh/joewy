@@ -1,1 +1,1 @@
-export * from './MemberSchema';
+export * from './MemberModel';

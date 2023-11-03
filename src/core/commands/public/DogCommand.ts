@@ -39,7 +39,7 @@ export class DogCommand extends Command {
         new EmbedBuilder()
           .setAuthor({
             name: "Here's a dog 🐶",
-            iconURL: interaction.user.avatarURL({ extension: 'png' })!,
+            iconURL: interaction.user.avatarURL()!,
           })
           .setImage(data[0].url)
           .setColor('Blue')

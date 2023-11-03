@@ -38,7 +38,7 @@ export class DuckCommand extends Command {
         new EmbedBuilder()
           .setAuthor({
             name: "Here's a duck 🦆",
-            iconURL: interaction.user.avatarURL({ extension: 'png' })!,
+            iconURL: interaction.user.avatarURL()!,
           })
           .setImage(data.url)
           .setColor('Blue')

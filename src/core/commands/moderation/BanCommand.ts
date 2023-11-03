@@ -1,5 +1,5 @@
 import { ApplicationCommandRegistry, Command } from '@sapphire/framework';
-import { PermissionsBitField } from 'discord.js';
+import { EmbedBuilder, PermissionsBitField } from 'discord.js';
 import { Time } from '@sapphire/time-utilities';
 
 export class BanCommand extends Command {
@@ -41,6 +41,12 @@ export class BanCommand extends Command {
               .setMinValue(0)
               .setMaxValue(7),
           )
+          .addBooleanOption((option) =>
+            option
+              .setName('silent')
+              .setDescription('whether to send the ban message silently')
+              .setRequired(false),
+          )
           .setDefaultMemberPermissions(PermissionsBitField.Flags.BanMembers);
       },
       { idHints: ['1169766210443956264'] },
@@ -51,8 +57,10 @@ export class BanCommand extends Command {
     interaction: Command.ChatInputCommandInteraction,
   ) {
     const user = interaction.options.getUser('user')!;
-    const reason = interaction.options.getString('reason')!;
-    const days = interaction.options.getInteger('days')!;
+    const reason =
+      interaction.options.getString('reason') ?? 'No reason provided';
+    const days = interaction.options.getInteger('days') ?? 0;
+    const silent = interaction.options.getBoolean('silent') ?? false;
 
     await interaction.guild?.bans.create(user, {
       reason,
@@ -60,8 +68,26 @@ export class BanCommand extends Command {
     });
 
     return interaction.reply({
-      content: `banned ${user.tag} 🔨`,
-      ephemeral: true,
+      embeds: [
+        new EmbedBuilder()
+          .setAuthor({
+            name: `Banned ${user.tag}`,
+            iconURL: user.displayAvatarURL(),
+          })
+          .addFields([
+            {
+              name: 'Reason',
+              value: `\`${
+                reason.length > 100 ? `${reason.substring(0, 100)}...` : reason
+              }\``,
+            },
+            {
+              name: 'Days',
+              value: `\`${days} days of messages deleted\``,
+            },
+          ]),
+      ],
+      ephemeral: silent,
     });
   }
 }
