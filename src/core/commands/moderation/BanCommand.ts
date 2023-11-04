@@ -1,5 +1,5 @@
 import { ApplicationCommandRegistry, Command } from '@sapphire/framework';
-import { EmbedBuilder, PermissionsBitField } from 'discord.js';
+import { EmbedBuilder, PermissionFlagsBits } from 'discord.js';
 import { Time } from '@sapphire/time-utilities';
 
 export class BanCommand extends Command {
@@ -47,7 +47,7 @@ export class BanCommand extends Command {
               .setDescription('whether to send the ban message silently')
               .setRequired(false),
           )
-          .setDefaultMemberPermissions(PermissionsBitField.Flags.BanMembers);
+          .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers);
       },
       { idHints: ['1169766210443956264'] },
     );
