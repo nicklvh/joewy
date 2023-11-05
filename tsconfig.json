@@ -1,8 +1,6 @@
 {
   "extends": "@sapphire/ts-config",
   "compilerOptions": {
-    "target": "ESNext",
-    "removeComments": true,
     "outDir": "dist",
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,
