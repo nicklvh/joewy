@@ -5,4 +5,4 @@ const MemberSchema = new Schema({
   guildId: String,
 });
 
-export const MemberModel = model('member', MemberSchema);
+export const Member = model('Member', MemberSchema, 'members');

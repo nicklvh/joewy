@@ -7,14 +7,6 @@ const GuildSchema = new Schema({
     welcomeId: String,
     auditlogId: String,
   },
-  roleIds: {
-    modRoleId: String,
-  },
-  options: {
-    modlog: Boolean,
-    welcome: Boolean,
-    auditlog: Boolean,
-  },
 });
 
-export const GuildModel = model('guilds', GuildSchema);
+export const Guild = model('Guild', GuildSchema, 'guilds');

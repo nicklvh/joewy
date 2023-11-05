@@ -1,6 +1,8 @@
 import { ApplicationCommandRegistry, Command } from '@sapphire/framework';
 import { EmbedBuilder, PermissionFlagsBits } from 'discord.js';
 import { Time } from '@sapphire/time-utilities';
+import { Modlog } from '../../../lib';
+import { TypeEnum } from '../../../lib/utils';
 
 export class BanCommand extends Command {
   public constructor(context: Command.Context, options: Command.Options) {
@@ -10,6 +12,7 @@ export class BanCommand extends Command {
       description: 'ban a member 🔨',
       requiredUserPermissions: ['BanMembers'],
       requiredClientPermissions: ['BanMembers'],
+      runIn: 'GUILD_ANY',
     });
   }
 
@@ -31,6 +34,12 @@ export class BanCommand extends Command {
             option
               .setName('reason')
               .setDescription('the reason for the ban')
+              .setRequired(false),
+          )
+          .addStringOption((option) =>
+            option
+              .setName('evidence')
+              .setDescription('Provide evidence for the ban')
               .setRequired(false),
           )
           .addIntegerOption((option) =>
@@ -59,8 +68,39 @@ export class BanCommand extends Command {
     const user = interaction.options.getUser('user')!;
     const reason =
       interaction.options.getString('reason') ?? 'No reason provided';
+    const evidence =
+      interaction.options.getString('evidence') ?? 'No evidence provided';
     const days = interaction.options.getInteger('days') ?? 0;
     const silent = interaction.options.getBoolean('silent') ?? false;
+
+    await Modlog.create({
+      guildId: interaction.guildId,
+      userId: user.id,
+      evidence,
+      type: TypeEnum.Ban,
+      moderatorId: interaction.user.id,
+      reason,
+    });
+
+    await user.send({
+      embeds: [
+        new EmbedBuilder()
+          .setAuthor({
+            name: `You have been banned from ${interaction.guild!.name}`,
+            iconURL: interaction.guild!.iconURL() || undefined,
+          })
+          .addFields([
+            {
+              name: 'Reason',
+              value: `\`${
+                reason.length > 100 ? `${reason.substring(0, 100)}...` : reason
+              }\``,
+            },
+          ])
+          .setColor('Blue')
+          .setTimestamp(),
+      ],
+    });
 
     await interaction.guild?.bans.create(user, {
       reason,
@@ -82,10 +122,20 @@ export class BanCommand extends Command {
               }\``,
             },
             {
-              name: 'Days',
-              value: `\`${days} days of messages deleted\``,
+              name: 'Messages deleted',
+              value: `\`${days}\` days of messages deleted`,
             },
-          ]),
+            {
+              name: 'Evidence',
+              value: `\`${
+                evidence.length > 100
+                  ? `${evidence.substring(0, 100)}...`
+                  : evidence
+              }\``,
+            },
+          ])
+          .setColor('Blue')
+          .setTimestamp(),
       ],
       ephemeral: silent,
     });
