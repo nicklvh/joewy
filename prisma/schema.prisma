@@ -1,0 +1,33 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Guild {
+  id          String   @id @map("_id")
+  modlogId    String?
+  welcomeId   String?
+  auditlogId  String?
+}
+
+model Member {
+  id          String   @id @map("_id")
+  guildId     String
+}
+
+model Modlog {
+  id          String   @id @map("_id")
+  userId      String
+  moderatorId String
+  reason      String
+  evidence    String
+  type        Int
+  timestamp   DateTime
+}

@@ -1,6 +1,5 @@
 import { ApplicationCommandRegistry } from '@sapphire/framework';
 import { Subcommand } from '@sapphire/plugin-subcommands';
-import { Guild } from '../../../lib';
 import { ChannelType, EmbedBuilder, PermissionFlagsBits } from 'discord.js';
 
 export class SettingsCommand extends Subcommand {
@@ -105,25 +104,26 @@ export class SettingsCommand extends Subcommand {
   public async chatInputList(
     interaction: Subcommand.ChatInputCommandInteraction,
   ) {
-    this.container.logger.info('hihihi');
-
-    let guildInDB = await Guild.findOne({ guildId: interaction.guildId });
+    let guildInDB = await this.container.prisma.guild.findUnique({
+      where: { id: interaction.guildId! },
+    });
 
     if (!guildInDB) {
-      guildInDB = await Guild.create({ guildId: interaction.guildId });
-      await guildInDB.save();
+      guildInDB = await this.container.prisma.guild.create({
+        data: { id: interaction.guildId! },
+      });
     }
 
-    const modlogChannel = guildInDB.channelIds?.modlogId
-      ? `<#${guildInDB.channelIds?.modlogId}>`
+    const modlogChannel = guildInDB.modlogId
+      ? `<#${guildInDB.modlogId}>`
       : 'Not set';
 
-    const auditlogChannel = guildInDB.channelIds?.auditlogId
-      ? `<#${guildInDB.channelIds?.auditlogId}>`
+    const auditlogChannel = guildInDB.auditlogId
+      ? `<#${guildInDB.auditlogId}>`
       : 'Not set';
 
-    const welcomeChannel = guildInDB.channelIds?.welcomeId
-      ? `<#${guildInDB.channelIds?.welcomeId}>`
+    const welcomeChannel = guildInDB.welcomeId
+      ? `<#${guildInDB.welcomeId}>`
       : 'Not set';
 
     return interaction.reply({
@@ -131,20 +131,26 @@ export class SettingsCommand extends Subcommand {
         new EmbedBuilder()
           .setAuthor({
             name: `Settings for ${interaction.guild?.name}`,
-            iconURL: interaction.guild?.iconURL() || undefined,
+            // @ts-ignore - guild icon url is not undefined
+            iconURL: interaction.guild?.iconURL()
+              ? interaction.guild?.iconURL()
+              : this.container.client.user?.displayAvatarURL(),
           })
           .addFields([
             {
               name: 'Modlog',
               value: modlogChannel,
+              inline: true,
             },
             {
               name: 'Auditlog',
               value: auditlogChannel,
+              inline: true,
             },
             {
               name: 'Welcome',
               value: welcomeChannel,
+              inline: true,
             },
           ])
           .setColor('Blue')
@@ -158,30 +164,41 @@ export class SettingsCommand extends Subcommand {
   ) {
     const channel = interaction.options.getChannel('channel');
 
-    let guildInDB = await Guild.findOne({ guildId: interaction.guildId });
+    let guildInDB = await this.container.prisma.guild.findUnique({
+      where: { id: interaction.guildId! },
+    });
 
     if (!guildInDB) {
-      guildInDB = await Guild.create({ guildId: interaction.guildId });
-      await guildInDB.save();
+      guildInDB = await this.container.prisma.guild.create({
+        data: { id: interaction.guildId! },
+      });
     }
 
     if (channel) {
-      guildInDB.channelIds!.modlogId = channel.id;
+      await this.container.prisma.guild.update({
+        where: { id: interaction.guildId! },
+        data: { modlogId: channel.id },
+      });
     } else {
-      guildInDB.channelIds!.modlogId = undefined;
+      await this.container.prisma.guild.update({
+        where: { id: interaction.guildId! },
+        data: { modlogId: null },
+      });
     }
-
-    await guildInDB.save();
 
     return interaction.reply({
       embeds: [
         new EmbedBuilder()
           .setAuthor({
-            name: `Modlog channel ${
-              channel ? `set to ${channel.name}` : 'disabled'
-            }`,
+            name: `Modlog channel set`,
             iconURL: interaction.guild?.iconURL() || undefined,
           })
+          .addFields([
+            {
+              name: 'Channel',
+              value: channel ? `<#${channel.id}>` : 'Not set',
+            },
+          ])
           .setColor('Blue')
           .setTimestamp(),
       ],
@@ -193,30 +210,41 @@ export class SettingsCommand extends Subcommand {
   ) {
     const channel = interaction.options.getChannel('channel');
 
-    let guildInDB = await Guild.findOne({ guildId: interaction.guildId });
+    let guildInDB = await this.container.prisma.guild.findUnique({
+      where: { id: interaction.guildId! },
+    });
 
     if (!guildInDB) {
-      guildInDB = await Guild.create({ guildId: interaction.guildId });
-      await guildInDB.save();
+      guildInDB = await this.container.prisma.guild.create({
+        data: { id: interaction.guildId! },
+      });
     }
 
     if (channel) {
-      guildInDB.channelIds!.auditlogId = channel.id;
+      await this.container.prisma.guild.update({
+        where: { id: interaction.guildId! },
+        data: { auditlogId: channel.id },
+      });
     } else {
-      guildInDB.channelIds!.auditlogId = undefined;
+      await this.container.prisma.guild.update({
+        where: { id: interaction.guildId! },
+        data: { auditlogId: null },
+      });
     }
-
-    await guildInDB.save();
 
     return interaction.reply({
       embeds: [
         new EmbedBuilder()
           .setAuthor({
-            name: `Auditlog channel ${
-              channel ? `set to ${channel.name}` : 'disabled'
-            }`,
+            name: `Auditlog channel set`,
             iconURL: interaction.guild?.iconURL() || undefined,
           })
+          .addFields([
+            {
+              name: 'Channel',
+              value: channel ? `<#${channel.id}>` : 'Not set',
+            },
+          ])
           .setColor('Blue')
           .setTimestamp(),
       ],
@@ -228,30 +256,41 @@ export class SettingsCommand extends Subcommand {
   ) {
     const channel = interaction.options.getChannel('channel');
 
-    let guildInDB = await Guild.findOne({ guildId: interaction.guildId });
+    let guildInDB = await this.container.prisma.guild.create({
+      data: { id: interaction.guildId! },
+    });
 
     if (!guildInDB) {
-      guildInDB = await Guild.create({ guildId: interaction.guildId });
-      await guildInDB.save();
+      guildInDB = await this.container.prisma.guild.create({
+        data: { id: interaction.guildId! },
+      });
     }
 
     if (channel) {
-      guildInDB.channelIds!.welcomeId = channel.id;
+      await this.container.prisma.guild.update({
+        where: { id: interaction.guildId! },
+        data: { auditlogId: channel.id },
+      });
     } else {
-      guildInDB.channelIds!.welcomeId = undefined;
+      await this.container.prisma.guild.update({
+        where: { id: interaction.guildId! },
+        data: { auditlogId: null },
+      });
     }
-
-    await guildInDB.save();
 
     return interaction.reply({
       embeds: [
         new EmbedBuilder()
           .setAuthor({
-            name: `Welcome channel ${
-              channel ? `set to ${channel.name}` : 'disabled'
-            }`,
+            name: `Welcome channel set`,
             iconURL: interaction.guild?.iconURL() || undefined,
           })
+          .addFields([
+            {
+              name: 'Channel',
+              value: channel ? `<#${channel.id}>` : 'Not set',
+            },
+          ])
           .setColor('Blue')
           .setTimestamp(),
       ],

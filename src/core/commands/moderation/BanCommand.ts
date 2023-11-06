@@ -1,8 +1,7 @@
 import { ApplicationCommandRegistry, Command } from '@sapphire/framework';
 import { EmbedBuilder, PermissionFlagsBits } from 'discord.js';
 import { Time } from '@sapphire/time-utilities';
-import { Modlog } from '../../../lib';
-import { TypeEnum } from '../../../lib/utils';
+import { TypeEnum } from '../../../lib';
 
 export class BanCommand extends Command {
   public constructor(context: Command.Context, options: Command.Options) {
@@ -73,13 +72,16 @@ export class BanCommand extends Command {
     const days = interaction.options.getInteger('days') ?? 0;
     const silent = interaction.options.getBoolean('silent') ?? false;
 
-    await Modlog.create({
-      guildId: interaction.guildId,
-      userId: user.id,
-      evidence,
-      type: TypeEnum.Ban,
-      moderatorId: interaction.user.id,
-      reason,
+    await this.container.prisma.modlog.create({
+      data: {
+        id: interaction.guildId!,
+        userId: user.id,
+        evidence,
+        type: TypeEnum.Ban,
+        moderatorId: interaction.user.id,
+        reason,
+        timestamp: new Date(),
+      },
     });
 
     await user.send({
