@@ -1,21 +1,14 @@
 import { type ApplicationCommandRegistry, Command } from '@sapphire/framework';
 import { fetch, FetchResultTypes } from '@sapphire/fetch';
 import { EmbedBuilder } from 'discord.js';
+import { ApplyOptions } from '@sapphire/decorators';
+import { APIPetInterface } from '@lib/index';
 
-interface DuckResponse {
-  url: string;
-  message: string;
-}
-
+@ApplyOptions<Command.Options>({
+  name: 'duck',
+  description: 'shows a duck 🦆',
+})
 export class DuckCommand extends Command {
-  public constructor(context: Command.Context, options: Command.Options) {
-    super(context, {
-      ...options,
-      name: 'duck',
-      description: 'shows a duck 🦆',
-    });
-  }
-
   public override registerApplicationCommands(
     registry: ApplicationCommandRegistry,
   ) {
@@ -28,7 +21,7 @@ export class DuckCommand extends Command {
   public override async chatInputRun(
     interaction: Command.ChatInputCommandInteraction,
   ) {
-    const data = await fetch<DuckResponse>(
+    const data = await fetch<APIPetInterface>(
       'https://random-d.uk/api/v2/quack',
       FetchResultTypes.JSON,
     );
@@ -42,7 +35,7 @@ export class DuckCommand extends Command {
           })
           .setImage(data.url)
           .setColor('Blue')
-          .setFooter({ text: data.message })
+          .setFooter({ text: data.message! })
           .setTimestamp(),
       ],
     });

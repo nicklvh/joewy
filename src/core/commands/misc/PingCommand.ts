@@ -1,15 +1,12 @@
+import { ApplyOptions } from '@sapphire/decorators';
 import { type ApplicationCommandRegistry, Command } from '@sapphire/framework';
 import { EmbedBuilder } from 'discord.js';
 
+@ApplyOptions<Command.Options>({
+  name: 'ping',
+  description: 'pong! shows latency of the bot 🏓',
+})
 export class PingCommand extends Command {
-  public constructor(context: Command.Context, options: Command.Options) {
-    super(context, {
-      ...options,
-      name: 'ping',
-      description: 'pong! shows latency of the bot 🏓',
-    });
-  }
-
   public override registerApplicationCommands(
     registry: ApplicationCommandRegistry,
   ) {

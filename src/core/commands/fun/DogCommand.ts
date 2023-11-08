@@ -1,22 +1,14 @@
 import { type ApplicationCommandRegistry, Command } from '@sapphire/framework';
 import { fetch, FetchResultTypes } from '@sapphire/fetch';
 import { EmbedBuilder } from 'discord.js';
+import { APIPetResponse } from '@lib/index';
+import { ApplyOptions } from '@sapphire/decorators';
 
-type DogResponse = Array<DogObject>;
-
-interface DogObject {
-  url: string;
-}
-
+@ApplyOptions<Command.Options>({
+  name: 'dog',
+  description: 'shows a dog 🐶',
+})
 export class DogCommand extends Command {
-  public constructor(context: Command.Context, options: Command.Options) {
-    super(context, {
-      ...options,
-      name: 'dog',
-      description: 'shows a dog 🐶',
-    });
-  }
-
   public override registerApplicationCommands(
     registry: ApplicationCommandRegistry,
   ) {
@@ -29,7 +21,7 @@ export class DogCommand extends Command {
   public override async chatInputRun(
     interaction: Command.ChatInputCommandInteraction,
   ) {
-    const data = await fetch<DogResponse>(
+    const data = await fetch<APIPetResponse>(
       'https://api.thedogapi.com/v1/images/search',
       FetchResultTypes.JSON,
     );

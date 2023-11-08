@@ -1,22 +1,14 @@
 import { type ApplicationCommandRegistry, Command } from '@sapphire/framework';
 import { fetch, FetchResultTypes } from '@sapphire/fetch';
 import { EmbedBuilder } from 'discord.js';
+import { APIPetResponse } from '@lib/index';
+import { ApplyOptions } from '@sapphire/decorators';
 
-type CatResponse = Array<CatObject>;
-
-interface CatObject {
-  url: string;
-}
-
+@ApplyOptions<Command.Options>({
+  name: 'cat',
+  description: 'shows a cat 😽',
+})
 export class CatCommand extends Command {
-  public constructor(context: Command.Context, options: Command.Options) {
-    super(context, {
-      ...options,
-      name: 'cat',
-      description: 'shows a cat 😽',
-    });
-  }
-
   public override registerApplicationCommands(
     registry: ApplicationCommandRegistry,
   ) {
@@ -29,7 +21,7 @@ export class CatCommand extends Command {
   public override async chatInputRun(
     interaction: Command.ChatInputCommandInteraction,
   ) {
-    const data = await fetch<CatResponse>(
+    const data = await fetch<APIPetResponse>(
       'https://api.thecatapi.com/v1/images/search',
       FetchResultTypes.JSON,
     );

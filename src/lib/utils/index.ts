@@ -1,1 +1,1 @@
-export * from './TypeEnum';
+export * from './Functions';

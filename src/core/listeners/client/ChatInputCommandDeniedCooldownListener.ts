@@ -1,3 +1,4 @@
+import { ApplyOptions } from '@sapphire/decorators';
 import {
   Events,
   Listener,
@@ -5,14 +6,10 @@ import {
   type UserError,
 } from '@sapphire/framework';
 
+@ApplyOptions<Listener.Options>({
+  event: Events.ChatInputCommandDenied,
+})
 export class ChatInputCommandDeniedCooldownListener extends Listener {
-  public constructor(context: Listener.Context, options: Listener.Options) {
-    super(context, {
-      ...options,
-      event: Events.ChatInputCommandDenied,
-    });
-  }
-
   public async run(
     error: UserError,
     { interaction }: ChatInputCommandDeniedPayload,

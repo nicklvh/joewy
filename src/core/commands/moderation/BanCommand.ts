@@ -1,20 +1,17 @@
 import { ApplicationCommandRegistry, Command } from '@sapphire/framework';
 import { EmbedBuilder, PermissionFlagsBits } from 'discord.js';
 import { Time } from '@sapphire/time-utilities';
-import { TypeEnum } from '../../../lib';
+import { TypeEnum } from '@lib/index';
+import { ApplyOptions } from '@sapphire/decorators';
 
+@ApplyOptions<Command.Options>({
+  name: 'ban',
+  description: 'ban a member 🔨',
+  requiredUserPermissions: ['BanMembers'],
+  requiredClientPermissions: ['BanMembers'],
+  runIn: 'GUILD_ANY',
+})
 export class BanCommand extends Command {
-  public constructor(context: Command.Context, options: Command.Options) {
-    super(context, {
-      ...options,
-      name: 'ban',
-      description: 'ban a member 🔨',
-      requiredUserPermissions: ['BanMembers'],
-      requiredClientPermissions: ['BanMembers'],
-      runIn: 'GUILD_ANY',
-    });
-  }
-
   public override registerApplicationCommands(
     registry: ApplicationCommandRegistry,
   ) {

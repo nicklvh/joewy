@@ -5,6 +5,14 @@
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,
     "exactOptionalPropertyTypes": false,
-    "noImplicitOverride": true
+    "noImplicitOverride": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "removeComments": true,
+    "target": "ESNext",
+    "baseUrl": "./src",
+    "paths": {
+      "@lib/*": ["lib/*"]
+    }
   }
 }

@@ -1,3 +1,4 @@
+import 'module-alias/register';
 import '@sapphire/plugin-subcommands/register';
 import { config } from 'dotenv';
 config();

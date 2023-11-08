@@ -1,31 +1,28 @@
+import { ApplyOptions } from '@sapphire/decorators';
 import { ApplicationCommandRegistry } from '@sapphire/framework';
 import { Subcommand } from '@sapphire/plugin-subcommands';
 import { ChannelType, EmbedBuilder, PermissionFlagsBits } from 'discord.js';
 
-export class SettingsCommand extends Subcommand {
-  public constructor(context: Subcommand.Context, options: Subcommand.Options) {
-    super(context, {
-      ...options,
-      name: 'settings',
-      description: 'change the settings of the bot for the current server',
-      requiredUserPermissions: ['ManageGuild'],
-      requiredClientPermissions: ['ManageGuild'],
-      runIn: 'GUILD_ANY',
-      subcommands: [
-        { name: 'list', chatInputRun: 'chatInputList' },
-        {
-          name: 'set',
-          type: 'group',
-          entries: [
-            { name: 'modlog', chatInputRun: 'chatInputSetModlog' },
-            { name: 'auditlog', chatInputRun: 'chatInputSetAuditlog' },
-            { name: 'welcome', chatInputRun: 'chatInputSetWelcome' },
-          ],
-        },
+@ApplyOptions<Subcommand.Options>({
+  name: 'settings',
+  description: 'change the settings of the bot for the current server',
+  requiredUserPermissions: ['ManageGuild'],
+  requiredClientPermissions: ['ManageGuild'],
+  runIn: 'GUILD_ANY',
+  subcommands: [
+    { name: 'list', chatInputRun: 'chatInputList' },
+    {
+      name: 'set',
+      type: 'group',
+      entries: [
+        { name: 'modlog', chatInputRun: 'chatInputSetModlog' },
+        { name: 'auditlog', chatInputRun: 'chatInputSetAuditlog' },
+        { name: 'welcome', chatInputRun: 'chatInputSetWelcome' },
       ],
-    });
-  }
-
+    },
+  ],
+})
+export class SettingsCommand extends Subcommand {
   public override registerApplicationCommands(
     registry: ApplicationCommandRegistry,
   ) {
