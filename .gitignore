@@ -1,6 +1,7 @@
 .env
 node_modules
 dist
+.idea
 
 # Yarn files
 .yarn/install-state.gz

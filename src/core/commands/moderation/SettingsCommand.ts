@@ -1,11 +1,10 @@
 import { ApplyOptions } from '@sapphire/decorators';
-import { ApplicationCommandRegistry } from '@sapphire/framework';
 import { Subcommand } from '@sapphire/plugin-subcommands';
 import { ChannelType, EmbedBuilder, PermissionFlagsBits } from 'discord.js';
 
 @ApplyOptions<Subcommand.Options>({
   name: 'settings',
-  description: 'change the settings of the bot for the current server',
+  description: 'change the settings of the bot for the current server ⚙️',
   requiredUserPermissions: ['ManageGuild'],
   requiredClientPermissions: ['ManageGuild'],
   runIn: 'GUILD_ANY',
@@ -23,9 +22,7 @@ import { ChannelType, EmbedBuilder, PermissionFlagsBits } from 'discord.js';
   ],
 })
 export class SettingsCommand extends Subcommand {
-  public override registerApplicationCommands(
-    registry: ApplicationCommandRegistry,
-  ) {
+  public override registerApplicationCommands(registry: Subcommand.Registry) {
     registry.registerChatInputCommand(
       (builder) =>
         builder
@@ -35,20 +32,20 @@ export class SettingsCommand extends Subcommand {
             command
               .setName('list')
               .setDescription(
-                'list the current settings of the bot for the current server',
+                'list the current settings of the bot for the current server ⚙️',
               ),
           )
           .addSubcommandGroup((group) =>
             group
               .setName('set')
               .setDescription(
-                'change the settings of the bot for the current server',
+                'set the settings of the bot for the current server ⚙️',
               )
               .addSubcommand((command) =>
                 command
                   .setName('modlog')
                   .setDescription(
-                    'change the modlog channel for the current server',
+                    'change the modlog channel for the current server ⚙️',
                   )
                   .addChannelOption((option) =>
                     option
@@ -64,7 +61,7 @@ export class SettingsCommand extends Subcommand {
                 command
                   .setName('auditlog')
                   .setDescription(
-                    'change the auditlog channel for the current server',
+                    'change the auditlog channel for the current server ⚙️',
                   )
                   .addChannelOption((option) =>
                     option
@@ -253,8 +250,8 @@ export class SettingsCommand extends Subcommand {
   ) {
     const channel = interaction.options.getChannel('channel');
 
-    let guildInDB = await this.container.prisma.guild.create({
-      data: { id: interaction.guildId! },
+    let guildInDB = await this.container.prisma.guild.findUnique({
+      where: { id: interaction.guildId! },
     });
 
     if (!guildInDB) {
@@ -266,12 +263,12 @@ export class SettingsCommand extends Subcommand {
     if (channel) {
       await this.container.prisma.guild.update({
         where: { id: interaction.guildId! },
-        data: { auditlogId: channel.id },
+        data: { welcomeId: channel.id },
       });
     } else {
       await this.container.prisma.guild.update({
         where: { id: interaction.guildId! },
-        data: { auditlogId: null },
+        data: { welcomeId: null },
       });
     }
 

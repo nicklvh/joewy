@@ -6,6 +6,7 @@ import {
 } from '@sapphire/framework';
 import { join } from 'path';
 import { PrismaClient } from '@prisma/client';
+import { ModerationManager } from '.';
 
 export class JoewyClient extends SapphireClient {
   public constructor() {
@@ -30,5 +31,8 @@ export class JoewyClient extends SapphireClient {
     await prisma.$connect().then(() => {
       this.logger.info('Connected to MongoDB');
     });
+
+    const moderationManager = new ModerationManager();
+    container.moderationManager = moderationManager;
   }
 }
