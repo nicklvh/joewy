@@ -1,5 +1,5 @@
 import { ApplyOptions } from '@sapphire/decorators';
-import { type ApplicationCommandRegistry, Command } from '@sapphire/framework';
+import { Command } from '@sapphire/framework';
 import { EmbedBuilder } from 'discord.js';
 
 @ApplyOptions<Command.Options>({
@@ -7,9 +7,7 @@ import { EmbedBuilder } from 'discord.js';
   description: 'flip! shows heads or tails 🪙',
 })
 export class CoinflipCommand extends Command {
-  public override registerApplicationCommands(
-    registry: ApplicationCommandRegistry,
-  ) {
+  public override registerApplicationCommands(registry: Command.Registry) {
     registry.registerChatInputCommand(
       (builder) => builder.setName(this.name).setDescription(this.description),
       { idHints: ['1171942952705208390'] },

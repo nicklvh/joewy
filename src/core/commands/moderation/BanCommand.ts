@@ -1,4 +1,4 @@
-import { ApplicationCommandRegistry, Command } from '@sapphire/framework';
+import { Command } from '@sapphire/framework';
 import { EmbedBuilder, PermissionFlagsBits } from 'discord.js';
 import { Time } from '@sapphire/time-utilities';
 import { TypeEnum } from '@lib/index';
@@ -12,9 +12,7 @@ import { ApplyOptions } from '@sapphire/decorators';
   runIn: 'GUILD_ANY',
 })
 export class BanCommand extends Command {
-  public override registerApplicationCommands(
-    registry: ApplicationCommandRegistry,
-  ) {
+  public override registerApplicationCommands(registry: Command.Registry) {
     registry.registerChatInputCommand(
       (builder) => {
         builder
@@ -62,44 +60,28 @@ export class BanCommand extends Command {
     interaction: Command.ChatInputCommandInteraction,
   ) {
     const user = interaction.options.getUser('user')!;
-    const reason =
+    let reason =
       interaction.options.getString('reason') ?? 'No reason provided';
-    const evidence =
+    let evidence =
       interaction.options.getString('evidence') ?? 'No evidence provided';
     const days = interaction.options.getInteger('days') ?? 0;
     const silent = interaction.options.getBoolean('silent') ?? false;
 
-    await this.container.prisma.modlog.create({
-      data: {
-        id: interaction.guildId!,
-        userId: user.id,
-        evidence,
-        type: TypeEnum.Ban,
-        moderatorId: interaction.user.id,
-        reason,
-        timestamp: new Date(),
-      },
-    });
+    reason =
+      reason.length > 100
+        ? (reason = `${reason.substring(0, 100)}...`)
+        : reason;
 
-    await user.send({
-      embeds: [
-        new EmbedBuilder()
-          .setAuthor({
-            name: `You have been banned from ${interaction.guild!.name}`,
-            iconURL: interaction.guild!.iconURL() || undefined,
-          })
-          .addFields([
-            {
-              name: 'Reason',
-              value: `\`${
-                reason.length > 100 ? `${reason.substring(0, 100)}...` : reason
-              }\``,
-            },
-          ])
-          .setColor('Blue')
-          .setTimestamp(),
-      ],
-    });
+    evidence =
+      evidence.length > 100 ? `${evidence.substring(0, 100)}...` : evidence;
+
+    await this.container.moderationManager.handleModeration(
+      TypeEnum.Ban,
+      interaction,
+      user,
+      reason,
+      evidence,
+    );
 
     await interaction.guild?.bans.create(user, {
       reason,
@@ -116,9 +98,7 @@ export class BanCommand extends Command {
           .addFields([
             {
               name: 'Reason',
-              value: `\`${
-                reason.length > 100 ? `${reason.substring(0, 100)}...` : reason
-              }\``,
+              value: `\`${reason}\``,
             },
             {
               name: 'Messages deleted',
@@ -126,11 +106,7 @@ export class BanCommand extends Command {
             },
             {
               name: 'Evidence',
-              value: `\`${
-                evidence.length > 100
-                  ? `${evidence.substring(0, 100)}...`
-                  : evidence
-              }\``,
+              value: `\`${evidence}\``,
             },
           ])
           .setColor('Blue')

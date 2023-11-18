@@ -1,5 +1,5 @@
 import { ApplyOptions } from '@sapphire/decorators';
-import { type ApplicationCommandRegistry, Command } from '@sapphire/framework';
+import { Command } from '@sapphire/framework';
 import { EmbedBuilder } from 'discord.js';
 
 @ApplyOptions<Command.Options>({
@@ -7,9 +7,7 @@ import { EmbedBuilder } from 'discord.js';
   description: 'shows information about a user',
 })
 export class WhoisCommand extends Command {
-  public override registerApplicationCommands(
-    registry: ApplicationCommandRegistry,
-  ) {
+  public override registerApplicationCommands(registry: Command.Registry) {
     registry.registerChatInputCommand(
       (builder) =>
         builder
@@ -35,6 +33,18 @@ export class WhoisCommand extends Command {
         new EmbedBuilder()
           .setAuthor({ name: `Whois | ${user.tag}` })
           .setColor(user.hexAccentColor ?? 'Blue')
+          .addFields([
+            {
+              name: 'General',
+              value: `**❯ Name:** \`${user.tag}\` (\`${
+                user.id
+              }\`)\n**❯ Bot:** \`${
+                user.bot ? `Bot` : `Human`
+              }\`\n**❯ Created:** <t:${(
+                (user.createdTimestamp as number) / 1000
+              ).toFixed(0)}:f>`,
+            },
+          ])
           .setTimestamp()
           .setFooter({ text: `ID: ${user.id}` }),
       ],

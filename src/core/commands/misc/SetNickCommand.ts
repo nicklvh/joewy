@@ -1,4 +1,4 @@
-import { type ApplicationCommandRegistry, Command } from '@sapphire/framework';
+import { Command } from '@sapphire/framework';
 import { ApplyOptions } from '@sapphire/decorators';
 import { EmbedBuilder, PermissionFlagsBits } from 'discord.js';
 
@@ -10,9 +10,7 @@ import { EmbedBuilder, PermissionFlagsBits } from 'discord.js';
   runIn: 'GUILD_ANY',
 })
 export class SetNickCommand extends Command {
-  public override registerApplicationCommands(
-    registry: ApplicationCommandRegistry,
-  ) {
+  public override registerApplicationCommands(registry: Command.Registry) {
     registry.registerChatInputCommand(
       (builder) =>
         builder

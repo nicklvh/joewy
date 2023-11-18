@@ -1,5 +1,5 @@
 import { ApplyOptions } from '@sapphire/decorators';
-import { type ApplicationCommandRegistry, Command } from '@sapphire/framework';
+import { Command } from '@sapphire/framework';
 import { EmbedBuilder } from 'discord.js';
 
 @ApplyOptions<Command.Options>({
@@ -7,9 +7,7 @@ import { EmbedBuilder } from 'discord.js';
   description: 'will it be: rock, paper, or scissors? 🤔',
 })
 export class RockPaperScissorsCommand extends Command {
-  public override registerApplicationCommands(
-    registry: ApplicationCommandRegistry,
-  ) {
+  public override registerApplicationCommands(registry: Command.Registry) {
     registry.registerChatInputCommand(
       (builder) =>
         builder
@@ -72,8 +70,8 @@ export class RockPaperScissorsCommand extends Command {
                 result === 'win'
                   ? 'You won!'
                   : result === 'lose'
-                  ? 'You lost!'
-                  : 'We tied!'
+                    ? 'You lost!'
+                    : 'We tied!'
               }\``,
             },
           ])
