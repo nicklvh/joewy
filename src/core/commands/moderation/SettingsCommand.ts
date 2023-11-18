@@ -77,7 +77,7 @@ export class SettingsCommand extends Subcommand {
                 command
                   .setName('welcome')
                   .setDescription(
-                    'change the welcome channel for the current server',
+                    'change the welcome channel for the current server ⚙️',
                   )
                   .addChannelOption((option) =>
                     option
@@ -156,7 +156,7 @@ export class SettingsCommand extends Subcommand {
   public async chatInputSetModlog(
     interaction: Subcommand.ChatInputCommandInteraction,
   ) {
-    const channel = interaction.options.getChannel('channel');
+    const channel = interaction.options.getChannel('channel', false);
 
     let guildInDB = await this.container.prisma.guild.findUnique({
       where: { id: interaction.guildId! },
@@ -202,7 +202,7 @@ export class SettingsCommand extends Subcommand {
   public async chatInputSetAuditlog(
     interaction: Subcommand.ChatInputCommandInteraction,
   ) {
-    const channel = interaction.options.getChannel('channel');
+    const channel = interaction.options.getChannel('channel', false);
 
     let guildInDB = await this.container.prisma.guild.findUnique({
       where: { id: interaction.guildId! },
@@ -248,7 +248,7 @@ export class SettingsCommand extends Subcommand {
   public async chatInputSetWelcome(
     interaction: Subcommand.ChatInputCommandInteraction,
   ) {
-    const channel = interaction.options.getChannel('channel');
+    const channel = interaction.options.getChannel('channel', false);
 
     let guildInDB = await this.container.prisma.guild.findUnique({
       where: { id: interaction.guildId! },

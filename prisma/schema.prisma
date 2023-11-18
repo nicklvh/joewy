@@ -6,28 +6,45 @@ generator client {
 }
 
 datasource db {
-  provider = "mongodb"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
 model Guild {
-  id          String   @id @map("_id")
-  modlogId    String?
-  welcomeId   String?
-  auditlogId  String?
+  id         String   @id
+  modlogId   String?
+  welcomeId  String?
+  auditlogId String?
+  modlogs    Modlog[]
+  members    Member[]
 }
 
 model Member {
-  id          String   @id @map("_id")
-  guildId     String
+  id      String   @id
+  coins   Int?
+  xp      Int?
+  level   Int?
+  Guild   Guild    @relation(fields: [guildId], references: [id])
+  guildId String
+  modlogs Modlog[]
 }
 
 model Modlog {
-  id          String   @id @map("_id")
-  userId      String
+  id          Int            @id @default(autoincrement())
+  memberId    String
   moderatorId String
   reason      String
   evidence    String
-  type        Int
-  timestamp   DateTime
+  type        ModerationType
+  createdAt   DateTime       @default(now())
+  Guild       Guild          @relation(fields: [guildId], references: [id])
+  guildId     String
+  Member      Member         @relation(fields: [memberId], references: [id])
+}
+
+enum ModerationType {
+  BAN
+  KICK
+  WARN
+  MUTE
 }

@@ -41,7 +41,7 @@ export class RockPaperScissorsCommand extends Command {
     interaction: Command.ChatInputCommandInteraction,
   ) {
     const random = Math.random();
-    const choice = interaction.options.getString('choice')!;
+    const choice = interaction.options.getString('choice', true);
     let result: 'win' | 'lose' | 'tie' = 'tie';
     const myChoice: 'Rock' | 'Paper' | 'Scissors' =
       random > 0.66 ? 'Rock' : random > 0.33 ? 'Paper' : 'Scissors';

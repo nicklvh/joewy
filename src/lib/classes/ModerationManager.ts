@@ -6,11 +6,11 @@ import {
   type ChatInputCommandInteraction,
 } from 'discord.js';
 import { container } from '@sapphire/framework';
-import { TypeEnum } from '..';
+import { ModerationType } from '@prisma/client';
 
 export class ModerationManager {
   public async handleModeration(
-    type: TypeEnum,
+    type: ModerationType,
     interaction: ChatInputCommandInteraction,
     user: User,
     reason: string,
@@ -20,7 +20,7 @@ export class ModerationManager {
     const moderator = interaction.user;
 
     await this.createModlogEntry(
-      type,
+      ModerationType[type],
       guild!.id,
       evidence,
       moderator.id,
@@ -45,7 +45,7 @@ export class ModerationManager {
   }
 
   private async sendModerationMessageToUser(
-    type: TypeEnum,
+    type: ModerationType,
     user: User,
     guild: Guild,
     reason: string,
@@ -74,25 +74,25 @@ export class ModerationManager {
       : undefined;
 
     switch (type) {
-      case TypeEnum.Ban:
+      case ModerationType.BAN:
         embed.setAuthor({
           name: `You have been banned from ${guild.name}`,
           iconURL: guild.iconURL() || undefined,
         });
         break;
-      case TypeEnum.Kick:
+      case ModerationType.KICK:
         embed.setAuthor({
           name: `You have been kicked from ${guild.name}`,
           iconURL: guild.iconURL() || undefined,
         });
         break;
-      case TypeEnum.Mute:
+      case ModerationType.MUTE:
         embed.setAuthor({
           name: `You have been muted in ${guild.name}`,
           iconURL: guild.iconURL() || undefined,
         });
         break;
-      case TypeEnum.Warn:
+      case ModerationType.WARN:
         embed.setAuthor({
           name: `You have been warned in ${guild.name}`,
           iconURL: guild.iconURL() || undefined,
@@ -105,28 +105,28 @@ export class ModerationManager {
   }
 
   private async createModlogEntry(
-    type: TypeEnum,
+    type: ModerationType,
     guildId: string,
     evidence: string,
     moderatorId: string,
     reason: string,
-    userId: string,
+    memberId: string,
   ) {
     return container.prisma.modlog.create({
       data: {
-        id: guildId,
-        userId,
+        guildId,
+        memberId,
         evidence,
-        type,
+        type: ModerationType[type],
         moderatorId,
         reason,
-        timestamp: new Date(),
+        createdAt: new Date(),
       },
     });
   }
 
   private async sendModerationMessageToModlog(
-    type: TypeEnum,
+    type: ModerationType,
     guild: Guild,
     user: User,
     moderator: User,
@@ -161,43 +161,44 @@ export class ModerationManager {
 
     if (!modlogChannel || modlogChannel!.type !== ChannelType.GuildText) return;
 
-    const embed = new EmbedBuilder().setTimestamp();
+    const embed = new EmbedBuilder()
+      .addFields([
+        {
+          name: 'Reason',
+          value: `\`${reason}\``,
+        },
+        {
+          name: 'Evidence',
+          value: `\`${evidence}\``,
+        },
+        {
+          name: 'Moderator',
+          value: `${moderator} (\`${moderator.id}\`)`,
+        },
+      ])
+      .setColor('Blue')
+      .setTimestamp();
 
     switch (type) {
-      case TypeEnum.Ban:
+      case ModerationType.BAN:
         embed.setAuthor({
           name: `Banned ${user.tag}`,
           iconURL: user.displayAvatarURL(),
         });
         break;
-      case TypeEnum.Kick:
-        embed
-          .setAuthor({
-            name: `Kicked ${user.tag}`,
-            iconURL: user.displayAvatarURL(),
-          })
-          .addFields([
-            {
-              name: 'Reason',
-              value: reason,
-            },
-            {
-              name: 'Evidence',
-              value: evidence,
-            },
-            {
-              name: 'Moderator',
-              value: `${moderator} (${moderator.id})`,
-            },
-          ]);
+      case ModerationType.KICK:
+        embed.setAuthor({
+          name: `Kicked ${user.tag}`,
+          iconURL: user.displayAvatarURL(),
+        });
         break;
-      case TypeEnum.Mute:
+      case ModerationType.MUTE:
         embed.setAuthor({
           name: `Muted ${user.tag}`,
           iconURL: user.displayAvatarURL(),
         });
         break;
-      case TypeEnum.Warn:
+      case ModerationType.WARN:
         embed.setAuthor({
           name: `Warned ${user.tag}`,
           iconURL: user.displayAvatarURL(),

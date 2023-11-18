@@ -43,8 +43,8 @@ export class AvatarCommand extends Command {
   public override async chatInputRun(
     interaction: Command.ChatInputCommandInteraction,
   ) {
-    const user = interaction.options.getUser('user') ?? interaction.user;
-    const size: any = interaction.options.getNumber('size') ?? 1024;
+    const user = interaction.options.getUser('user', false) ?? interaction.user;
+    const size: any = interaction.options.getNumber('size', false) ?? 1024;
 
     return interaction.reply({
       embeds: [
