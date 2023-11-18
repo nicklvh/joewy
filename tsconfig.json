@@ -1,15 +1,12 @@
 {
-  "extends": "@sapphire/ts-config",
+  "extends": [
+    "@sapphire/ts-config",
+    "@sapphire/ts-config/decorators",
+    "@sapphire/ts-config/extra-strict"
+  ],
   "compilerOptions": {
     "outDir": "dist",
-    "allowUnreachableCode": false,
-    "allowUnusedLabels": false,
-    "exactOptionalPropertyTypes": false,
-    "noImplicitOverride": true,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
     "removeComments": true,
-    "target": "ESNext",
     "baseUrl": "./src",
     "paths": {
       "@lib/*": ["lib/*"]
