@@ -165,16 +165,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@kaname-png/plugin-env@npm:^1.1.9":
-  version: 1.1.9
-  resolution: "@kaname-png/plugin-env@npm:1.1.9"
-  dependencies:
-    dotenv-cra: "npm:^3.0.3"
-    tslib: "npm:^2.6.2"
-  checksum: b2a1b4f3ef5cf750b0ac20c211b87b491906f9be61918967d9966c26117d9b659e3afcc63529751acd6dfb9aacdec4b09d04d20696fb49cf89f917b3ac3aed24
-  languageName: node
-  linkType: hard
-
 "@nodelib/fs.scandir@npm:2.1.5":
   version: 2.1.5
   resolution: "@nodelib/fs.scandir@npm:2.1.5"
@@ -355,6 +345,16 @@ __metadata:
     "@sapphire/utilities": "npm:^3.13.0"
     tslib: "npm:^2.6.2"
   checksum: ce29aa1b91a2ca843271792107655f9a79176d2c53927cbe9902994390035094b29ccb1a52891304daf87d2d74243fda45279e5e933a02a61cfc3fbbf37feec4
+  languageName: node
+  linkType: hard
+
+"@sapphire/plugin-logger@npm:^3.0.7":
+  version: 3.0.7
+  resolution: "@sapphire/plugin-logger@npm:3.0.7"
+  dependencies:
+    "@sapphire/timestamp": "npm:^1.0.1"
+    colorette: "npm:^2.0.20"
+  checksum: 1ef51ed340045a5dbffc9b6c77893aaca2a697735a430dc25576155321bb50820194f7dd69d93cfa7a3e6a7fb1d1fcfa953d928c0dd1f58ab6b6a87ce80632c2
   languageName: node
   linkType: hard
 
@@ -779,6 +779,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"colorette@npm:^2.0.20":
+  version: 2.0.20
+  resolution: "colorette@npm:2.0.20"
+  checksum: e94116ff33b0ff56f3b83b9ace895e5bf87c2a7a47b3401b8c3f3226e050d5ef76cf4072fb3325f9dc24d1698f9b730baf4e05eeaf861d74a1883073f4c98a40
+  languageName: node
+  linkType: hard
+
 "concat-map@npm:0.0.1":
   version: 0.0.1
   resolution: "concat-map@npm:0.0.1"
@@ -908,27 +915,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dotenv-cra@npm:^3.0.3":
-  version: 3.0.3
-  resolution: "dotenv-cra@npm:3.0.3"
-  dependencies:
-    dotenv: "npm:^10.0.0"
-    dotenv-expand: "npm:^5.1.0"
-  checksum: ce3ee40d6c660fc6c0709ca600f92d7dfa1c684499b36383a1afb9b9cf63c6879ad9892d8ed7a7f633ec3ea7c59a5a41650f1d8e4fd47ee3e5ae467bac592423
-  languageName: node
-  linkType: hard
-
-"dotenv-expand@npm:^5.1.0":
-  version: 5.1.0
-  resolution: "dotenv-expand@npm:5.1.0"
-  checksum: 24ac633de853ef474d0421cc639328b7134109c8dc2baaa5e3afb7495af5e9237136d7e6971e55668e4dce915487eb140967cdd2b3e99aa439e0f6bf8b56faeb
-  languageName: node
-  linkType: hard
-
-"dotenv@npm:^10.0.0":
-  version: 10.0.0
-  resolution: "dotenv@npm:10.0.0"
-  checksum: 2d8d4ba64bfaff7931402aa5e8cbb8eba0acbc99fe9ae442300199af021079eafa7171ce90e150821a5cb3d74f0057721fbe7ec201a6044b68c8a7615f8c123f
+"dotenv@npm:^16.3.1":
+  version: 16.3.1
+  resolution: "dotenv@npm:16.3.1"
+  checksum: b95ff1bbe624ead85a3cd70dbd827e8e06d5f05f716f2d0cbc476532d54c7c9469c3bc4dd93ea519f6ad711cb522c00ac9a62b6eb340d5affae8008facc3fbd7
   languageName: node
   linkType: hard
 
@@ -1438,12 +1428,12 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "joewy@workspace:."
   dependencies:
-    "@kaname-png/plugin-env": "npm:^1.1.9"
     "@prisma/client": "npm:^5.6.0"
     "@sapphire/decorators": "npm:^6.0.2"
     "@sapphire/eslint-config": "npm:^5.0.2"
     "@sapphire/fetch": "npm:^2.4.1"
     "@sapphire/framework": "npm:^4.8.2"
+    "@sapphire/plugin-logger": "npm:^3.0.7"
     "@sapphire/plugin-subcommands": "npm:^5.1.0"
     "@sapphire/time-utilities": "npm:^1.7.10"
     "@sapphire/ts-config": "npm:^5.0.0"
@@ -1451,6 +1441,7 @@ __metadata:
     "@types/module-alias": "npm:^2.0.4"
     "@types/node": "npm:^20.9.2"
     discord.js: "npm:^14.14.1"
+    dotenv: "npm:^16.3.1"
     module-alias: "npm:^2.2.3"
     prisma: "npm:^5.6.0"
     typescript: "npm:^5.2.2"

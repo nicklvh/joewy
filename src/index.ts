@@ -1,34 +1,29 @@
 import { ModerationManager } from './lib';
 import { PrismaClient } from '@prisma/client';
 import 'module-alias/register';
-import '@sapphire/plugin-subcommands/register';
-import '@kaname-png/plugin-env/register';
-import {
-  ApplicationCommandRegistries,
-  LogLevel,
-  RegisterBehavior,
-  SapphireClient,
-  container,
-} from '@sapphire/framework';
+import '@sapphire/plugin-logger/register';
+import { config } from 'dotenv';
+config();
+import { LogLevel, SapphireClient, container } from '@sapphire/framework';
 import { join } from 'path';
+import { GatewayIntentBits, Partials } from 'discord.js';
 
-async function start() {
-  ApplicationCommandRegistries.setDefaultBehaviorWhenNotIdentical(
-    RegisterBehavior.BulkOverwrite,
-  );
-
-  const client = await new SapphireClient({
-    intents: ['Guilds'],
+const start = async () => {
+  const client = new SapphireClient({
+    intents: [
+      GatewayIntentBits.Guilds,
+      GatewayIntentBits.GuildMembers,
+      GatewayIntentBits.GuildMessageReactions,
+      GatewayIntentBits.GuildEmojisAndStickers,
+    ],
+    partials: [Partials.GuildMember, Partials.Reaction, Partials.User],
     baseUserDirectory: join(process.cwd(), 'dist', 'core'),
     logger: {
       level: LogLevel.Info,
     },
-    env: {
-      enabled: true,
-    },
   });
 
-  await client.login(container.env.string('TOKEN'));
+  await client.login(process.env.TOKEN);
 
   const prisma = new PrismaClient();
   container.prisma = prisma;
@@ -38,7 +33,7 @@ async function start() {
 
   const moderationManager = new ModerationManager();
   container.moderationManager = moderationManager;
-}
+};
 
 void start();
 
@@ -46,11 +41,5 @@ declare module '@sapphire/pieces' {
   interface Container {
     prisma: PrismaClient;
     moderationManager: ModerationManager;
-  }
-}
-
-declare module '@kaname-png/plugin-env' {
-  interface EnvKeys {
-    TOKEN: never;
   }
 }
