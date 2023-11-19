@@ -2,12 +2,16 @@
   "extends": [
     "@sapphire/ts-config",
     "@sapphire/ts-config/decorators",
-    "@sapphire/ts-config/extra-strict"
+    "@sapphire/ts-config/extra-strict",
+    "@sapphire/ts-config/bundler",
+    "@sapphire/ts-config/verbatim"
   ],
   "compilerOptions": {
-    "outDir": "dist",
+    "incremental": true,
+    "noEmit": true,
     "removeComments": true,
-    "baseUrl": "./src",
+    "outDir": "dist",
+    "baseUrl": "src",
     "paths": {
       "@lib/*": ["lib/*"]
     }
