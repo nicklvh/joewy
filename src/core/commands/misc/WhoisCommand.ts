@@ -31,7 +31,10 @@ export class WhoisCommand extends Command {
     return interaction.reply({
       embeds: [
         new EmbedBuilder()
-          .setAuthor({ name: `Whois | ${user.tag}` })
+          .setAuthor({
+            name: `Whois | ${user.tag}`,
+            iconURL: user.displayAvatarURL(),
+          })
           .setColor(user.hexAccentColor ?? 'Blue')
           .addFields([
             {

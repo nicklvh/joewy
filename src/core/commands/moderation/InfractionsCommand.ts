@@ -19,7 +19,7 @@ export class InfractionsCommand extends Command {
             option
               .setName('user')
               .setDescription('the user to show infractions for')
-              .setRequired(true),
+              .setRequired(false),
           )
           .setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages);
       },
@@ -30,7 +30,7 @@ export class InfractionsCommand extends Command {
   public override async chatInputRun(
     interaction: Command.ChatInputCommandInteraction,
   ) {
-    const user = interaction.options.getUser('user', true);
+    const user = interaction.options.getUser('user', false) ?? interaction.user;
 
     await interaction.reply(user.toString());
   }

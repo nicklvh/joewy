@@ -34,7 +34,6 @@ model Modlog {
   memberId    String
   moderatorId String
   reason      String
-  evidence    String
   type        ModerationType
   createdAt   DateTime       @default(now())
   Guild       Guild          @relation(fields: [guildId], references: [id])

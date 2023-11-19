@@ -5,6 +5,7 @@ import { ChannelType, EmbedBuilder } from 'discord.js';
 @ApplyOptions<Command.Options>({
   name: 'serverinfo',
   description: 'shows information about the server',
+  runIn: 'GUILD_ANY',
 })
 export class ServerInfoCommand extends Command {
   public override registerApplicationCommands(registry: Command.Registry) {

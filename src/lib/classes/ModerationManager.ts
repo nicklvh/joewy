@@ -14,7 +14,6 @@ export class ModerationManager {
     interaction: ChatInputCommandInteraction,
     user: User,
     reason: string,
-    evidence: string,
   ) {
     const { guild } = interaction;
     const moderator = interaction.user;
@@ -22,25 +21,17 @@ export class ModerationManager {
     await this.createModlogEntry(
       ModerationType[type],
       guild!.id,
-      evidence,
       moderator.id,
       reason,
       user.id,
     );
-    await this.sendModerationMessageToUser(
-      type,
-      user,
-      guild!,
-      reason,
-      evidence,
-    );
+    await this.sendModerationMessageToUser(type, user, guild!, reason);
     await this.sendModerationMessageToModlog(
       type,
       guild!,
       user,
       moderator,
       reason,
-      evidence,
     );
   }
 
@@ -49,7 +40,6 @@ export class ModerationManager {
     user: User,
     guild: Guild,
     reason: string,
-    evidence?: string,
   ) {
     const embed = new EmbedBuilder()
       .addFields([
@@ -62,16 +52,6 @@ export class ModerationManager {
       ])
       .setColor('Blue')
       .setTimestamp();
-
-    evidence
-      ? embed.addFields([
-          {
-            name: 'Evidence',
-            value: evidence,
-            inline: true,
-          },
-        ])
-      : undefined;
 
     switch (type) {
       case ModerationType.BAN:
@@ -107,7 +87,6 @@ export class ModerationManager {
   private async createModlogEntry(
     type: ModerationType,
     guildId: string,
-    evidence: string,
     moderatorId: string,
     reason: string,
     memberId: string,
@@ -116,7 +95,6 @@ export class ModerationManager {
       data: {
         guildId,
         memberId,
-        evidence,
         type: ModerationType[type],
         moderatorId,
         reason,
@@ -131,7 +109,6 @@ export class ModerationManager {
     user: User,
     moderator: User,
     reason: string,
-    evidence: string,
   ) {
     let guildInDB = await container.prisma.guild.findUnique({
       where: {
@@ -166,10 +143,6 @@ export class ModerationManager {
         {
           name: 'Reason',
           value: `\`${reason}\``,
-        },
-        {
-          name: 'Evidence',
-          value: `\`${evidence}\``,
         },
         {
           name: 'Moderator',
