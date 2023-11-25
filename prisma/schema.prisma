@@ -30,12 +30,12 @@ model Member {
 }
 
 model Modlog {
-  id          Int            @id @default(autoincrement())
+  caseId      Int            @id @default(autoincrement())      
   memberId    String
   moderatorId String
   reason      String
   type        ModerationType
-  createdAt   DateTime       @default(now())
+  createdAt   DateTime       @default(now())  @unique
   Guild       Guild          @relation(fields: [guildId], references: [id])
   guildId     String
   Member      Member         @relation(fields: [memberId], references: [id])

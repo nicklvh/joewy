@@ -189,6 +189,8 @@ export class KickCommand extends Command {
         });
       }
     } catch (e) {
+      this.container.logger.error(e);
+
       await interaction.editReply({
         embeds: [
           errorEmbed.setDescription(

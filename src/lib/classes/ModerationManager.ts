@@ -1,12 +1,13 @@
-import {
-  EmbedBuilder,
-  type User,
-  type Guild,
-  ChannelType,
-  type ChatInputCommandInteraction,
-} from 'discord.js';
-import { container } from '@sapphire/framework';
 import { ModerationType } from '@prisma/client';
+import {
+  ChatInputCommandInteraction,
+  User,
+  Guild,
+  EmbedBuilder,
+  ChannelType,
+} from 'discord.js';
+import { ModerationTypeNames } from '..';
+import { container } from '@sapphire/framework';
 
 export class ModerationManager {
   public async handleModeration(
@@ -42,6 +43,10 @@ export class ModerationManager {
     reason: string,
   ) {
     const embed = new EmbedBuilder()
+      .setAuthor({
+        name: `You have been ${ModerationTypeNames[type]} from ${guild.name}`,
+        iconURL: guild.iconURL() || undefined,
+      })
       .addFields([
         {
           name: 'Reason',
@@ -52,32 +57,6 @@ export class ModerationManager {
       ])
       .setColor('Blue')
       .setTimestamp();
-
-    switch (type) {
-      case ModerationType.BAN:
-        embed.setAuthor({
-          name: `You have been banned from ${guild.name}`,
-          iconURL: guild.iconURL() || undefined,
-        });
-        break;
-      case ModerationType.KICK:
-        embed.setAuthor({
-          name: `You have been kicked from ${guild.name}`,
-          iconURL: guild.iconURL() || undefined,
-        });
-        break;
-      case ModerationType.MUTE:
-        embed.setAuthor({
-          name: `You have been muted in ${guild.name}`,
-          iconURL: guild.iconURL() || undefined,
-        });
-        break;
-      case ModerationType.WARN:
-        embed.setAuthor({
-          name: `You have been warned in ${guild.name}`,
-          iconURL: guild.iconURL() || undefined,
-        });
-    }
 
     return user
       .send({ embeds: [embed] })
@@ -91,14 +70,38 @@ export class ModerationManager {
     reason: string,
     memberId: string,
   ) {
+    const member = await container.prisma.member.findUnique({
+      where: {
+        id: memberId,
+      },
+    });
+
+    if (!member) {
+      return container.prisma.member.create({
+        data: {
+          id: memberId,
+          modlogs: {
+            create: {
+              guildId,
+              type: ModerationType[type],
+              moderatorId,
+              reason,
+              createdAt: new Date(),
+            },
+          },
+          guildId,
+        },
+      });
+    }
+
     return container.prisma.modlog.create({
       data: {
         guildId,
-        memberId,
         type: ModerationType[type],
         moderatorId,
         reason,
         createdAt: new Date(),
+        memberId,
       },
     });
   }
@@ -139,6 +142,10 @@ export class ModerationManager {
     if (!modlogChannel || modlogChannel!.type !== ChannelType.GuildText) return;
 
     const embed = new EmbedBuilder()
+      .setAuthor({
+        name: `${ModerationTypeNames[type]} ${user.tag}`,
+        iconURL: user.displayAvatarURL(),
+      })
       .addFields([
         {
           name: 'Reason',
@@ -151,33 +158,6 @@ export class ModerationManager {
       ])
       .setColor('Blue')
       .setTimestamp();
-
-    switch (type) {
-      case ModerationType.BAN:
-        embed.setAuthor({
-          name: `Banned ${user.tag}`,
-          iconURL: user.displayAvatarURL(),
-        });
-        break;
-      case ModerationType.KICK:
-        embed.setAuthor({
-          name: `Kicked ${user.tag}`,
-          iconURL: user.displayAvatarURL(),
-        });
-        break;
-      case ModerationType.MUTE:
-        embed.setAuthor({
-          name: `Muted ${user.tag}`,
-          iconURL: user.displayAvatarURL(),
-        });
-        break;
-      case ModerationType.WARN:
-        embed.setAuthor({
-          name: `Warned ${user.tag}`,
-          iconURL: user.displayAvatarURL(),
-        });
-        break;
-    }
 
     return modlogChannel.send({ embeds: [embed] });
   }

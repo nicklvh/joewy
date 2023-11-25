@@ -191,6 +191,8 @@ export class BanCommand extends Command {
         });
       }
     } catch (e) {
+      this.container.logger.error(e);
+
       return interaction.editReply({
         embeds: [
           errorEmbed.setDescription(

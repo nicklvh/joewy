@@ -1,4 +1,3 @@
-import { ModerationManager } from './lib';
 import { PrismaClient } from '@prisma/client';
 import 'module-alias/register';
 import '@sapphire/plugin-logger/register';
@@ -7,6 +6,7 @@ config();
 import { LogLevel, SapphireClient, container } from '@sapphire/framework';
 import { join } from 'path';
 import { GatewayIntentBits, Partials } from 'discord.js';
+import { ModerationManager } from '@lib/classes';
 
 const start = async () => {
   const client = new SapphireClient({
@@ -19,7 +19,7 @@ const start = async () => {
     partials: [Partials.GuildMember, Partials.Reaction, Partials.User],
     baseUserDirectory: join(process.cwd(), 'dist', 'core'),
     logger: {
-      level: LogLevel.Info,
+      level: LogLevel.Debug,
     },
   });
 
@@ -36,10 +36,3 @@ const start = async () => {
 };
 
 void start();
-
-declare module '@sapphire/pieces' {
-  interface Container {
-    prisma: PrismaClient;
-    moderationManager: ModerationManager;
-  }
-}

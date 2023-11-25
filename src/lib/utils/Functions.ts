@@ -6,3 +6,7 @@ export function trimArray(array: Array<any>) {
   }
   return array;
 }
+
+export function capitaliseFirstLetter(string: string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
