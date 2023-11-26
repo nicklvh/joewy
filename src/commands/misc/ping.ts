@@ -27,8 +27,7 @@ export class PingCommand extends Command {
           .addFields([
             { name: 'Ping', value: `\`${this.container.client.ws.ping}ms\`` },
           ])
-          .setColor('Blue')
-          .setTimestamp(),
+          .setColor('Blue'),
       ],
     });
   }

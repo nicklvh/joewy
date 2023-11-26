@@ -9,8 +9,6 @@ import {
   ChannelType,
   EmbedBuilder,
   PermissionFlagsBits,
-  StringSelectMenuBuilder,
-  StringSelectMenuOptionBuilder,
 } from 'discord.js';
 
 @ApplyOptions<Command.Options>({
@@ -39,69 +37,70 @@ export class SettingsCommand extends Command {
   ) {
     this.guildId = interaction.guildId!;
 
-    const { modlogChannel, auditlogChannel, welcomeChannel } =
-      await this.getChannels(false);
+    const guildInDB = await this.getGuild();
 
-    const select = new StringSelectMenuBuilder()
-      .setCustomId('options')
-      .setPlaceholder('Select an option')
-      .addOptions(
-        new StringSelectMenuOptionBuilder()
-          .setLabel('Modlog Channel')
-          .setDescription('Change or disable the modlog')
-          .setValue('modlog'),
-        new StringSelectMenuOptionBuilder()
-          .setLabel('Auditlog Channel')
-          .setDescription('Change or disable the auditlog')
-          .setValue('auditlog'),
-        new StringSelectMenuOptionBuilder()
-          .setLabel('Welcome Channel')
-          .setDescription('Change or disable the welcome channel')
-          .setValue('welcome'),
-      );
+    const loggingButton = new ButtonBuilder()
+      .setLabel('Logging')
+      .setStyle(ButtonStyle.Primary)
+      .setEmoji('📝')
+      .setCustomId('logging');
 
-    const mainRow =
-      new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(select);
+    const moderationButton = new ButtonBuilder()
+      .setLabel('Moderation')
+      .setStyle(ButtonStyle.Primary)
+      .setEmoji('🔨')
+      .setCustomId('moderation');
 
-    const embed = new EmbedBuilder()
-      .setAuthor({
-        name: `Settings for ${interaction.guild!.name}`,
-        iconURL: interaction.guild?.iconURL() ?? undefined,
-      })
-      .setTimestamp()
-      .setColor('Blue');
+    const starboardButton = new ButtonBuilder()
+      .setLabel('Starboard')
+      .setStyle(ButtonStyle.Primary)
+      .setEmoji('⭐')
+      .setCustomId('starboard');
+
+    const funButton = new ButtonBuilder()
+      .setLabel('Fun')
+      .setStyle(ButtonStyle.Primary)
+      .setEmoji('🎉')
+      .setCustomId('fun');
+
+    const mainRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
+      loggingButton,
+      moderationButton,
+      starboardButton,
+      funButton,
+    );
+
+    const exitButton = new ButtonBuilder()
+      .setCustomId('exit')
+      .setLabel('Exit')
+      .setEmoji('⬅')
+      .setStyle(ButtonStyle.Secondary);
+
+    const exitRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
+      exitButton,
+    );
 
     const message = await interaction.reply({
       embeds: [
         new EmbedBuilder()
           .setAuthor({
-            name: `Settings for ${interaction.guild!.name}`,
+            name: `Configure ${interaction.guild!.name}`,
             iconURL: interaction.guild?.iconURL() ?? undefined,
           })
-          .setTimestamp()
           .setColor('Blue')
-          .setDescription(
-            `Choose one of the options to below change the settings for that option`,
-          )
           .addFields([
             {
-              name: 'Modlog',
-              value: modlogChannel!,
-              inline: true,
-            },
-            {
-              name: 'Auditlog',
-              value: auditlogChannel!,
-              inline: true,
-            },
-            {
-              name: 'Welcome',
-              value: welcomeChannel!,
-              inline: true,
+              name: 'Use the buttons below to configure the server.',
+              value: [
+                `**Logging:** ${guildInDB?.logging ? '✅' : '❌'}`,
+                `**Moderation:** ${guildInDB?.moderation ? '✅' : '❌'}`,
+                `**Starboard:** ${guildInDB?.starboard ? '✅' : '❌'}`,
+                `**Fun:** ${guildInDB?.fun ? '✅' : '❌'}`,
+              ].join('\n'),
             },
           ]),
       ],
-      components: [mainRow],
+      components: [mainRow, exitRow],
       fetchReply: true,
     });
 
@@ -115,8 +114,9 @@ export class SettingsCommand extends Command {
 
       const goBackButton = new ButtonBuilder()
         .setCustomId('goBack')
-        .setLabel('Go Back')
-        .setStyle(ButtonStyle.Primary);
+        .setLabel('Home')
+        .setEmoji('⬅')
+        .setStyle(ButtonStyle.Secondary);
 
       const goBackRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
         goBackButton,
@@ -127,160 +127,121 @@ export class SettingsCommand extends Command {
 
       const id = componentInteraction.customId;
 
-      if (componentInteraction.isStringSelectMenu()) {
-        const selection = componentInteraction.values[0];
-
-        const channelSelector = new ChannelSelectMenuBuilder()
-          .addChannelTypes(ChannelType.GuildText)
-          .setCustomId(`${selection}ChannelSelect`);
-
-        const disableButton = new ButtonBuilder()
-          .setLabel('Disable')
-          .setStyle(ButtonStyle.Danger)
-          .setCustomId(`${selection}Disable`);
-
-        const channelRow =
-          new ActionRowBuilder<ChannelSelectMenuBuilder>().addComponents(
-            channelSelector,
-          );
-
-        const goBackAndDisableRow =
-          new ActionRowBuilder<ButtonBuilder>().addComponents(
-            goBackButton,
-            disableButton,
-          );
-
-        let channel;
-        let string;
-
-        if (selection === 'modlog') {
-          channel = modlogChannel;
-          string = 'modlog';
-        } else if (selection === 'auditlog') {
-          channel = auditlogChannel;
-          string = 'auditlog';
-        } else if (selection === 'welcome') {
-          channel = welcomeChannel;
-          string = 'welcome';
-        }
-
-        await componentInteraction.update({
-          embeds: [
-            embed.setDescription(
-              `Choose a channel below to configure the ${string} channel for \`${
-                interaction.guild!.name
-              }\`${channel ? '\n\nDisable it by selecting `Disable`' : ''}`,
-            ),
-          ],
-          components: [channelRow, channel ? goBackAndDisableRow : goBackRow],
-        });
-      } else if (componentInteraction.isChannelSelectMenu()) {
-        const channelId = componentInteraction.values[0];
-
-        const channels = await this.getChannels(false, true);
-
-        let data: object | undefined = undefined;
-        let string = '';
-
-        if (id === 'modlogChannelSelect') {
-          if (channels.modlogChannel === channelId) {
-            await componentInteraction.update({
-              embeds: [
-                embed.setDescription(
-                  `<#${channelId}> is already set as the modlog channel!`,
-                ),
-              ],
-              components: [goBackRow],
-            });
-            return;
-          }
-
-          string = 'modlog';
-          data = { modlogId: channelId };
-        } else if (id === 'auditlogChannelSelect') {
-          if (channels.auditlogChannel === channelId) {
-            await componentInteraction.update({
-              embeds: [
-                embed.setDescription(
-                  `<#${channelId}> is already set as the auditlog channel!`,
-                ),
-              ],
-              components: [goBackRow],
-            });
-            return;
-          }
-
-          data = { auditlogId: channelId };
-          string = 'auditlog';
-        } else if (id === 'welcomeChannelSelect') {
-          if (channels.welcomeChannel === channelId) {
-            await componentInteraction.update({
-              embeds: [
-                embed.setDescription(
-                  `<#${channelId}> is already set as the welcome channel!`,
-                ),
-              ],
-              components: [goBackRow],
-            });
-            return;
-          }
-
-          data = { welcomeId: channelId };
-          string = 'welcome';
-        }
-
-        if (data) {
-          await this.container.prisma.guild.update({
-            where: {
-              id: interaction.guildId!,
-            },
-            data,
-          });
-
-          await componentInteraction.update({
-            embeds: [
-              embed.setDescription(
-                `Successfully set the ${string} channel to <#${channelId}>`,
-              ),
-            ],
-            components: [goBackRow],
-          });
-        }
-      } else if (componentInteraction.isButton()) {
-        if (id === 'goBack') {
-          const channels = await this.getChannels(false);
+      if (componentInteraction.isButton()) {
+        if (id === 'logging') {
+          const { modlogChannel, auditlogChannel, welcomeChannel } =
+            await this.getChannels(false, false);
 
           await componentInteraction.update({
             embeds: [
               new EmbedBuilder()
                 .setAuthor({
-                  name: `Settings for ${interaction.guild!.name}`,
-                  iconURL: interaction.guild?.iconURL() ?? undefined,
+                  name: 'Configuring the logging system',
+                  iconURL: interaction.guild?.iconURL()!,
                 })
-                .setTimestamp()
-                .setColor('Blue')
-                .setDescription(
-                  `Choose one of the options to below change the settings for that option`,
-                )
                 .addFields([
                   {
-                    name: 'Modlog',
-                    value: channels.modlogChannel!,
-                    inline: true,
+                    name: `Use the buttons below to edit the respective channel and settings`,
+                    value: [
+                      `**Modlog:** ${modlogChannel}`,
+                      `**Auditlog:** ${auditlogChannel}`,
+                      `**Welcome:** ${welcomeChannel}`,
+                    ].join('\n'),
                   },
+                ])
+                .setColor('Blue'),
+            ],
+            components: [
+              new ActionRowBuilder<ButtonBuilder>().addComponents(
+                new ButtonBuilder()
+                  .setCustomId('modlog')
+                  .setLabel('Modlog')
+                  .setStyle(ButtonStyle.Primary),
+                new ButtonBuilder()
+                  .setCustomId('auditlog')
+                  .setLabel('Auditlog')
+                  .setStyle(ButtonStyle.Primary),
+                new ButtonBuilder()
+                  .setCustomId('welcome')
+                  .setLabel('Welcome')
+                  .setStyle(ButtonStyle.Primary),
+              ),
+              goBackRow,
+            ],
+          });
+        } else if (id === 'modlog' || id === 'auditlog' || id === 'welcome') {
+          const channelSelector = new ChannelSelectMenuBuilder()
+            .addChannelTypes(ChannelType.GuildText)
+            .setCustomId(`${id}ChannelSelect`);
+
+          const disableButton = new ButtonBuilder()
+            .setLabel('Disable')
+            .setStyle(ButtonStyle.Danger)
+            .setCustomId(`${id}Disable`);
+
+          const channelRow =
+            new ActionRowBuilder<ChannelSelectMenuBuilder>().addComponents(
+              channelSelector,
+            );
+
+          const goBackAndDisableRow =
+            new ActionRowBuilder<ButtonBuilder>().addComponents(
+              goBackButton,
+              disableButton,
+            );
+
+          let channel;
+          let string;
+
+          if (id === 'modlog') {
+            channel = modlogChannel;
+            string = 'modlog';
+          } else if (id === 'auditlog') {
+            channel = auditlogChannel;
+            string = 'auditlog';
+          } else if (id === 'welcome') {
+            channel = welcomeChannel;
+            string = 'welcome';
+          }
+
+          await componentInteraction.update({
+            embeds: [
+              new EmbedBuilder()
+                .setAuthor({
+                  name: `Configuring the ${string} channel`,
+                  iconURL: interaction.guild?.iconURL()!,
+                })
+                .setColor('Blue')
+                .setDescription(
+                  `Pick a channel below to edit the ${string} channel for \`${
+                    interaction.guild!.name
+                  }\`${channel ? '\nDisable it by selecting `Disable`' : ''}`,
+                ),
+            ],
+            components: [channelRow, channel ? goBackAndDisableRow : goBackRow],
+          });
+        } else if (id === 'goBack') {
+          await componentInteraction.update({
+            embeds: [
+              new EmbedBuilder()
+                .setAuthor({
+                  name: `Configure ${interaction.guild!.name}`,
+                  iconURL: interaction.guild?.iconURL() ?? undefined,
+                })
+                .setColor('Blue')
+                .addFields([
                   {
-                    name: 'Auditlog',
-                    value: channels.auditlogChannel!,
-                    inline: true,
-                  },
-                  {
-                    name: 'Welcome',
-                    value: channels.welcomeChannel!,
-                    inline: true,
+                    name: 'Use the buttons below to configure the server.',
+                    value: [
+                      `**Logging:** ${guildInDB?.logging ? '✅' : '❌'}`,
+                      `**Moderation:** ${guildInDB?.moderation ? '✅' : '❌'}`,
+                      `**Starboard:** ${guildInDB?.starboard ? '✅' : '❌'}`,
+                      `**Fun:** ${guildInDB?.fun ? '✅' : '❌'}`,
+                    ].join('\n'),
                   },
                 ]),
             ],
-            components: [mainRow],
+            components: [mainRow, exitRow],
           });
           return;
         }
@@ -309,11 +270,113 @@ export class SettingsCommand extends Command {
 
           await componentInteraction.update({
             embeds: [
-              embed.setDescription(
-                `Successfully disabled the ${string} channel for \`${
-                  interaction.guild!.name
-                }\``,
-              ),
+              new EmbedBuilder()
+                .setAuthor({
+                  name: `Success`,
+                  iconURL: interaction.guild?.iconURL()!,
+                })
+                .setColor('Blue')
+                .setDescription(
+                  `Successfully disabled the ${string} channel for \`${
+                    interaction.guild!.name
+                  }\``,
+                ),
+            ],
+            components: [goBackRow],
+          });
+        }
+      } else if (componentInteraction.isChannelSelectMenu()) {
+        const channelId = componentInteraction.values[0];
+
+        const channels = await this.getChannels(false, true);
+
+        let data: object | undefined = undefined;
+        let string = '';
+
+        if (id === 'modlogChannelSelect') {
+          if (channels.modlogChannel === channelId) {
+            await componentInteraction.update({
+              embeds: [
+                new EmbedBuilder()
+                  .setAuthor({
+                    name: `Error while editing ${interaction.guild!.name}`,
+                    iconURL: interaction.guild?.iconURL()!,
+                  })
+                  .setColor('Blue')
+                  .setDescription(
+                    `<#${channelId}> is already set as the modlog channel!`,
+                  ),
+              ],
+              components: [goBackRow],
+            });
+            return;
+          }
+
+          string = 'modlog';
+          data = { modlogId: channelId };
+        } else if (id === 'auditlogChannelSelect') {
+          if (channels.auditlogChannel === channelId) {
+            await componentInteraction.update({
+              embeds: [
+                new EmbedBuilder()
+                  .setAuthor({
+                    name: `Error while editing ${interaction.guild!.name}`,
+                    iconURL: interaction.guild?.iconURL()!,
+                  })
+                  .setColor('Blue')
+                  .setDescription(
+                    `<#${channelId}> is already set as the auditlog channel!`,
+                  ),
+              ],
+              components: [goBackRow],
+            });
+            return;
+          }
+
+          data = { auditlogId: channelId };
+          string = 'auditlog';
+        } else if (id === 'welcomeChannelSelect') {
+          if (channels.welcomeChannel === channelId) {
+            await componentInteraction.update({
+              embeds: [
+                new EmbedBuilder()
+                  .setAuthor({
+                    name: `Error while editing ${interaction.guild!.name}`,
+                    iconURL: interaction.guild?.iconURL()!,
+                  })
+                  .setColor('Blue')
+                  .setDescription(
+                    `<#${channelId}> is already set as the welcome channel!`,
+                  ),
+              ],
+              components: [goBackRow],
+            });
+            return;
+          }
+
+          data = { welcomeId: channelId };
+          string = 'welcome';
+        }
+
+        if (data) {
+          await this.container.prisma.guild.update({
+            where: {
+              id: interaction.guildId!,
+            },
+            data,
+          });
+
+          await componentInteraction.update({
+            embeds: [
+              new EmbedBuilder()
+                .setAuthor({
+                  name: `Success`,
+                  iconURL: interaction.guild?.iconURL()!,
+                })
+                .setColor('Blue')
+                .setDescription(
+                  `Successfully set the ${string} channel to <#${channelId}>`,
+                ),
             ],
             components: [goBackRow],
           });
@@ -324,7 +387,7 @@ export class SettingsCommand extends Command {
     collector.on('dispose', async () => {
       const embed = new EmbedBuilder()
         .setAuthor({
-          name: 'Timed out',
+          name: 'Expired',
           iconURL: interaction.user.displayAvatarURL(),
         })
         .setDescription(
@@ -332,7 +395,6 @@ export class SettingsCommand extends Command {
             interaction.guild!.name
           }\``,
         )
-        .setTimestamp()
         .setColor('Blue');
 
       await interaction.editReply({ embeds: [embed] });
@@ -340,9 +402,7 @@ export class SettingsCommand extends Command {
   }
 
   private async getChannels(shouldReturnOrNull: boolean, returnId?: boolean) {
-    let guildInDB = await this.container.prisma.guild.findUnique({
-      where: { id: this.guildId },
-    });
+    let guildInDB = await this.getGuild();
 
     if (!guildInDB)
       guildInDB = await this.container.prisma.guild.create({
@@ -382,5 +442,11 @@ export class SettingsCommand extends Command {
       auditlogChannel,
       welcomeChannel,
     };
+  }
+
+  private async getGuild() {
+    return await this.container.prisma.guild.findUnique({
+      where: { id: this.guildId },
+    });
   }
 }

@@ -71,7 +71,7 @@ export class ServerInfoCommand extends Command {
               inline: true,
             },
           ])
-          .setTimestamp()
+
           .setFooter({ text: `ID: ${interaction.guild?.id}` }),
       ],
     });

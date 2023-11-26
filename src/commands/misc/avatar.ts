@@ -54,8 +54,7 @@ export class AvatarCommand extends Command {
             iconURL: user.avatarURL({ size }) || undefined,
           })
           .setColor('Blue')
-          .setImage(user.avatarURL())
-          .setTimestamp(),
+          .setImage(user.avatarURL()),
       ],
     });
   }

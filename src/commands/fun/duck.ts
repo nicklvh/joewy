@@ -35,8 +35,7 @@ export class DuckCommand extends Command {
               iconURL: interaction.user.avatarURL()!,
             })
             .setColor('Red')
-            .setDescription(`Couldn't fetch a duck 🦆\nTry again later!`)
-            .setTimestamp(),
+            .setDescription(`Couldn't fetch a duck 🦆\nTry again later!`),
         ],
       });
 
@@ -49,8 +48,7 @@ export class DuckCommand extends Command {
           })
           .setImage(data.url)
           .setColor('Blue')
-          .setFooter({ text: data.message! })
-          .setTimestamp(),
+          .setFooter({ text: data.message! }),
       ],
     });
   }

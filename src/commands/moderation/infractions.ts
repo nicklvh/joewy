@@ -64,14 +64,12 @@ export class InfractionsCommand extends Command {
     const infractions = await this.container.prisma.modlog.findMany({
       where: {
         memberId: user.id,
-        Guild: guildInDB,
         guildId: interaction.guildId!,
       },
     });
 
     const guildInfractions = await this.container.prisma.modlog.findMany({
       where: {
-        Guild: guildInDB,
         guildId: interaction.guildId!,
       },
     });
@@ -90,8 +88,7 @@ export class InfractionsCommand extends Command {
             name: `Infractions for ${user.tag}`,
             iconURL: user.displayAvatarURL(),
           })
-          .setColor('Blue')
-          .setTimestamp();
+          .setColor('Blue');
 
         for (const infraction of arr) {
           const moderator = this.container.client.users.cache.get(

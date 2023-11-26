@@ -35,8 +35,7 @@ export class DogCommand extends Command {
               iconURL: interaction.user.avatarURL()!,
             })
             .setColor('Red')
-            .setDescription(`Couldn't fetch a dog 🐶\nTry again later!`)
-            .setTimestamp(),
+            .setDescription(`Couldn't fetch a dog 🐶\nTry again later!`),
         ],
       });
 
@@ -49,8 +48,7 @@ export class DogCommand extends Command {
           })
           .setImage(data[0].url)
           .setColor('Blue')
-          .setFooter({ text: 'Powered by thedogapi.com' })
-          .setTimestamp(),
+          .setFooter({ text: 'Powered by thedogapi.com' }),
       ],
     });
   }

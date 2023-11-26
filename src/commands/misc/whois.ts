@@ -48,7 +48,7 @@ export class WhoisCommand extends Command {
               ).toFixed(0)}:f>`,
             },
           ])
-          .setTimestamp()
+
           .setFooter({ text: `ID: ${user.id}` }),
       ],
     });

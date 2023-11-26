@@ -75,8 +75,7 @@ export class RockPaperScissorsCommand extends Command {
               }\``,
             },
           ])
-          .setColor('Blue')
-          .setTimestamp(),
+          .setColor('Blue'),
       ],
     });
   }

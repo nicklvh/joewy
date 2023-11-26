@@ -52,9 +52,7 @@ export class KickCommand extends Command {
         name: `Error!`,
         iconURL: interaction.user.displayAvatarURL(),
       })
-      .setColor('Blue')
-      .setTimestamp();
-
+      .setColor('Blue');
     if (user.id === interaction.user.id) {
       return interaction.reply({
         embeds: [
@@ -75,7 +73,7 @@ export class KickCommand extends Command {
     if (!member) {
       return interaction.reply({
         embeds: [
-          new EmbedBuilder().setDescription(
+          errorEmbed.setDescription(
             `An error occured with finding the member.`,
           ),
         ],
@@ -131,8 +129,7 @@ export class KickCommand extends Command {
           .setDescription(
             `Are you sure you want to kick ${user}?\n\nThis will be cancelled in 1 minute if you don't respond.`,
           )
-          .setColor('Blue')
-          .setTimestamp(),
+          .setColor('Blue'),
       ],
       components: [row],
       fetchReply: true,
@@ -168,8 +165,7 @@ export class KickCommand extends Command {
                   inline: true,
                 },
               ])
-              .setColor('Blue')
-              .setTimestamp(),
+              .setColor('Blue'),
           ],
           components: [],
         });
@@ -182,8 +178,7 @@ export class KickCommand extends Command {
                 iconURL: interaction.user.displayAvatarURL(),
               })
               .setDescription(`Cancelled kicking ${user}`)
-              .setColor('Blue')
-              .setTimestamp(),
+              .setColor('Blue'),
           ],
           components: [],
         });
@@ -194,7 +189,7 @@ export class KickCommand extends Command {
       await interaction.editReply({
         embeds: [
           errorEmbed.setDescription(
-            `You took too long to respond, so the ban has been cancelled.`,
+            `You took too long to respond, so the kick has been cancelled.`,
           ),
         ],
         components: [],

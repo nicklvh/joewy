@@ -30,8 +30,7 @@ export class CoinflipCommand extends Command {
               value: `\`${Math.random() > 0.5 ? 'Heads' : 'Tails'}\``,
             },
           ])
-          .setColor('Blue')
-          .setTimestamp(),
+          .setColor('Blue'),
       ],
     });
   }

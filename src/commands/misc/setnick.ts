@@ -55,7 +55,7 @@ export class SetNickCommand extends Command {
                 value: 'Cannot set the nickname of the server owner',
               },
             ])
-            .setTimestamp()
+
             .setColor('Blue'),
         ],
       });
@@ -82,7 +82,7 @@ export class SetNickCommand extends Command {
               inline: true,
             },
           ])
-          .setTimestamp()
+
           .setColor('Blue'),
       ],
     });

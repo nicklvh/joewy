@@ -15,8 +15,12 @@ model Guild {
   modlogId   String?
   welcomeId  String?
   auditlogId String?
-  modlogs    Modlog[]
   members    Member[]
+  logging    Boolean? @default(false)
+  moderation Boolean? @default(false)
+  welcome    Boolean? @default(false)
+  starboard  Boolean? @default(false)
+  fun        Boolean? @default(false)
 }
 
 model Member {
@@ -26,18 +30,22 @@ model Member {
   level   Int?
   Guild   Guild    @relation(fields: [guildId], references: [id])
   guildId String
-  modlogs Modlog[]
 }
 
-model Modlog { 
+model Modlog {
   memberId    String
   moderatorId String
   reason      String
   type        ModerationType
-  createdAt   DateTime       @default(now())  @unique
-  Guild       Guild          @relation(fields: [guildId], references: [id])
+  createdAt   DateTime       @unique @default(now())
   guildId     String
-  Member      Member         @relation(fields: [memberId], references: [id])
+}
+
+model Ban {
+  memberId  String
+  guildId   String
+  createdAt DateTime @unique @default(now())
+  dueUnban  DateTime
 }
 
 enum ModerationType {

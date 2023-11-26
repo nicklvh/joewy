@@ -15,9 +15,24 @@ export class ModerationManager {
     interaction: ChatInputCommandInteraction,
     user: User,
     reason: string,
+    days?: number,
   ) {
     const { guild } = interaction;
     const moderator = interaction.user;
+
+    if (days && type === ModerationType.BAN) {
+      days = days * 86400000;
+
+      const dueDate = new Date().valueOf() + days;
+
+      await container.prisma.ban.create({
+        data: {
+          guildId: guild!.id,
+          memberId: user.id,
+          dueUnban: new Date(dueDate),
+        },
+      });
+    }
 
     await this.createModlogEntry(
       ModerationType[type],
@@ -70,30 +85,6 @@ export class ModerationManager {
     reason: string,
     memberId: string,
   ) {
-    const member = await container.prisma.member.findUnique({
-      where: {
-        id: memberId,
-      },
-    });
-
-    if (!member) {
-      return container.prisma.member.create({
-        data: {
-          id: memberId,
-          modlogs: {
-            create: {
-              guildId,
-              type: ModerationType[type],
-              moderatorId,
-              reason,
-              createdAt: new Date(),
-            },
-          },
-          guildId,
-        },
-      });
-    }
-
     return container.prisma.modlog.create({
       data: {
         guildId,
