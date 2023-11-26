@@ -2,7 +2,8 @@ import { Command } from '@sapphire/framework';
 import { PermissionFlagsBits } from 'discord.js';
 import { ApplyOptions } from '@sapphire/decorators';
 import { PaginatedMessage } from '@sapphire/discord.js-utilities';
-import { capitaliseFirstLetter } from '@lib/utils';
+import { chunk } from '@sapphire/utilities';
+import { ModerationTypeStrings } from '@lib/types';
 
 @ApplyOptions<Command.Options>({
   name: 'infractions',
@@ -68,6 +69,13 @@ export class InfractionsCommand extends Command {
       },
     });
 
+    const guildInfractions = await this.container.prisma.modlog.findMany({
+      where: {
+        Guild: guildInDB,
+        guildId: interaction.guildId!,
+      },
+    });
+
     if (!infractions || !infractions.length) {
       return interaction.reply({
         content: 'This user has no infractions',
@@ -75,30 +83,41 @@ export class InfractionsCommand extends Command {
       });
     }
 
-    for (const infraction of infractions) {
+    for (const arr of chunk(infractions, 3)) {
       message.addPageEmbed((embed) => {
-        return embed.setTitle(`Infraction #${infraction.caseId}`).addFields([
-          {
-            name: 'Moderator',
-            value: `<@${infraction.moderatorId}>`,
-            inline: true,
-          },
-          {
-            name: 'Reason',
-            value: infraction.reason,
-            inline: true,
-          },
-          {
-            name: 'Type',
-            value: capitaliseFirstLetter(infraction.type),
-            inline: false,
-          },
-          {
-            name: 'Date',
-            value: `<t:${infraction.createdAt.getMilliseconds()}:f>`,
-            inline: true,
-          },
-        ]);
+        embed
+          .setAuthor({
+            name: `Infractions for ${user.tag}`,
+            iconURL: user.displayAvatarURL(),
+          })
+          .setColor('Blue')
+          .setTimestamp();
+
+        for (const infraction of arr) {
+          const moderator = this.container.client.users.cache.get(
+            infraction.moderatorId,
+          );
+
+          const id =
+            guildInfractions.findIndex(
+              (inf) => inf.createdAt === infraction.createdAt,
+            ) + 1;
+
+          embed.addFields([
+            {
+              name: `${ModerationTypeStrings[infraction.type]} - Case #${id}`,
+              value: [
+                `**Moderator:** ${moderator!} (\`${moderator!.id}\`)`,
+                `**Reason:** \`${infraction.reason}\``,
+                `**Date:** <t:${(infraction.createdAt.valueOf() / 1000).toFixed(
+                  0,
+                )}:f>`,
+              ].join('\n'),
+            },
+          ]);
+        }
+
+        return embed;
       });
     }
 

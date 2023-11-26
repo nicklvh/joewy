@@ -671,6 +671,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@sapphire/plugin-api@npm:^5.2.0":
+  version: 5.2.0
+  resolution: "@sapphire/plugin-api@npm:5.2.0"
+  dependencies:
+    "@types/ws": "npm:^8.5.9"
+    tldts: "npm:^6.0.20"
+    tslib: "npm:^2.6.2"
+    undici: "npm:^5.27.2"
+  checksum: b4474a8bbd6987e8ea3e74f3a0b398c8eff4758b1f2d41762fda28d6c1e501998cbceb432d837bcbd3b3ab5b19dce1f1cc695e142ce344e7b059e26b4768dcb3
+  languageName: node
+  linkType: hard
+
 "@sapphire/plugin-logger@npm:^3.0.7":
   version: 3.0.7
   resolution: "@sapphire/plugin-logger@npm:3.0.7"
@@ -771,6 +783,16 @@ __metadata:
   version: 3.13.0
   resolution: "@sapphire/utilities@npm:3.13.0"
   checksum: cf34a7294ff31ff9049527880cf273d61c07131d41a8d8c211a99baae213a1aaab9c2774a2e934173582243f79f755afd17542996159d1b99309c91524d30b9d
+  languageName: node
+  linkType: hard
+
+"@skyra/env-utilities@npm:^1.2.1":
+  version: 1.2.1
+  resolution: "@skyra/env-utilities@npm:1.2.1"
+  dependencies:
+    dotenv: "npm:^16.3.0"
+    dotenv-expand: "npm:^10.0.0"
+  checksum: 198ab7fbed7b22b196cf1427af03e453c4803c5cb04cfa90b9e2f5fb00b2ee99d014ea82f7fe3a84497d7f8abbf7e0abb07e765c90109c2381471c69ae652f02
   languageName: node
   linkType: hard
 
@@ -1478,6 +1500,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"discord-api-types@npm:^0.37.65":
+  version: 0.37.65
+  resolution: "discord-api-types@npm:0.37.65"
+  checksum: 4bb650463434efc10b1788500191edeefb0626cf682a9d49fcf094699d887f85b29ec439083672c9f79c9fcdc6d88c9974881ab28f65aac00b5aeaf0e01af855
+  languageName: node
+  linkType: hard
+
 "discord.js@npm:^14.14.1":
   version: 14.14.1
   resolution: "discord.js@npm:14.14.1"
@@ -1509,7 +1538,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dotenv@npm:^16.3.1":
+"dotenv-expand@npm:^10.0.0":
+  version: 10.0.0
+  resolution: "dotenv-expand@npm:10.0.0"
+  checksum: 298f5018e29cfdcb0b5f463ba8e8627749103fbcf6cf81c561119115754ed582deee37b49dfc7253028aaba875ab7aea5fa90e5dac88e511d009ab0e6677924e
+  languageName: node
+  linkType: hard
+
+"dotenv@npm:^16.3.0":
   version: 16.3.1
   resolution: "dotenv@npm:16.3.1"
   checksum: b95ff1bbe624ead85a3cd70dbd827e8e06d5f05f716f2d0cbc476532d54c7c9469c3bc4dd93ea519f6ad711cb522c00ac9a62b6eb340d5affae8008facc3fbd7
@@ -2332,16 +2368,19 @@ __metadata:
     "@sapphire/eslint-config": "npm:^5.0.2"
     "@sapphire/fetch": "npm:^2.4.1"
     "@sapphire/framework": "npm:^4.8.2"
+    "@sapphire/plugin-api": "npm:^5.2.0"
     "@sapphire/plugin-logger": "npm:^3.0.7"
     "@sapphire/plugin-subcommands": "npm:^5.1.0"
+    "@sapphire/ratelimits": "npm:^2.4.7"
     "@sapphire/time-utilities": "npm:^1.7.10"
     "@sapphire/ts-config": "npm:^5.0.0"
     "@sapphire/utilities": "npm:^3.13.0"
+    "@skyra/env-utilities": "npm:^1.2.1"
     "@swc/core": "npm:^1.3.99"
     "@types/module-alias": "npm:^2.0.4"
     "@types/node": "npm:^20.10.0"
+    discord-api-types: "npm:^0.37.65"
     discord.js: "npm:^14.14.1"
-    dotenv: "npm:^16.3.1"
     module-alias: "npm:^2.2.3"
     prisma: "npm:^5.6.0"
     tsup: "npm:^8.0.1"
@@ -3373,6 +3412,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"tldts-core@npm:^6.0.21":
+  version: 6.0.21
+  resolution: "tldts-core@npm:6.0.21"
+  checksum: 09bd1c18ffe57655c9c698b671ef2917cc5a6a734ea6d329202e1ca63853a4ef8581064257febe8bc5a0c1a8f67a415cd684dcd3fd2fe3f2f30e8ad17cddd284
+  languageName: node
+  linkType: hard
+
+"tldts@npm:^6.0.20":
+  version: 6.0.21
+  resolution: "tldts@npm:6.0.21"
+  dependencies:
+    tldts-core: "npm:^6.0.21"
+  bin:
+    tldts: bin/cli.js
+  checksum: f6d9c60000b4743615303dc6bf7b1c19bc55d629b6940d60df816c479d2c734c9278aeae4a458631e9265e864320f29f212732411d047f2eded126d9fb5f486a
+  languageName: node
+  linkType: hard
+
 "to-regex-range@npm:^5.0.1":
   version: 5.0.1
   resolution: "to-regex-range@npm:5.0.1"
@@ -3545,6 +3602,15 @@ __metadata:
   dependencies:
     "@fastify/busboy": "npm:^2.0.0"
   checksum: 0cb62c57edc938f242c116e41fb2a74f81ed20e7e2e554cf1ceae548520df0592385b53d444f8cf59e1e10e6b27acd153198d8a2353b3040d0a778a099aac92c
+  languageName: node
+  linkType: hard
+
+"undici@npm:^5.27.2":
+  version: 5.28.0
+  resolution: "undici@npm:5.28.0"
+  dependencies:
+    "@fastify/busboy": "npm:^2.0.0"
+  checksum: ad49ebe742bbfcb389a46d20e1ac38100856b7126c53c7083bdf4a85eba5c3e4df1955bc99226d004157017d52a0e158b7b58a9d1fab2db8158c6a4704b49193
   languageName: node
   linkType: hard
 

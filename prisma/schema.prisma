@@ -29,8 +29,7 @@ model Member {
   modlogs Modlog[]
 }
 
-model Modlog {
-  caseId      Int            @id @default(autoincrement())      
+model Modlog { 
   memberId    String
   moderatorId String
   reason      String

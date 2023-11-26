@@ -6,7 +6,7 @@ import {
   EmbedBuilder,
   ChannelType,
 } from 'discord.js';
-import { ModerationTypeNames } from '..';
+import { ModerationTypeNames } from '../types';
 import { container } from '@sapphire/framework';
 
 export class ModerationManager {
