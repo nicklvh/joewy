@@ -15,7 +15,6 @@ declare module '@skyra/env-utilities' {
     CLIENT_ID: string;
     CLIENT_SECRET: string;
     OAUTH_REDIRECT: string;
-    OAUTH_SCOPE: ArrayString;
     OAUTH_COOKIE: string;
     API_PORT: NumberString;
     API_ORIGIN: string;
