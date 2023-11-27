@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "tsup",
-    "start": "tsup && cls && node ."
+    "start": "tsup && node ."
   },
   "private": true,
   "repository": {
