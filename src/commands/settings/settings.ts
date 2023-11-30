@@ -221,8 +221,7 @@ export class SettingsCommand extends Command {
             components: [channelRow, channel ? goBackAndDisableRow : goBackRow],
           });
         } else if (id === 'moderation') {
-          const { modlogChannel, auditlogChannel, welcomeChannel } =
-            await this.getChannels(false, false);
+          const guild = await this.getGuild();
 
           await componentInteraction.update({
             embeds: [
@@ -235,7 +234,7 @@ export class SettingsCommand extends Command {
                   {
                     name: `Use the buttons below to edit the respective channel and settings`,
                     value: [
-                      `**Modlog:** ${modlogChannel}`,
+                      `**Blacklist Words:** ${guild?.blacklist ? '✅' : '❌'}`,
                       `**Auditlog:** ${auditlogChannel}`,
                       `**Welcome:** ${welcomeChannel}`,
                     ].join('\n'),

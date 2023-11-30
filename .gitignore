@@ -2,7 +2,3 @@
 .env.development
 node_modules
 dist
-
-# Yarn files
-.yarn/install-state.gz
-.yarn/build-state.yml
