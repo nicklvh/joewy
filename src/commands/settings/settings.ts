@@ -137,7 +137,7 @@ export class SettingsCommand extends Command {
               new EmbedBuilder()
                 .setAuthor({
                   name: 'Configuring the logging system',
-                  iconURL: interaction.guild?.iconURL()!,
+                  iconURL: interaction.guild?.iconURL() as string,
                 })
                 .addFields([
                   {
@@ -209,7 +209,7 @@ export class SettingsCommand extends Command {
               new EmbedBuilder()
                 .setAuthor({
                   name: `Configuring the ${string} channel`,
-                  iconURL: interaction.guild?.iconURL()!,
+                  iconURL: interaction.guild?.iconURL() as string,
                 })
                 .setColor('Blue')
                 .setDescription(
@@ -219,6 +219,47 @@ export class SettingsCommand extends Command {
                 ),
             ],
             components: [channelRow, channel ? goBackAndDisableRow : goBackRow],
+          });
+        } else if (id === 'moderation') {
+          const { modlogChannel, auditlogChannel, welcomeChannel } =
+            await this.getChannels(false, false);
+
+          await componentInteraction.update({
+            embeds: [
+              new EmbedBuilder()
+                .setAuthor({
+                  name: 'Configuring the moderation system',
+                  iconURL: interaction.guild?.iconURL() as string,
+                })
+                .addFields([
+                  {
+                    name: `Use the buttons below to edit the respective channel and settings`,
+                    value: [
+                      `**Modlog:** ${modlogChannel}`,
+                      `**Auditlog:** ${auditlogChannel}`,
+                      `**Welcome:** ${welcomeChannel}`,
+                    ].join('\n'),
+                  },
+                ])
+                .setColor('Blue'),
+            ],
+            components: [
+              new ActionRowBuilder<ButtonBuilder>().addComponents(
+                new ButtonBuilder()
+                  .setCustomId('modlog')
+                  .setLabel('Modlog')
+                  .setStyle(ButtonStyle.Primary),
+                new ButtonBuilder()
+                  .setCustomId('auditlog')
+                  .setLabel('Auditlog')
+                  .setStyle(ButtonStyle.Primary),
+                new ButtonBuilder()
+                  .setCustomId('welcome')
+                  .setLabel('Welcome')
+                  .setStyle(ButtonStyle.Primary),
+              ),
+              goBackRow,
+            ],
           });
         } else if (id === 'goBack') {
           await componentInteraction.update({
@@ -273,7 +314,7 @@ export class SettingsCommand extends Command {
               new EmbedBuilder()
                 .setAuthor({
                   name: `Success`,
-                  iconURL: interaction.guild?.iconURL()!,
+                  iconURL: interaction.guild?.iconURL() as string,
                 })
                 .setColor('Blue')
                 .setDescription(
@@ -300,7 +341,7 @@ export class SettingsCommand extends Command {
                 new EmbedBuilder()
                   .setAuthor({
                     name: `Error while editing ${interaction.guild!.name}`,
-                    iconURL: interaction.guild?.iconURL()!,
+                    iconURL: interaction.guild?.iconURL() as string,
                   })
                   .setColor('Blue')
                   .setDescription(
@@ -321,7 +362,7 @@ export class SettingsCommand extends Command {
                 new EmbedBuilder()
                   .setAuthor({
                     name: `Error while editing ${interaction.guild!.name}`,
-                    iconURL: interaction.guild?.iconURL()!,
+                    iconURL: interaction.guild?.iconURL() as string,
                   })
                   .setColor('Blue')
                   .setDescription(
@@ -342,7 +383,7 @@ export class SettingsCommand extends Command {
                 new EmbedBuilder()
                   .setAuthor({
                     name: `Error while editing ${interaction.guild!.name}`,
-                    iconURL: interaction.guild?.iconURL()!,
+                    iconURL: interaction.guild?.iconURL() as string,
                   })
                   .setColor('Blue')
                   .setDescription(
@@ -371,7 +412,7 @@ export class SettingsCommand extends Command {
               new EmbedBuilder()
                 .setAuthor({
                   name: `Success`,
-                  iconURL: interaction.guild?.iconURL()!,
+                  iconURL: interaction.guild?.iconURL() as string,
                 })
                 .setColor('Blue')
                 .setDescription(
@@ -387,7 +428,7 @@ export class SettingsCommand extends Command {
     collector.on('dispose', async () => {
       const embed = new EmbedBuilder()
         .setAuthor({
-          name: 'Expired',
+          name: 'Exited',
           iconURL: interaction.user.displayAvatarURL(),
         })
         .setDescription(
@@ -445,8 +486,10 @@ export class SettingsCommand extends Command {
   }
 
   private async getGuild() {
-    return await this.container.prisma.guild.findUnique({
+    const guild = await this.container.prisma.guild.findUnique({
       where: { id: this.guildId },
     });
+
+    return guild;
   }
 }

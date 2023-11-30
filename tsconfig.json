@@ -7,10 +7,6 @@
     "@sapphire/ts-config/verbatim"
   ],
   "compilerOptions": {
-    "incremental": true,
-    "noEmit": true,
-    "removeComments": true,
-    "outDir": "dist",
     "baseUrl": "src",
     "paths": {
       "@lib/*": ["lib/*"]

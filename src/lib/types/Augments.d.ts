@@ -1,6 +1,6 @@
 import type { ModerationManager } from '@lib/classes';
 import type { PrismaClient } from '@prisma/client';
-import type { ArrayString, NumberString } from '@skyra/env-utilities';
+import type { NumberString } from '@skyra/env-utilities';
 
 declare module '@sapphire/pieces' {
   interface Container {
