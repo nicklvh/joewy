@@ -470,13 +470,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/module-alias@npm:^2.0.4":
-  version: 2.0.4
-  resolution: "@types/module-alias@npm:2.0.4"
-  checksum: 73e0993763526093d9e0993923e93a43186fac9b73e6ee6f785a34a79db6130468b2c9d9798c092ae5d50e8a2e6f7ab51a7f638ee7671037c15b5dde15dc5787
-  languageName: node
-  linkType: hard
-
 "@types/node@npm:*, @types/node@npm:^20.10.0":
   version: 20.10.2
   resolution: "@types/node@npm:20.10.2"
@@ -880,7 +873,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"discord-api-types@npm:^0.37.63, discord-api-types@npm:^0.37.65":
+"discord-api-types@npm:^0.37.63":
   version: 0.37.65
   resolution: "discord-api-types@npm:0.37.65"
   checksum: 4bb650463434efc10b1788500191edeefb0626cf682a9d49fcf094699d887f85b29ec439083672c9f79c9fcdc6d88c9974881ab28f65aac00b5aeaf0e01af855
@@ -1451,11 +1444,8 @@ __metadata:
     "@sapphire/ts-config": "npm:^5.0.0"
     "@sapphire/utilities": "npm:^3.13.0"
     "@skyra/env-utilities": "npm:^1.2.1"
-    "@types/module-alias": "npm:^2.0.4"
     "@types/node": "npm:^20.10.0"
-    discord-api-types: "npm:^0.37.65"
     discord.js: "npm:^14.14.1"
-    module-alias: "npm:^2.2.3"
     prisma: "npm:^5.6.0"
     typescript: "npm:^5.3.2"
   languageName: unknown
@@ -1602,13 +1592,6 @@ __metadata:
   dependencies:
     brace-expansion: "npm:^1.1.7"
   checksum: 0262810a8fc2e72cca45d6fd86bd349eee435eb95ac6aa45c9ea2180e7ee875ef44c32b55b5973ceabe95ea12682f6e3725cbb63d7a2d1da3ae1163c8b210311
-  languageName: node
-  linkType: hard
-
-"module-alias@npm:^2.2.3":
-  version: 2.2.3
-  resolution: "module-alias@npm:2.2.3"
-  checksum: 47dc5b6d04f6e7df0ff330ca9b2a37c688a682ed661e9432b0b327e1e6c43eedad052151b8d50d6beea8b924828d2a92fa4625c18d651bf2d93d8f03aa0172fa
   languageName: node
   linkType: hard
 

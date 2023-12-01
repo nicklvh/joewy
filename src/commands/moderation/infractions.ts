@@ -1,15 +1,15 @@
-import { Command } from '@sapphire/framework';
+import { Command, CommandOptionsRunTypeEnum } from '@sapphire/framework';
 import { PermissionFlagsBits } from 'discord.js';
 import { ApplyOptions } from '@sapphire/decorators';
 import { PaginatedMessage } from '@sapphire/discord.js-utilities';
 import { chunk } from '@sapphire/utilities';
-import { ModerationTypeStrings } from '@lib/types';
+import { ModerationTypeStrings } from '#types/index';
 
 @ApplyOptions<Command.Options>({
   name: 'infractions',
   description: 'show all of a members infractions, warns/bans/mutes/kicks...',
   requiredUserPermissions: [PermissionFlagsBits.ManageMessages],
-  runIn: 'GUILD_ANY',
+  runIn: CommandOptionsRunTypeEnum.GuildAny,
 })
 export class InfractionsCommand extends Command {
   public override registerApplicationCommands(registry: Command.Registry) {

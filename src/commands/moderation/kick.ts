@@ -1,4 +1,4 @@
-import { Command } from '@sapphire/framework';
+import { Command, CommandOptionsRunTypeEnum } from '@sapphire/framework';
 import {
   ActionRowBuilder,
   ButtonBuilder,
@@ -15,7 +15,7 @@ import { Time } from '@sapphire/time-utilities';
   description: 'kick a member 🔨',
   requiredUserPermissions: [PermissionFlagsBits.KickMembers],
   requiredClientPermissions: [PermissionFlagsBits.KickMembers],
-  runIn: 'GUILD_ANY',
+  runIn: CommandOptionsRunTypeEnum.GuildAny,
 })
 export class KickCommand extends Command {
   public override registerApplicationCommands(registry: Command.Registry) {

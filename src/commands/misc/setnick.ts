@@ -1,4 +1,4 @@
-import { Command } from '@sapphire/framework';
+import { Command, CommandOptionsRunTypeEnum } from '@sapphire/framework';
 import { ApplyOptions } from '@sapphire/decorators';
 import { EmbedBuilder, PermissionFlagsBits } from 'discord.js';
 
@@ -7,7 +7,7 @@ import { EmbedBuilder, PermissionFlagsBits } from 'discord.js';
   description: 'set the nickname of a user',
   requiredClientPermissions: [PermissionFlagsBits.ManageNicknames],
   requiredUserPermissions: [PermissionFlagsBits.ManageNicknames],
-  runIn: 'GUILD_ANY',
+  runIn: CommandOptionsRunTypeEnum.GuildAny,
 })
 export class SetNickCommand extends Command {
   public override registerApplicationCommands(registry: Command.Registry) {

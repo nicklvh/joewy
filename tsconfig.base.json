@@ -1,0 +1,13 @@
+{
+  "extends": [
+    "@sapphire/ts-config",
+    "@sapphire/ts-config/decorators",
+    "@sapphire/ts-config/extra-strict"
+  ],
+  "compilerOptions": {
+    "tsBuildInfoFile": "dist/tsconfig.tsbuildinfo",
+    "skipLibCheck": true,
+    "removeComments": true,
+    "moduleResolution": "Node16"
+  }
+}

@@ -2,7 +2,7 @@ import { Command } from '@sapphire/framework';
 import { fetch, FetchResultTypes } from '@sapphire/fetch';
 import { EmbedBuilder } from 'discord.js';
 import { ApplyOptions } from '@sapphire/decorators';
-import type { APIPetInterface } from '@lib/types';
+import type { APIPetInterface } from '#types/index';
 
 @ApplyOptions<Command.Options>({
   name: 'duck',

@@ -1,5 +1,5 @@
-import { ApplyOptions } from '@sapphire/decorators';
 import { Command } from '@sapphire/framework';
+import { ApplyOptions } from '@sapphire/decorators';
 import { EmbedBuilder } from 'discord.js';
 
 @ApplyOptions<Command.Options>({

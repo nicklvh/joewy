@@ -1,4 +1,4 @@
-import { Command } from '@sapphire/framework';
+import { Command, CommandOptionsRunTypeEnum } from '@sapphire/framework';
 import {
   ActionRowBuilder,
   ButtonBuilder,
@@ -14,7 +14,7 @@ import { Time } from '@sapphire/time-utilities';
   name: 'warn',
   description: 'warn a member 👎',
   requiredUserPermissions: [PermissionFlagsBits.ManageGuild],
-  runIn: 'GUILD_ANY',
+  runIn: CommandOptionsRunTypeEnum.GuildAny,
 })
 export class WarnCommand extends Command {
   public override registerApplicationCommands(registry: Command.Registry) {

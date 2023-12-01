@@ -1,4 +1,4 @@
-import { Command } from '@sapphire/framework';
+import { Command, CommandOptionsRunTypeEnum } from '@sapphire/framework';
 import {
   ActionRowBuilder,
   ButtonBuilder,
@@ -15,7 +15,7 @@ import { ModerationType } from '@prisma/client';
   description: 'ban a member 🔨',
   requiredUserPermissions: [PermissionFlagsBits.BanMembers],
   requiredClientPermissions: [PermissionFlagsBits.BanMembers],
-  runIn: 'GUILD_ANY',
+  runIn: CommandOptionsRunTypeEnum.GuildAny,
 })
 export class BanCommand extends Command {
   public override registerApplicationCommands(registry: Command.Registry) {

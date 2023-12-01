@@ -1,10 +1,9 @@
 import { PrismaClient } from '@prisma/client';
 import '@sapphire/plugin-logger/register';
 import '@sapphire/plugin-api/register';
-import 'module-alias/register';
 import { LogLevel, SapphireClient, container } from '@sapphire/framework';
 import { GatewayIntentBits, OAuth2Scopes, Partials } from 'discord.js';
-import { ModerationManager } from '@lib/classes';
+import { ModerationManager } from '#classes/index';
 import { envParseNumber, envParseString, setup } from '@skyra/env-utilities';
 
 setup();

@@ -1,4 +1,4 @@
-import { rateLimit } from '@lib/api';
+import { rateLimit } from '#api/index';
 import { ApplyOptions } from '@sapphire/decorators';
 import {
   methods,

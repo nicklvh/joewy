@@ -1,11 +1,11 @@
+import { Command, CommandOptionsRunTypeEnum } from '@sapphire/framework';
 import { ApplyOptions } from '@sapphire/decorators';
-import { Command } from '@sapphire/framework';
 import { ChannelType, EmbedBuilder } from 'discord.js';
 
 @ApplyOptions<Command.Options>({
   name: 'serverinfo',
   description: 'shows information about the server',
-  runIn: 'GUILD_ANY',
+  runIn: CommandOptionsRunTypeEnum.GuildAny,
 })
 export class ServerInfoCommand extends Command {
   public override registerApplicationCommands(registry: Command.Registry) {
