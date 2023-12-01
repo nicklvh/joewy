@@ -236,16 +236,8 @@ export class SettingsCommand extends Command {
             components: [
               new ActionRowBuilder<ButtonBuilder>().addComponents(
                 new ButtonBuilder()
-                  .setCustomId('modlog')
-                  .setLabel('Modlog')
-                  .setStyle(ButtonStyle.Primary),
-                new ButtonBuilder()
-                  .setCustomId('auditlog')
-                  .setLabel('Auditlog')
-                  .setStyle(ButtonStyle.Primary),
-                new ButtonBuilder()
-                  .setCustomId('welcome')
-                  .setLabel('Welcome')
+                  .setCustomId('blacklistWords')
+                  .setLabel('Blacklist Words')
                   .setStyle(ButtonStyle.Primary),
               ),
               goBackRow,
