@@ -21,8 +21,10 @@ export class ModerationManager {
     const moderator = interaction.user;
 
     if (days && type === ModerationType.BAN) {
-      days = days * 86400000;
+      // Turn days into milliseconds
+      days *= 86400000;
 
+      // Create a new date containing the date of unban
       const dueDate = new Date().valueOf() + days;
 
       await container.prisma.ban.create({

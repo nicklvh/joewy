@@ -1,3 +1,4 @@
+import type { Guild } from '@prisma/client';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Command } from '@sapphire/framework';
 import { Time } from '@sapphire/time-utilities';
@@ -122,16 +123,12 @@ export class SettingsCommand extends Command {
         goBackButton,
       );
 
-      const { modlogChannel, auditlogChannel, welcomeChannel } =
-        await this.getChannels(true, false);
+      const guild: Guild = await this.getGuild();
 
       const id = componentInteraction.customId;
 
       if (componentInteraction.isButton()) {
         if (id === 'logging') {
-          const { modlogChannel, auditlogChannel, welcomeChannel } =
-            await this.getChannels(false, false);
-
           await componentInteraction.update({
             embeds: [
               new EmbedBuilder()
@@ -143,9 +140,15 @@ export class SettingsCommand extends Command {
                   {
                     name: `Use the buttons below to edit the respective channel and settings`,
                     value: [
-                      `**Modlog:** ${modlogChannel}`,
-                      `**Auditlog:** ${auditlogChannel}`,
-                      `**Welcome:** ${welcomeChannel}`,
+                      `**Modlog:** ${
+                        guild.modlogId ? `<#${guild.modlogId}>` : 'Not set'
+                      }`,
+                      `**Auditlog:** ${
+                        guild.auditlogId ? `<#${guild.auditlogId}>` : 'Not set'
+                      }`,
+                      `**Welcome:** ${
+                        guild.welcomeId ? `<#${guild.welcomeId}>` : 'Not set'
+                      }`,
                     ].join('\n'),
                   },
                 ])
@@ -190,30 +193,20 @@ export class SettingsCommand extends Command {
               disableButton,
             );
 
-          let channel;
-          let string;
+          const name = `${id}Id` as 'modlogId' | 'auditlogId' | 'welcomeId';
 
-          if (id === 'modlog') {
-            channel = modlogChannel;
-            string = 'modlog';
-          } else if (id === 'auditlog') {
-            channel = auditlogChannel;
-            string = 'auditlog';
-          } else if (id === 'welcome') {
-            channel = welcomeChannel;
-            string = 'welcome';
-          }
+          const channel = guild[name];
 
           await componentInteraction.update({
             embeds: [
               new EmbedBuilder()
                 .setAuthor({
-                  name: `Configuring the ${string} channel`,
+                  name: `Configuring the ${id} channel`,
                   iconURL: interaction.guild?.iconURL() as string,
                 })
                 .setColor('Blue')
                 .setDescription(
-                  `Pick a channel below to edit the ${string} channel for \`${
+                  `Pick a channel below to edit the ${id} channel for \`${
                     interaction.guild!.name
                   }\`${channel ? '\nDisable it by selecting `Disable`' : ''}`,
                 ),
@@ -235,8 +228,6 @@ export class SettingsCommand extends Command {
                     name: `Use the buttons below to edit the respective channel and settings`,
                     value: [
                       `**Blacklist Words:** ${guild?.blacklist ? '✅' : '❌'}`,
-                      `**Auditlog:** ${auditlogChannel}`,
-                      `**Welcome:** ${welcomeChannel}`,
                     ].join('\n'),
                   },
                 ])
@@ -283,29 +274,18 @@ export class SettingsCommand extends Command {
             ],
             components: [mainRow, exitRow],
           });
-          return;
-        }
+        } else if (id.endsWith('Disable')) {
+          const name = id.split('Disable')[0];
 
-        let data: object | undefined = undefined;
-        let string = '';
+          const customId = `${name}Id`;
 
-        if (id === 'modlogDisable') {
-          data = { modlogId: null };
-          string = 'modlog';
-        } else if (id === 'auditlogDisable') {
-          data = { auditlogId: null };
-          string = 'auditlog';
-        } else if (id === 'welcomeDisable') {
-          data = { welcomeId: null };
-          string = 'welcome';
-        }
-
-        if (data) {
           await this.container.prisma.guild.update({
             where: {
               id: interaction.guildId!,
             },
-            data,
+            data: {
+              [customId]: null,
+            },
           });
 
           await componentInteraction.update({
@@ -317,7 +297,7 @@ export class SettingsCommand extends Command {
                 })
                 .setColor('Blue')
                 .setDescription(
-                  `Successfully disabled the ${string} channel for \`${
+                  `Successfully disabled the ${name} channel for \`${
                     interaction.guild!.name
                   }\``,
                 ),
@@ -328,99 +308,51 @@ export class SettingsCommand extends Command {
       } else if (componentInteraction.isChannelSelectMenu()) {
         const channelId = componentInteraction.values[0];
 
-        const channels = await this.getChannels(false, true);
+        const name = id.split('ChannelSelect')[0];
 
-        let data: object | undefined = undefined;
-        let string = '';
+        const customId = `${name}Id` as 'modlogId' | 'auditlogId' | 'welcomeId';
 
-        if (id === 'modlogChannelSelect') {
-          if (channels.modlogChannel === channelId) {
-            await componentInteraction.update({
-              embeds: [
-                new EmbedBuilder()
-                  .setAuthor({
-                    name: `Error while editing ${interaction.guild!.name}`,
-                    iconURL: interaction.guild?.iconURL() as string,
-                  })
-                  .setColor('Blue')
-                  .setDescription(
-                    `<#${channelId}> is already set as the modlog channel!`,
-                  ),
-              ],
-              components: [goBackRow],
-            });
-            return;
-          }
-
-          string = 'modlog';
-          data = { modlogId: channelId };
-        } else if (id === 'auditlogChannelSelect') {
-          if (channels.auditlogChannel === channelId) {
-            await componentInteraction.update({
-              embeds: [
-                new EmbedBuilder()
-                  .setAuthor({
-                    name: `Error while editing ${interaction.guild!.name}`,
-                    iconURL: interaction.guild?.iconURL() as string,
-                  })
-                  .setColor('Blue')
-                  .setDescription(
-                    `<#${channelId}> is already set as the auditlog channel!`,
-                  ),
-              ],
-              components: [goBackRow],
-            });
-            return;
-          }
-
-          data = { auditlogId: channelId };
-          string = 'auditlog';
-        } else if (id === 'welcomeChannelSelect') {
-          if (channels.welcomeChannel === channelId) {
-            await componentInteraction.update({
-              embeds: [
-                new EmbedBuilder()
-                  .setAuthor({
-                    name: `Error while editing ${interaction.guild!.name}`,
-                    iconURL: interaction.guild?.iconURL() as string,
-                  })
-                  .setColor('Blue')
-                  .setDescription(
-                    `<#${channelId}> is already set as the welcome channel!`,
-                  ),
-              ],
-              components: [goBackRow],
-            });
-            return;
-          }
-
-          data = { welcomeId: channelId };
-          string = 'welcome';
-        }
-
-        if (data) {
-          await this.container.prisma.guild.update({
-            where: {
-              id: interaction.guildId!,
-            },
-            data,
-          });
-
+        if (guild[customId] === channelId) {
           await componentInteraction.update({
             embeds: [
               new EmbedBuilder()
                 .setAuthor({
-                  name: `Success`,
+                  name: `Error while editing ${interaction.guild!.name}`,
                   iconURL: interaction.guild?.iconURL() as string,
                 })
                 .setColor('Blue')
                 .setDescription(
-                  `Successfully set the ${string} channel to <#${channelId}>`,
+                  `<#${channelId}> is already set as the ${name} channel!`,
                 ),
             ],
             components: [goBackRow],
           });
+          return;
         }
+
+        await this.container.prisma.guild.update({
+          where: {
+            id: interaction.guildId!,
+          },
+          data: {
+            [customId]: channelId,
+          },
+        });
+
+        await componentInteraction.update({
+          embeds: [
+            new EmbedBuilder()
+              .setAuthor({
+                name: `Success`,
+                iconURL: interaction.guild?.iconURL() as string,
+              })
+              .setColor('Blue')
+              .setDescription(
+                `Successfully set the ${name} channel to <#${channelId}>`,
+              ),
+          ],
+          components: [goBackRow],
+        });
       }
     });
 
@@ -441,53 +373,15 @@ export class SettingsCommand extends Command {
     });
   }
 
-  private async getChannels(shouldReturnOrNull: boolean, returnId?: boolean) {
-    let guildInDB = await this.getGuild();
-
-    if (!guildInDB)
-      guildInDB = await this.container.prisma.guild.create({
-        data: { id: this.guildId! },
-      });
-
-    let modlogChannel;
-    let auditlogChannel;
-    let welcomeChannel;
-
-    if (shouldReturnOrNull) {
-      modlogChannel = guildInDB.modlogId ? `<#${guildInDB.modlogId}>` : null;
-      auditlogChannel = guildInDB.auditlogId
-        ? `<#${guildInDB.auditlogId}>`
-        : null;
-      welcomeChannel = guildInDB.welcomeId ? `<#${guildInDB.welcomeId}>` : null;
-    } else {
-      modlogChannel = guildInDB.modlogId
-        ? `<#${guildInDB.modlogId}>`
-        : 'Not set';
-      auditlogChannel = guildInDB.auditlogId
-        ? `<#${guildInDB.auditlogId}>`
-        : 'Not set';
-      welcomeChannel = guildInDB.welcomeId
-        ? `<#${guildInDB.welcomeId}>`
-        : 'Not set';
-    }
-
-    if (returnId) {
-      modlogChannel = guildInDB.modlogId ?? null;
-      auditlogChannel = guildInDB.auditlogId ?? null;
-      welcomeChannel = guildInDB.welcomeId ?? null;
-    }
-
-    return {
-      modlogChannel,
-      auditlogChannel,
-      welcomeChannel,
-    };
-  }
-
-  private async getGuild() {
-    const guild = await this.container.prisma.guild.findUnique({
+  private async getGuild(): Promise<Guild> {
+    let guild: Guild | null = await this.container.prisma.guild.findUnique({
       where: { id: this.guildId },
     });
+
+    if (!guild)
+      guild = await this.container.prisma.guild.create({
+        data: { id: this.guildId },
+      });
 
     return guild;
   }

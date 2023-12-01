@@ -6,12 +6,13 @@ import {
   type ApiResponse,
 } from '@sapphire/plugin-api';
 
-export const authenticated = () =>
+export function authenticated() {
   createFunctionPrecondition(
     (request: ApiRequest) => Boolean(request.auth?.token),
     (_request: ApiRequest, response: ApiResponse) =>
       response.error(HttpCodes.Unauthorized),
   );
+}
 
 export function rateLimit(
   time: number,

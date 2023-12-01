@@ -9,7 +9,7 @@ import { envParseNumber, envParseString, setup } from '@skyra/env-utilities';
 
 setup();
 
-const start = async () => {
+async function start() {
   const client = new SapphireClient({
     intents: [
       GatewayIntentBits.Guilds,
@@ -47,6 +47,6 @@ const start = async () => {
 
   const moderationManager = new ModerationManager();
   container.moderationManager = moderationManager;
-};
+}
 
 void start();
