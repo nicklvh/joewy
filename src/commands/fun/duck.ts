@@ -10,9 +10,8 @@ import type { APIPetInterface } from '#types/index';
 })
 export class DuckCommand extends Command {
   public override registerApplicationCommands(registry: Command.Registry) {
-    registry.registerChatInputCommand(
-      (builder) => builder.setName(this.name).setDescription(this.description),
-      { idHints: ['1169732840691355659'] },
+    registry.registerChatInputCommand((builder) =>
+      builder.setName(this.name).setDescription(this.description),
     );
   }
 

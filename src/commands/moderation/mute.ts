@@ -12,12 +12,13 @@ import { ModerationType } from '@prisma/client';
 import { Time } from '@sapphire/time-utilities';
 
 @ApplyOptions<Command.Options>({
-  name: 'warn',
-  description: 'warn a member',
-  requiredUserPermissions: [PermissionFlagsBits.ManageGuild],
+  name: 'mute',
+  description: 'mute a member',
+  requiredUserPermissions: [PermissionFlagsBits.MuteMembers],
+  requiredClientPermissions: [PermissionFlagsBits.MuteMembers],
   runIn: CommandOptionsRunTypeEnum.GuildAny,
 })
-export class WarnCommand extends Command {
+export class MuteCommand extends Command {
   public override registerApplicationCommands(registry: Command.Registry) {
     registry.registerChatInputCommand((builder) => {
       builder
@@ -26,16 +27,80 @@ export class WarnCommand extends Command {
         .addUserOption((option) =>
           option
             .setName('user')
-            .setDescription('the user to warn')
+            .setDescription('the user to mute')
             .setRequired(true),
+        )
+        .addIntegerOption((option) =>
+          option
+            .setName('duration')
+            .setDescription('the duration of the mute')
+            .setRequired(true)
+            .setChoices(
+              {
+                name: '1 minute',
+                value: Time.Minute,
+              },
+              {
+                name: '5 minutes',
+                value: Time.Minute * 5,
+              },
+              {
+                name: '10 minutes',
+                value: Time.Minute * 10,
+              },
+              {
+                name: '30 minutes',
+                value: Time.Minute * 30,
+              },
+              {
+                name: '1 hour',
+                value: Time.Hour,
+              },
+              {
+                name: '6 hours',
+                value: Time.Hour * 6,
+              },
+              {
+                name: '12 hours',
+                value: Time.Hour * 12,
+              },
+              {
+                name: '1 day',
+                value: Time.Day,
+              },
+              {
+                name: '3 days',
+                value: Time.Day * 3,
+              },
+              {
+                name: '1 week',
+                value: Time.Week,
+              },
+              {
+                name: '2 weeks',
+                value: Time.Week * 2,
+              },
+              {
+                name: '1 month',
+                value: Time.Month,
+              },
+              {
+                name: '3 months',
+                value: Time.Month * 3,
+              },
+              {
+                name: '6 months',
+                value: Time.Month * 6,
+              },
+            ),
         )
         .addStringOption((option) =>
           option
             .setName('reason')
-            .setDescription('the reason for the warn')
+            .setDescription('the reason for the mute')
             .setRequired(false),
         )
-        .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild);
+        .setDefaultMemberPermissions(PermissionFlagsBits.MuteMembers);
     });
   }
 
@@ -43,6 +108,7 @@ export class WarnCommand extends Command {
     interaction: Command.ChatInputCommandInteraction<'cached'>,
   ) {
     const user = interaction.options.getUser('user', true);
+    const duration = interaction.options.getNumber('duration', true);
 
     const errorEmbed = new EmbedBuilder()
       .setAuthor({
@@ -82,12 +148,13 @@ export class WarnCommand extends Command {
       (interactionMember.roles.highest <= member.roles.highest &&
         interaction.guild.ownerId !== interaction.user.id) ||
       (interaction.guild.ownerId === user.id &&
-        interaction.guild.ownerId !== interaction.user.id)
+        interaction.guild.ownerId !== interaction.user.id) ||
+      member.moderatable
     ) {
       return interaction.reply({
         embeds: [
           errorEmbed.setDescription(
-            `You cannot warn ${user} because they either have a higher or equal positioned role than you, or they are the owner of the server!`,
+            `You cannot mute ${user} because they either have a higher or equal positioned role than you or me, or they are the owner of the server!`,
           ),
         ],
         ephemeral: true,
@@ -125,7 +192,7 @@ export class WarnCommand extends Command {
             iconURL: interaction.user.displayAvatarURL(),
           })
           .setDescription(
-            `Are you sure you want to warn ${user}?\n\nThis will be cancelled in 1 minute if you don't respond.`,
+            `Are you sure you want to mute ${user}?\n\nThis will be cancelled in 1 minute if you don't respond.`,
           )
           .setColor('Blue'),
       ],
@@ -141,20 +208,27 @@ export class WarnCommand extends Command {
 
       if (confirmation.customId === 'confirm') {
         await this.container.moderationManager.handleModeration(
-          ModerationType.WARN,
+          ModerationType.MUTE,
           interaction,
           user,
           reason,
         );
 
+        await member.timeout(duration, reason);
+
         await confirmation.update({
           embeds: [
             new EmbedBuilder()
               .setAuthor({
-                name: `Warned ${user.tag}`,
+                name: `Muted ${user.tag}`,
                 iconURL: user.displayAvatarURL(),
               })
               .addFields([
+                {
+                  name: 'Duration',
+                  value: inlineCode(`${duration * Time.Minute}`),
+                  inline: true,
+                },
                 {
                   name: 'Reason',
                   value: inlineCode(reason),
@@ -173,7 +247,7 @@ export class WarnCommand extends Command {
                 name: `Cancelled`,
                 iconURL: interaction.user.displayAvatarURL(),
               })
-              .setDescription(`Cancelled warning ${user}`)
+              .setDescription(`Cancelled muting ${user}`)
               .setColor('Blue'),
           ],
           components: [],

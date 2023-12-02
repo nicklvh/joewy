@@ -11,7 +11,7 @@ declare module '@sapphire/pieces' {
 
 declare module '@skyra/env-utilities' {
   interface Env {
-    TOKEN: string;
+    DISCORD_TOKEN: string;
     CLIENT_ID: string;
     CLIENT_SECRET: string;
     OAUTH_REDIRECT: string;

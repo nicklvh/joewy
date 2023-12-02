@@ -1,14 +1,27 @@
-import { PrismaClient } from '@prisma/client';
 import '@sapphire/plugin-logger/register';
 import '@sapphire/plugin-api/register';
-import { LogLevel, SapphireClient, container } from '@sapphire/framework';
+
+import { PrismaClient } from '@prisma/client';
+import {
+  ApplicationCommandRegistries,
+  LogLevel,
+  RegisterBehavior,
+  SapphireClient,
+  container,
+} from '@sapphire/framework';
 import { GatewayIntentBits, OAuth2Scopes, Partials } from 'discord.js';
 import { ModerationManager } from '#classes/index';
 import { envParseNumber, envParseString, setup } from '@skyra/env-utilities';
+import { join } from 'path';
 
-setup();
+process.env.NODE_ENV ??= 'development';
+setup({ path: join(__dirname, '..', `.env.${process.env.NODE_ENV}.local`) });
 
 async function start() {
+  ApplicationCommandRegistries.setDefaultBehaviorWhenNotIdentical(
+    RegisterBehavior.BulkOverwrite,
+  );
+
   const client = new SapphireClient({
     intents: [
       GatewayIntentBits.Guilds,
@@ -18,7 +31,8 @@ async function start() {
     ],
     partials: [Partials.GuildMember, Partials.Reaction, Partials.User],
     logger: {
-      level: LogLevel.Debug,
+      level:
+        process.env.NODE_ENV === 'production' ? LogLevel.Info : LogLevel.Debug,
     },
     api: {
       auth: {
@@ -36,7 +50,7 @@ async function start() {
     },
   });
 
-  await client.login(envParseString('TOKEN'));
+  await client.login();
 
   const prisma = new PrismaClient();
   container.prisma = prisma;

@@ -11,37 +11,35 @@ import { EmbedBuilder, PermissionFlagsBits } from 'discord.js';
 })
 export class SetNickCommand extends Command {
   public override registerApplicationCommands(registry: Command.Registry) {
-    registry.registerChatInputCommand(
-      (builder) =>
-        builder
-          .setName(this.name)
-          .setDescription(this.description)
-          .addUserOption((option) =>
-            option
-              .setName('user')
-              .setDescription('the user to set the nickname of')
-              .setRequired(true),
-          )
-          .addStringOption((option) =>
-            option
-              .setName('nickname')
-              .setDescription('the nickname to set')
-              .setRequired(true)
-              .setMaxLength(32),
-          ),
-      { idHints: ['1171942330958360587'] },
+    registry.registerChatInputCommand((builder) =>
+      builder
+        .setName(this.name)
+        .setDescription(this.description)
+        .addUserOption((option) =>
+          option
+            .setName('user')
+            .setDescription('the user to set the nickname of')
+            .setRequired(true),
+        )
+        .addStringOption((option) =>
+          option
+            .setName('nickname')
+            .setDescription('the nickname to set')
+            .setRequired(true)
+            .setMaxLength(32),
+        ),
     );
   }
 
   public override async chatInputRun(
-    interaction: Command.ChatInputCommandInteraction,
+    interaction: Command.ChatInputCommandInteraction<'cached'>,
   ) {
-    const user = interaction.options.getUser('user')!;
-    const nickname = interaction.options.getString('nickname')!;
-    const member = await interaction.guild?.members.fetch(user.id);
-    const oldNickname = member?.nickname || member?.displayName;
+    const user = interaction.options.getUser('user', true);
+    const nickname = interaction.options.getString('nickname', true);
+    const member = await interaction.guild.members.fetch(user.id);
+    const oldNickname = member.nickname || member.displayName;
 
-    if (user.id === interaction.guild?.ownerId) {
+    if (user.id === interaction.guild.ownerId) {
       return interaction.reply({
         embeds: [
           new EmbedBuilder()
@@ -61,7 +59,7 @@ export class SetNickCommand extends Command {
       });
     }
 
-    await member?.setNickname(nickname);
+    await member.setNickname(nickname);
 
     return interaction.reply({
       embeds: [

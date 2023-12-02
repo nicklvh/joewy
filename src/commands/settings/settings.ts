@@ -1,7 +1,5 @@
-import type { Guild } from '@prisma/client';
+import { Command, CommandOptionsRunTypeEnum } from '@sapphire/framework';
 import { ApplyOptions } from '@sapphire/decorators';
-import { Command } from '@sapphire/framework';
-import { Time } from '@sapphire/time-utilities';
 import {
   ActionRowBuilder,
   ButtonBuilder,
@@ -11,34 +9,34 @@ import {
   EmbedBuilder,
   PermissionFlagsBits,
 } from 'discord.js';
+import type { Guild } from '@prisma/client';
+import { Time } from '@sapphire/time-utilities';
 
 @ApplyOptions<Command.Options>({
   name: 'settings',
   description: 'change the settings of the bot for the current server',
   requiredUserPermissions: ['ManageGuild'],
   requiredClientPermissions: ['ManageGuild'],
-  runIn: 'GUILD_ANY',
+  runIn: CommandOptionsRunTypeEnum.GuildAny,
 })
 export class SettingsCommand extends Command {
   private guildId = '';
 
   public override registerApplicationCommands(registry: Command.Registry) {
-    registry.registerChatInputCommand(
-      (builder) =>
-        builder
-          .setName(this.name)
-          .setDescription(this.description)
-          .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild),
-      { idHints: ['1170836355543212052'] },
+    registry.registerChatInputCommand((builder) =>
+      builder
+        .setName(this.name)
+        .setDescription(this.description)
+        .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild),
     );
   }
 
   public override async chatInputRun(
-    interaction: Command.ChatInputCommandInteraction,
+    interaction: Command.ChatInputCommandInteraction<'cached'>,
   ) {
     this.guildId = interaction.guildId!;
 
-    const guildInDB = await this.getGuild();
+    const guildInDB: Guild = await this.getGuild();
 
     const loggingButton = new ButtonBuilder()
       .setLabel('Logging')
@@ -86,7 +84,7 @@ export class SettingsCommand extends Command {
         new EmbedBuilder()
           .setAuthor({
             name: `Configure ${interaction.guild!.name}`,
-            iconURL: interaction.guild?.iconURL() ?? undefined,
+            iconURL: interaction.guild.iconURL() as string,
           })
           .setColor('Blue')
           .addFields([
@@ -134,7 +132,7 @@ export class SettingsCommand extends Command {
               new EmbedBuilder()
                 .setAuthor({
                   name: 'Configuring the logging system',
-                  iconURL: interaction.guild?.iconURL() as string,
+                  iconURL: interaction.guild.iconURL() as string,
                 })
                 .addFields([
                   {
@@ -202,7 +200,7 @@ export class SettingsCommand extends Command {
               new EmbedBuilder()
                 .setAuthor({
                   name: `Configuring the ${id} channel`,
-                  iconURL: interaction.guild?.iconURL() as string,
+                  iconURL: interaction.guild.iconURL() as string,
                 })
                 .setColor('Blue')
                 .setDescription(
@@ -221,7 +219,7 @@ export class SettingsCommand extends Command {
               new EmbedBuilder()
                 .setAuthor({
                   name: 'Configuring the moderation system',
-                  iconURL: interaction.guild?.iconURL() as string,
+                  iconURL: interaction.guild.iconURL() as string,
                 })
                 .addFields([
                   {
@@ -249,7 +247,7 @@ export class SettingsCommand extends Command {
               new EmbedBuilder()
                 .setAuthor({
                   name: `Configure ${interaction.guild!.name}`,
-                  iconURL: interaction.guild?.iconURL() ?? undefined,
+                  iconURL: interaction.guild.iconURL() ?? undefined,
                 })
                 .setColor('Blue')
                 .addFields([
@@ -285,7 +283,7 @@ export class SettingsCommand extends Command {
               new EmbedBuilder()
                 .setAuthor({
                   name: `Success`,
-                  iconURL: interaction.guild?.iconURL() as string,
+                  iconURL: interaction.guild.iconURL() as string,
                 })
                 .setColor('Blue')
                 .setDescription(
@@ -310,7 +308,7 @@ export class SettingsCommand extends Command {
               new EmbedBuilder()
                 .setAuthor({
                   name: `Error while editing ${interaction.guild!.name}`,
-                  iconURL: interaction.guild?.iconURL() as string,
+                  iconURL: interaction.guild.iconURL() as string,
                 })
                 .setColor('Blue')
                 .setDescription(
@@ -336,7 +334,7 @@ export class SettingsCommand extends Command {
             new EmbedBuilder()
               .setAuthor({
                 name: `Success`,
-                iconURL: interaction.guild?.iconURL() as string,
+                iconURL: interaction.guild.iconURL() as string,
               })
               .setColor('Blue')
               .setDescription(

@@ -8,32 +8,30 @@ import { EmbedBuilder } from 'discord.js';
 })
 export class RockPaperScissorsCommand extends Command {
   public override registerApplicationCommands(registry: Command.Registry) {
-    registry.registerChatInputCommand(
-      (builder) =>
-        builder
-          .setName(this.name)
-          .setDescription(this.description)
-          .addStringOption((option) =>
-            option
-              .setName('choice')
-              .setDescription('your choice of rock, paper, or scissors')
-              .setRequired(true)
-              .setChoices(
-                {
-                  name: 'Rock',
-                  value: 'Rock',
-                },
-                {
-                  name: 'Paper',
-                  value: 'Paper',
-                },
-                {
-                  name: 'Scissors',
-                  value: 'Scissors',
-                },
-              ),
-          ),
-      { idHints: ['1171945619875696672'] },
+    registry.registerChatInputCommand((builder) =>
+      builder
+        .setName(this.name)
+        .setDescription(this.description)
+        .addStringOption((option) =>
+          option
+            .setName('choice')
+            .setDescription('your choice of rock, paper, or scissors')
+            .setRequired(true)
+            .setChoices(
+              {
+                name: 'Rock',
+                value: 'Rock',
+              },
+              {
+                name: 'Paper',
+                value: 'Paper',
+              },
+              {
+                name: 'Scissors',
+                value: 'Scissors',
+              },
+            ),
+        ),
     );
   }
 

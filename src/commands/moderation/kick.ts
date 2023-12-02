@@ -5,6 +5,7 @@ import {
   ButtonStyle,
   EmbedBuilder,
   PermissionFlagsBits,
+  inlineCode,
 } from 'discord.js';
 import { ApplyOptions } from '@sapphire/decorators';
 import { ModerationType } from '@prisma/client';
@@ -12,38 +13,35 @@ import { Time } from '@sapphire/time-utilities';
 
 @ApplyOptions<Command.Options>({
   name: 'kick',
-  description: 'kick a member 🔨',
+  description: 'kick a member',
   requiredUserPermissions: [PermissionFlagsBits.KickMembers],
   requiredClientPermissions: [PermissionFlagsBits.KickMembers],
   runIn: CommandOptionsRunTypeEnum.GuildAny,
 })
 export class KickCommand extends Command {
   public override registerApplicationCommands(registry: Command.Registry) {
-    registry.registerChatInputCommand(
-      (builder) => {
-        builder
-          .setName(this.name)
-          .setDescription(this.description)
-          .addUserOption((option) =>
-            option
-              .setName('user')
-              .setDescription('the user to kick')
-              .setRequired(true),
-          )
-          .addStringOption((option) =>
-            option
-              .setName('reason')
-              .setDescription('the reason for the kick')
-              .setRequired(false),
-          )
-          .setDefaultMemberPermissions(PermissionFlagsBits.KickMembers);
-      },
-      { idHints: ['1175535354334421063'] },
-    );
+    registry.registerChatInputCommand((builder) => {
+      builder
+        .setName(this.name)
+        .setDescription(this.description)
+        .addUserOption((option) =>
+          option
+            .setName('user')
+            .setDescription('the user to kick')
+            .setRequired(true),
+        )
+        .addStringOption((option) =>
+          option
+            .setName('reason')
+            .setDescription('the reason for the kick')
+            .setRequired(false),
+        )
+        .setDefaultMemberPermissions(PermissionFlagsBits.KickMembers);
+    });
   }
 
   public override async chatInputRun(
-    interaction: Command.ChatInputCommandInteraction,
+    interaction: Command.ChatInputCommandInteraction<'cached'>,
   ) {
     const user = interaction.options.getUser('user', true);
 
@@ -53,6 +51,7 @@ export class KickCommand extends Command {
         iconURL: interaction.user.displayAvatarURL(),
       })
       .setColor('Blue');
+
     if (user.id === interaction.user.id) {
       return interaction.reply({
         embeds: [
@@ -64,11 +63,11 @@ export class KickCommand extends Command {
       });
     }
 
-    const interactionMember = await interaction.guild?.members.fetch(
+    const interactionMember = await interaction.guild.members.fetch(
       interaction.user.id,
     );
 
-    const member = await interaction.guild?.members.fetch(user.id);
+    const member = await interaction.guild.members.fetch(user.id);
 
     if (!member) {
       return interaction.reply({
@@ -81,15 +80,16 @@ export class KickCommand extends Command {
     }
 
     if (
-      (interactionMember!.roles.highest <= member!.roles.highest &&
-        interaction.guild?.ownerId !== interaction.user.id) ||
-      (interaction.guild?.ownerId === user.id &&
-        interaction.guild.ownerId !== interaction.user.id)
+      (interactionMember.roles.highest <= member.roles.highest &&
+        interaction.guild.ownerId !== interaction.user.id) ||
+      (interaction.guild.ownerId === user.id &&
+        interaction.guild.ownerId !== interaction.user.id) ||
+      !member.kickable
     ) {
       return interaction.reply({
         embeds: [
           errorEmbed.setDescription(
-            `You cannot kick ${user} because they either have a higher or equal positioned role than you, or they are the owner of the server!`,
+            `You cannot kick ${user} because they either have a higher or equal positioned role than you or me, or they are the owner of the server!`,
           ),
         ],
         ephemeral: true,
@@ -161,7 +161,7 @@ export class KickCommand extends Command {
               .addFields([
                 {
                   name: 'Reason',
-                  value: `\`${reason}\``,
+                  value: inlineCode(reason),
                   inline: true,
                 },
               ])
@@ -183,9 +183,7 @@ export class KickCommand extends Command {
           components: [],
         });
       }
-    } catch (e) {
-      this.container.logger.error(e);
-
+    } catch {
       await interaction.editReply({
         embeds: [
           errorEmbed.setDescription(

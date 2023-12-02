@@ -5,6 +5,7 @@ import {
   ButtonStyle,
   EmbedBuilder,
   PermissionFlagsBits,
+  inlineCode,
 } from 'discord.js';
 import { Time } from '@sapphire/time-utilities';
 import { ApplyOptions } from '@sapphire/decorators';
@@ -19,57 +20,54 @@ import { ModerationType } from '@prisma/client';
 })
 export class BanCommand extends Command {
   public override registerApplicationCommands(registry: Command.Registry) {
-    registry.registerChatInputCommand(
-      (builder) => {
-        builder
-          .setName(this.name)
-          .setDescription(this.description)
-          .addUserOption((option) =>
-            option
-              .setName('user')
-              .setDescription('the user to ban')
-              .setRequired(true),
-          )
-          .addStringOption((option) =>
-            option
-              .setName('reason')
-              .setDescription('the reason for the ban')
-              .setRequired(false),
-          )
-          .addIntegerOption((option) =>
-            option
-              .setName('days')
-              .setDescription(
-                'the amount of days to ban the user for, default is a perma ban',
-              )
-              .setRequired(false)
-              .addChoices(
-                {
-                  name: '1 day',
-                  value: 1,
-                },
-                {
-                  name: '1 week',
-                  value: 7,
-                },
-                {
-                  name: '2 weeks',
-                  value: 14,
-                },
-                {
-                  name: '1 month',
-                  value: 28,
-                },
-              ),
-          )
-          .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers);
-      },
-      { idHints: ['1169766210443956264'] },
-    );
+    registry.registerChatInputCommand((builder) => {
+      builder
+        .setName(this.name)
+        .setDescription(this.description)
+        .addUserOption((option) =>
+          option
+            .setName('user')
+            .setDescription('the user to ban')
+            .setRequired(true),
+        )
+        .addStringOption((option) =>
+          option
+            .setName('reason')
+            .setDescription('the reason for the ban')
+            .setRequired(false),
+        )
+        .addIntegerOption((option) =>
+          option
+            .setName('days')
+            .setDescription(
+              'the amount of days to ban the user for, default is a perma ban',
+            )
+            .setRequired(false)
+            .addChoices(
+              {
+                name: '1 day',
+                value: 1,
+              },
+              {
+                name: '1 week',
+                value: 7,
+              },
+              {
+                name: '2 weeks',
+                value: 14,
+              },
+              {
+                name: '1 month',
+                value: 28,
+              },
+            ),
+        )
+        .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers);
+    });
   }
 
   public override async chatInputRun(
-    interaction: Command.ChatInputCommandInteraction,
+    interaction: Command.ChatInputCommandInteraction<'cached'>,
   ) {
     const user = interaction.options.getUser('user', true);
 
@@ -91,11 +89,11 @@ export class BanCommand extends Command {
       });
     }
 
-    const interactionMember = await interaction.guild?.members.fetch(
+    const interactionMember = await interaction.guild.members.fetch(
       interaction.user.id,
     );
 
-    const member = await interaction.guild?.members.fetch(user.id);
+    const member = await interaction.guild.members.fetch(user.id);
 
     if (!member) {
       return interaction.reply({
@@ -108,15 +106,16 @@ export class BanCommand extends Command {
     }
 
     if (
-      (interactionMember!.roles.highest <= member!.roles.highest &&
-        interaction.guild?.ownerId !== interaction.user.id) ||
-      (interaction.guild?.ownerId === user.id &&
-        interaction.guild.ownerId !== interaction.user.id)
+      (interactionMember.roles.highest <= member.roles.highest &&
+        interaction.guild.ownerId !== interaction.user.id) ||
+      (interaction.guild.ownerId === user.id &&
+        interaction.guild.ownerId !== interaction.user.id) ||
+      !member.bannable
     ) {
       return interaction.reply({
         embeds: [
           errorEmbed.setDescription(
-            `You cannot ban ${user} because they either have a higher or equal positioned role than you, or they are the owner of the server!`,
+            `You cannot ban ${user} because they either have a higher or equal positioned role than you or me, or they are the owner of the server!`,
           ),
         ],
         ephemeral: true,
@@ -176,7 +175,7 @@ export class BanCommand extends Command {
           reason,
         );
 
-        await interaction.guild?.bans.create(user, {
+        await interaction.guild.bans.create(user, {
           reason,
         });
 
@@ -190,7 +189,7 @@ export class BanCommand extends Command {
               .addFields([
                 {
                   name: 'Reason',
-                  value: `\`${reason}\``,
+                  value: inlineCode(reason),
                   inline: true,
                 },
               ])
@@ -212,9 +211,7 @@ export class BanCommand extends Command {
           components: [],
         });
       }
-    } catch (e) {
-      this.container.logger.error(e);
-
+    } catch {
       return interaction.editReply({
         embeds: [
           errorEmbed.setDescription(

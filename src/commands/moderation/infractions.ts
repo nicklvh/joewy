@@ -1,5 +1,11 @@
 import { Command, CommandOptionsRunTypeEnum } from '@sapphire/framework';
-import { PermissionFlagsBits } from 'discord.js';
+import {
+  PermissionFlagsBits,
+  TimestampStyles,
+  bold,
+  inlineCode,
+  time,
+} from 'discord.js';
 import { ApplyOptions } from '@sapphire/decorators';
 import { PaginatedMessage } from '@sapphire/discord.js-utilities';
 import { chunk } from '@sapphire/utilities';
@@ -13,25 +19,22 @@ import { ModerationTypeStrings } from '#types/index';
 })
 export class InfractionsCommand extends Command {
   public override registerApplicationCommands(registry: Command.Registry) {
-    registry.registerChatInputCommand(
-      (builder) => {
-        builder
-          .setName(this.name)
-          .setDescription(this.description)
-          .addUserOption((option) =>
-            option
-              .setName('user')
-              .setDescription('the user to show infractions for')
-              .setRequired(false),
-          )
-          .setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages);
-      },
-      { idHints: ['1175550972718747740'] },
-    );
+    registry.registerChatInputCommand((builder) => {
+      builder
+        .setName(this.name)
+        .setDescription(this.description)
+        .addUserOption((option) =>
+          option
+            .setName('user')
+            .setDescription('the user to show infractions for')
+            .setRequired(false),
+        )
+        .setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages);
+    });
   }
 
   public override async chatInputRun(
-    interaction: Command.ChatInputCommandInteraction,
+    interaction: Command.ChatInputCommandInteraction<'cached'>,
   ) {
     const user = interaction.options.getUser('user', false) ?? interaction.user;
 
@@ -49,14 +52,14 @@ export class InfractionsCommand extends Command {
 
     let guildInDB = await this.container.prisma.guild.findUnique({
       where: {
-        id: interaction.guildId!,
+        id: interaction.guildId,
       },
     });
 
     if (!guildInDB) {
       guildInDB = await this.container.prisma.guild.create({
         data: {
-          id: interaction.guildId!,
+          id: interaction.guildId,
         },
       });
     }
@@ -64,13 +67,13 @@ export class InfractionsCommand extends Command {
     const infractions = await this.container.prisma.modlog.findMany({
       where: {
         memberId: user.id,
-        guildId: interaction.guildId!,
+        guildId: interaction.guildId,
       },
     });
 
     const guildInfractions = await this.container.prisma.modlog.findMany({
       where: {
-        guildId: interaction.guildId!,
+        guildId: interaction.guildId,
       },
     });
 
@@ -93,7 +96,7 @@ export class InfractionsCommand extends Command {
         for (const infraction of arr) {
           const moderator = this.container.client.users.cache.get(
             infraction.moderatorId,
-          );
+          )!;
 
           const id =
             guildInfractions.findIndex(
@@ -104,11 +107,14 @@ export class InfractionsCommand extends Command {
             {
               name: `${ModerationTypeStrings[infraction.type]} - Case #${id}`,
               value: [
-                `**Moderator:** ${moderator!} (\`${moderator!.id}\`)`,
-                `**Reason:** \`${infraction.reason}\``,
-                `**Date:** <t:${(infraction.createdAt.valueOf() / 1000).toFixed(
-                  0,
-                )}:f>`,
+                `${bold('❯ Moderator:')} ${moderator} (${inlineCode(
+                  moderator.id,
+                )})`,
+                `${bold('❯ Reason:')} ${inlineCode(infraction.reason)}`,
+                `${bold('❯ Date:')} ${time(
+                  Math.floor(infraction.createdAt.valueOf() / 1000),
+                  TimestampStyles.ShortDateTime,
+                )}`,
               ].join('\n'),
             },
           ]);

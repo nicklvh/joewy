@@ -8,9 +8,8 @@ import { EmbedBuilder } from 'discord.js';
 })
 export class CoinflipCommand extends Command {
   public override registerApplicationCommands(registry: Command.Registry) {
-    registry.registerChatInputCommand(
-      (builder) => builder.setName(this.name).setDescription(this.description),
-      { idHints: ['1171942952705208390'] },
+    registry.registerChatInputCommand((builder) =>
+      builder.setName(this.name).setDescription(this.description),
     );
   }
 

@@ -12,17 +12,8 @@
     "type": "git",
     "url": "git+https://github.com/nicklvh/joewy.git"
   },
-  "keywords": [
-    "discord-bot",
-    "sapphirejs",
-    "discordjs"
-  ],
   "author": "nicklvh",
   "license": "GPL-3.0-or-later",
-  "bugs": {
-    "url": "https://github.com/nicklvh/joewy/issues"
-  },
-  "homepage": "https://github.com/nicklvh/joewy",
   "imports": {
     "#classes/*": "./dist/lib/classes/*.js",
     "#api/*": "./dist/lib/api/*.js",
