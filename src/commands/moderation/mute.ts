@@ -14,8 +14,8 @@ import { Time } from '@sapphire/time-utilities';
 @ApplyOptions<Command.Options>({
   name: 'mute',
   description: 'mute a member',
-  requiredUserPermissions: [PermissionFlagsBits.MuteMembers],
-  requiredClientPermissions: [PermissionFlagsBits.MuteMembers],
+  requiredUserPermissions: [PermissionFlagsBits.ModerateMembers],
+  requiredClientPermissions: [PermissionFlagsBits.ModerateMembers],
   runIn: CommandOptionsRunTypeEnum.GuildAny,
 })
 export class MuteCommand extends Command {
@@ -100,7 +100,7 @@ export class MuteCommand extends Command {
             .setDescription('the reason for the mute')
             .setRequired(false),
         )
-        .setDefaultMemberPermissions(PermissionFlagsBits.MuteMembers);
+        .setDefaultMemberPermissions(PermissionFlagsBits.ModerateMembers);
     });
   }
 
