@@ -7,26 +7,19 @@ import {
 } from '@sapphire/plugin-api';
 
 export function authenticated() {
-  createFunctionPrecondition(
+  return createFunctionPrecondition(
     (request: ApiRequest) => Boolean(request.auth?.token),
     (_request: ApiRequest, response: ApiResponse) =>
       response.error(HttpCodes.Unauthorized),
   );
 }
 
-export function rateLimit(
-  time: number,
-  limit: number = 1,
-  auth: boolean = false,
-) {
+export function rateLimit(time: number, limit: number = 1) {
   const manager = new RateLimitManager(time, limit);
   return createFunctionPrecondition(
     (request: ApiRequest, response: ApiResponse) => {
-      const id = (
-        auth
-          ? request.auth!.id
-          : request.headers['x-api-key'] || request.socket.remoteAddress
-      ) as string;
+      const id = (request.headers['x-api-key'] ||
+        request.socket.remoteAddress) as string;
       const bucket = manager.acquire(id);
 
       response.setHeader('Date', new Date().toUTCString());

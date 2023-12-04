@@ -212,8 +212,6 @@ export class SettingsCommand extends Command {
             components: [channelRow, channel ? goBackAndDisableRow : goBackRow],
           });
         } else if (id === 'moderation') {
-          const guild = await this.getGuild();
-
           await componentInteraction.update({
             embeds: [
               new EmbedBuilder()
