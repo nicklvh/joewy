@@ -1,5 +1,3 @@
-# Joewy is being rewritten in rust! Check it out [here](https://github.com/nicklvh/joewy)
-
 # Joewy <img src="https://i.imgur.com/1NNM5e6.png" alt= "joewy pfp" width="39" height="39" />
 
 **Feature-packed, fast, clean:** Joewy is a discord bot from the future.
