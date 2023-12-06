@@ -303,11 +303,11 @@ __metadata:
   linkType: hard
 
 "@sapphire/fetch@npm:^2.4.1":
-  version: 2.4.1
-  resolution: "@sapphire/fetch@npm:2.4.1"
+  version: 2.4.2
+  resolution: "@sapphire/fetch@npm:2.4.2"
   dependencies:
-    cross-fetch: "npm:^3.1.5"
-  checksum: 88b651c0cef3f18e271f032b323614a82c48ef8ab4678380f003b2a9b623b5f2afdaeffc915bb7a78c2e1af5638bf3ca7ecc2b1d24c873ca284210dd263c1376
+    cross-fetch: "npm:^4.0.0"
+  checksum: 090484a0c8fb3e6d09b3c8e4efb55dfef7540dc6432ed04048937a4fb672ae6d872c0cc4f508fa78a26b45dfbe4bf20cf13ee04663a8c10247f2a6e6743c104b
   languageName: node
   linkType: hard
 
@@ -789,12 +789,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cross-fetch@npm:^3.1.5":
-  version: 3.1.8
-  resolution: "cross-fetch@npm:3.1.8"
+"cross-fetch@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "cross-fetch@npm:4.0.0"
   dependencies:
     node-fetch: "npm:^2.6.12"
-  checksum: 4c5e022ffe6abdf380faa6e2373c0c4ed7ef75e105c95c972b6f627c3f083170b6886f19fb488a7fa93971f4f69dcc890f122b0d97f0bf5f41ca1d9a8f58c8af
+  checksum: 386727dc4c6b044746086aced959ff21101abb85c43df5e1d151547ccb6f338f86dec3f28b9dbddfa8ff5b9ec8662ed2263ad4607a93b2dc354fb7fe3bbb898a
   languageName: node
   linkType: hard
 
