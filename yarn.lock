@@ -371,9 +371,9 @@ __metadata:
   linkType: hard
 
 "@sapphire/ratelimits@npm:^2.4.7":
-  version: 2.4.7
-  resolution: "@sapphire/ratelimits@npm:2.4.7"
-  checksum: d773792824c1f19fac60d5ff1f96432ccc13907fee78e3ff6c22148d81444dbe1534bdf75b15739920488920b164785565a742e3b0ca78a51600c8c4851014a7
+  version: 2.4.8
+  resolution: "@sapphire/ratelimits@npm:2.4.8"
+  checksum: eea81bd840f52552fde03538b57bcb44143cb2ed967032cb3af93251c4e82bdce8130cb80ba1203ff4193a8cf71634cc148ac37b5cfa9e6bca1b669cd2dedf23
   languageName: node
   linkType: hard
 
