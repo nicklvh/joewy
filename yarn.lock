@@ -259,15 +259,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sapphire/discord-utilities@npm:^3.2.0":
-  version: 3.2.0
-  resolution: "@sapphire/discord-utilities@npm:3.2.0"
-  dependencies:
-    discord-api-types: "npm:^0.37.63"
-  checksum: e9ab094080ac9f0cc93ea045f4e59abbafdf301c0a6f8a16c6094eaef8f174a1d59899b28822947aee00a78a9f4cadabdf40fae671660af885ade8056bbd63b7
-  languageName: node
-  linkType: hard
-
 "@sapphire/discord-utilities@npm:^3.2.1":
   version: 3.2.1
   resolution: "@sapphire/discord-utilities@npm:3.2.1"
@@ -277,19 +268,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sapphire/discord.js-utilities@npm:^7.1.2":
-  version: 7.1.2
-  resolution: "@sapphire/discord.js-utilities@npm:7.1.2"
-  dependencies:
-    "@sapphire/discord-utilities": "npm:^3.2.0"
-    "@sapphire/duration": "npm:^1.1.0"
-    "@sapphire/utilities": "npm:^3.13.0"
-    tslib: "npm:^2.6.2"
-  checksum: 90cd125919098788dd4b435ef3c678e5f9571598014f4ed5c6b3c79a5329b3697e1bdc3cad012f1713177a1dac36b58c696d765991df080f05b87ded629d6f25
-  languageName: node
-  linkType: hard
-
-"@sapphire/discord.js-utilities@npm:^7.1.3":
+"@sapphire/discord.js-utilities@npm:^7.1.2, @sapphire/discord.js-utilities@npm:^7.1.3":
   version: 7.1.3
   resolution: "@sapphire/discord.js-utilities@npm:7.1.3"
   dependencies:
@@ -915,7 +894,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"discord-api-types@npm:^0.37.63, discord-api-types@npm:^0.37.65":
+"discord-api-types@npm:^0.37.65":
   version: 0.37.65
   resolution: "discord-api-types@npm:0.37.65"
   checksum: 4bb650463434efc10b1788500191edeefb0626cf682a9d49fcf094699d887f85b29ec439083672c9f79c9fcdc6d88c9974881ab28f65aac00b5aeaf0e01af855
