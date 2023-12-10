@@ -511,14 +511,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sapphire/utilities@npm:^3.13.0":
-  version: 3.14.0
-  resolution: "@sapphire/utilities@npm:3.14.0"
-  checksum: 5740c05b130ee7e8d34fa53a96370cac87c36ad272760c0f5029fc4578279bf7850e4517e56f8ea66d9eb21978076a9e1d0808e1e16feac451e79541c97083e1
-  languageName: node
-  linkType: hard
-
-"@sapphire/utilities@npm:^3.14.0":
+"@sapphire/utilities@npm:^3.13.0, @sapphire/utilities@npm:^3.14.0":
   version: 3.14.0
   resolution: "@sapphire/utilities@npm:3.14.0"
   checksum: 5740c05b130ee7e8d34fa53a96370cac87c36ad272760c0f5029fc4578279bf7850e4517e56f8ea66d9eb21978076a9e1d0808e1e16feac451e79541c97083e1
@@ -526,12 +519,12 @@ __metadata:
   linkType: hard
 
 "@skyra/env-utilities@npm:^1.2.1":
-  version: 1.2.1
-  resolution: "@skyra/env-utilities@npm:1.2.1"
+  version: 1.2.2
+  resolution: "@skyra/env-utilities@npm:1.2.2"
   dependencies:
-    dotenv: "npm:^16.3.0"
+    dotenv: "npm:^16.3.1"
     dotenv-expand: "npm:^10.0.0"
-  checksum: 198ab7fbed7b22b196cf1427af03e453c4803c5cb04cfa90b9e2f5fb00b2ee99d014ea82f7fe3a84497d7f8abbf7e0abb07e765c90109c2381471c69ae652f02
+  checksum: f262491acd4560b62457814bed0cad45d1168064f76841f6b1719061c22e35d162f240817c3b59651558e380f0a857eacf4bbc538db980cc6ef28671b4439293
   languageName: node
   linkType: hard
 
@@ -990,7 +983,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dotenv@npm:^16.3.0":
+"dotenv@npm:^16.3.1":
   version: 16.3.1
   resolution: "dotenv@npm:16.3.1"
   checksum: b95ff1bbe624ead85a3cd70dbd827e8e06d5f05f716f2d0cbc476532d54c7c9469c3bc4dd93ea519f6ad711cb522c00ac9a62b6eb340d5affae8008facc3fbd7
