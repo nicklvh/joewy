@@ -10,7 +10,7 @@ import {
   container,
 } from '@sapphire/framework';
 import { GatewayIntentBits, OAuth2Scopes, Partials } from 'discord.js';
-import { ModerationManager, Utils } from '#classes/index';
+import { ModerationManager } from '#classes/index';
 import { envParseNumber, envParseString, setup } from '@skyra/env-utilities';
 import { join } from 'path';
 
@@ -60,9 +60,6 @@ async function start() {
 
   const moderationManager = new ModerationManager();
   container.moderationManager = moderationManager;
-
-  const utils = new Utils();
-  container.utils = utils;
 }
 
 void start();
