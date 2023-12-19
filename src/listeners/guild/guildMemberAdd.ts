@@ -1,6 +1,6 @@
-import { ApplyOptions } from '@sapphire/decorators';
-import { Listener, Events } from '@sapphire/framework';
-import { EmbedBuilder, type GuildMember } from 'discord.js';
+import { ApplyOptions } from "@sapphire/decorators";
+import { Listener, Events } from "@sapphire/framework";
+import { EmbedBuilder, type GuildMember } from "discord.js";
 
 @ApplyOptions<Listener.Options>({
   event: Events.GuildMemberAdd,
@@ -30,8 +30,8 @@ export class GuildMemberAddListener extends Listener {
       .fetch(guildInDB.welcomeId)
       .catch(() =>
         this.container.logger.error(
-          `Invalid welcome channel ID for Guild ${guild.name} (${guild.id})`,
-        ),
+          `Invalid welcome channel ID for Guild ${guild.name} (${guild.id})`
+        )
       );
 
     if (!welcomeChannel || !welcomeChannel.isTextBased()) return;
@@ -45,24 +45,24 @@ export class GuildMemberAddListener extends Listener {
               iconURL: member.user.displayAvatarURL(),
             })
             .setDescription(
-              `Welcome to ${guild.name}, ${member.user.toString()}!`,
+              `Welcome to ${guild.name}, ${member.user.toString()}!`
             )
             .addFields([
               {
-                name: 'User Created',
+                name: "User Created",
                 value: `<t:${(
                   (member.user.createdTimestamp as number) / 1000
                 ).toFixed(0)}:f>`,
               },
             ])
-            .setColor('Blue')
+            .setColor("Blue")
             .setFooter({ text: `ID: ${member.id}` })
             .setTimestamp(),
         ],
       })
       .catch(() => {
         this.container.logger.error(
-          `I do not have permission to send a welcome message in channel (${welcomeChannel.id}) for Guild ${guild.name} (${guild.id})`,
+          `I do not have permission to send a welcome message in channel (${welcomeChannel.id}) for Guild ${guild.name} (${guild.id})`
         );
       });
   }

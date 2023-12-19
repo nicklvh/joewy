@@ -1,2 +1,2 @@
-export * from './ModerationManager';
-export * from './Utils';
+export * from "./ModerationManager";
+export * from "./Utils";

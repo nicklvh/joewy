@@ -1,10 +1,10 @@
-import { Command, CommandOptionsRunTypeEnum } from '@sapphire/framework';
-import { ApplyOptions } from '@sapphire/decorators';
-import { EmbedBuilder, PermissionFlagsBits } from 'discord.js';
+import { Command, CommandOptionsRunTypeEnum } from "@sapphire/framework";
+import { ApplyOptions } from "@sapphire/decorators";
+import { EmbedBuilder, PermissionFlagsBits } from "discord.js";
 
 @ApplyOptions<Command.Options>({
-  name: 'setnick',
-  description: 'set the nickname of a user',
+  name: "setnick",
+  description: "set the nickname of a user",
   requiredClientPermissions: [PermissionFlagsBits.ManageNicknames],
   requiredUserPermissions: [PermissionFlagsBits.ManageNicknames],
   runIn: CommandOptionsRunTypeEnum.GuildAny,
@@ -17,25 +17,25 @@ export class SetNickCommand extends Command {
         .setDescription(this.description)
         .addUserOption((option) =>
           option
-            .setName('user')
-            .setDescription('the user to set the nickname of')
-            .setRequired(true),
+            .setName("user")
+            .setDescription("the user to set the nickname of")
+            .setRequired(true)
         )
         .addStringOption((option) =>
           option
-            .setName('nickname')
-            .setDescription('the nickname to set')
+            .setName("nickname")
+            .setDescription("the nickname to set")
             .setRequired(true)
-            .setMaxLength(32),
-        ),
+            .setMaxLength(32)
+        )
     );
   }
 
   public override async chatInputRun(
-    interaction: Command.ChatInputCommandInteraction<'cached'>,
+    interaction: Command.ChatInputCommandInteraction<"cached">
   ) {
-    const user = interaction.options.getUser('user', true);
-    const nickname = interaction.options.getString('nickname', true);
+    const user = interaction.options.getUser("user", true);
+    const nickname = interaction.options.getString("nickname", true);
     const member = await interaction.guild.members.fetch(user.id);
     const oldNickname = member.nickname || member.displayName;
 
@@ -44,17 +44,17 @@ export class SetNickCommand extends Command {
         embeds: [
           new EmbedBuilder()
             .setAuthor({
-              name: 'Cannot Set Nickname',
-              iconURL: user.avatarURL() || '',
+              name: "Cannot Set Nickname",
+              iconURL: user.avatarURL() || "",
             })
             .addFields([
               {
-                name: 'Reason',
-                value: 'Cannot set the nickname of the server owner',
+                name: "Reason",
+                value: "Cannot set the nickname of the server owner",
               },
             ])
 
-            .setColor('Blue'),
+            .setColor("Blue"),
         ],
       });
     }
@@ -66,22 +66,22 @@ export class SetNickCommand extends Command {
         new EmbedBuilder()
           .setAuthor({
             name: `Nickname Set | ${user.tag}`,
-            iconURL: user.avatarURL() || '',
+            iconURL: user.avatarURL() || "",
           })
           .addFields([
             {
-              name: 'Old Nickname',
+              name: "Old Nickname",
               value: `\`${oldNickname}\``,
               inline: true,
             },
             {
-              name: 'New Nickname',
+              name: "New Nickname",
               value: `\`${nickname}\``,
               inline: true,
             },
           ])
 
-          .setColor('Blue'),
+          .setColor("Blue"),
       ],
     });
   }

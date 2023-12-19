@@ -1,7 +1,7 @@
-import { auditlogChecks } from '#classes/Utils';
-import { ApplyOptions } from '@sapphire/decorators';
-import { Events, Listener } from '@sapphire/framework';
-import { EmbedBuilder, type Message } from 'discord.js';
+import { auditlogChecks } from "#classes/Utils";
+import { ApplyOptions } from "@sapphire/decorators";
+import { Events, Listener } from "@sapphire/framework";
+import { EmbedBuilder, type Message } from "discord.js";
 
 @ApplyOptions<Listener.Options>({
   event: Events.MessageUpdate,
@@ -21,17 +21,17 @@ export class MessageUpdateListener extends Listener {
       })
       .addFields([
         {
-          name: 'Old Message',
+          name: "Old Message",
           value: oldMessage.content,
           inline: true,
         },
         {
-          name: 'New Message',
+          name: "New Message",
           value: newMessage.content,
           inline: true,
         },
       ])
-      .setColor('Blue');
+      .setColor("Blue");
 
     return channel.send({
       embeds: [embed],

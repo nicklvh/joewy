@@ -1,13 +1,13 @@
-import { ModerationType } from '@prisma/client';
+import { ModerationType } from "@prisma/client";
 import {
   ChatInputCommandInteraction,
   User,
   Guild,
   EmbedBuilder,
   ChannelType,
-} from 'discord.js';
-import { ModerationTypeNames } from '../types';
-import { container } from '@sapphire/framework';
+} from "discord.js";
+import { ModerationTypeNames } from "../types";
+import { container } from "@sapphire/framework";
 
 export class ModerationManager {
   public async handleModeration(
@@ -15,7 +15,7 @@ export class ModerationManager {
     interaction: ChatInputCommandInteraction,
     user: User,
     reason: string,
-    days?: number,
+    days?: number
   ) {
     const { guild } = interaction;
     const moderator = interaction.user;
@@ -41,7 +41,7 @@ export class ModerationManager {
       guild!.id,
       moderator.id,
       reason,
-      user.id,
+      user.id
     );
     await this.sendModerationMessageToUser(type, user, guild!, reason);
     await this.sendModerationMessageToModlog(
@@ -49,7 +49,7 @@ export class ModerationManager {
       guild!,
       user,
       moderator,
-      reason,
+      reason
     );
   }
 
@@ -57,7 +57,7 @@ export class ModerationManager {
     type: ModerationType,
     user: User,
     guild: Guild,
-    reason: string,
+    reason: string
   ) {
     const embed = new EmbedBuilder()
       .setAuthor({
@@ -66,13 +66,13 @@ export class ModerationManager {
       })
       .addFields([
         {
-          name: 'Reason',
+          name: "Reason",
           value: `\`${
             reason.length > 100 ? `${reason.substring(0, 100)}...` : reason
           }\``,
         },
       ])
-      .setColor('Blue')
+      .setColor("Blue")
       .setTimestamp();
 
     return user
@@ -85,7 +85,7 @@ export class ModerationManager {
     guildId: string,
     moderatorId: string,
     reason: string,
-    memberId: string,
+    memberId: string
   ) {
     return container.prisma.modlog.create({
       data: {
@@ -104,7 +104,7 @@ export class ModerationManager {
     guild: Guild,
     user: User,
     moderator: User,
-    reason: string,
+    reason: string
   ) {
     let guildInDB = await container.prisma.guild.findUnique({
       where: {
@@ -128,8 +128,8 @@ export class ModerationManager {
         container.logger.error(
           `[${guild.name} (${guild.id})] Could not fetch modlog channel ${
             guildInDB!.modlogId
-          }`,
-        ),
+          }`
+        )
       );
 
     if (!modlogChannel || modlogChannel!.type !== ChannelType.GuildText) return;
@@ -141,15 +141,15 @@ export class ModerationManager {
       })
       .addFields([
         {
-          name: 'Reason',
+          name: "Reason",
           value: `\`${reason}\``,
         },
         {
-          name: 'Moderator',
+          name: "Moderator",
           value: `${moderator} (\`${moderator.id}\`)`,
         },
       ])
-      .setColor('Blue')
+      .setColor("Blue")
       .setTimestamp();
 
     return modlogChannel.send({ embeds: [embed] });

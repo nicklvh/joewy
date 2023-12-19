@@ -1,4 +1,4 @@
-import { Command, CommandOptionsRunTypeEnum } from '@sapphire/framework';
+import { Command, CommandOptionsRunTypeEnum } from "@sapphire/framework";
 import {
   ActionRowBuilder,
   ButtonBuilder,
@@ -6,14 +6,14 @@ import {
   EmbedBuilder,
   PermissionFlagsBits,
   inlineCode,
-} from 'discord.js';
-import { ApplyOptions } from '@sapphire/decorators';
-import { ModerationType } from '@prisma/client';
-import { Time } from '@sapphire/time-utilities';
+} from "discord.js";
+import { ApplyOptions } from "@sapphire/decorators";
+import { ModerationType } from "@prisma/client";
+import { Time } from "@sapphire/time-utilities";
 
 @ApplyOptions<Command.Options>({
-  name: 'kick',
-  description: 'kick a member',
+  name: "kick",
+  description: "kick a member",
   requiredUserPermissions: [PermissionFlagsBits.KickMembers],
   requiredClientPermissions: [PermissionFlagsBits.KickMembers],
   runIn: CommandOptionsRunTypeEnum.GuildAny,
@@ -26,37 +26,37 @@ export class KickCommand extends Command {
         .setDescription(this.description)
         .addUserOption((option) =>
           option
-            .setName('user')
-            .setDescription('the user to kick')
-            .setRequired(true),
+            .setName("user")
+            .setDescription("the user to kick")
+            .setRequired(true)
         )
         .addStringOption((option) =>
           option
-            .setName('reason')
-            .setDescription('the reason for the kick')
-            .setRequired(false),
+            .setName("reason")
+            .setDescription("the reason for the kick")
+            .setRequired(false)
         )
         .setDefaultMemberPermissions(PermissionFlagsBits.KickMembers);
     });
   }
 
   public override async chatInputRun(
-    interaction: Command.ChatInputCommandInteraction<'cached'>,
+    interaction: Command.ChatInputCommandInteraction<"cached">
   ) {
-    const user = interaction.options.getUser('user', true);
+    const user = interaction.options.getUser("user", true);
 
     const errorEmbed = new EmbedBuilder()
       .setAuthor({
         name: `Error!`,
         iconURL: interaction.user.displayAvatarURL(),
       })
-      .setColor('Blue');
+      .setColor("Blue");
 
     if (user.id === interaction.user.id) {
       return interaction.reply({
         embeds: [
           errorEmbed.setDescription(
-            `You cannot kick yourself, you silly goose!`,
+            `You cannot kick yourself, you silly goose!`
           ),
         ],
         ephemeral: true,
@@ -64,7 +64,7 @@ export class KickCommand extends Command {
     }
 
     const interactionMember = await interaction.guild.members.fetch(
-      interaction.user.id,
+      interaction.user.id
     );
 
     const member = await interaction.guild.members.fetch(user.id);
@@ -73,7 +73,7 @@ export class KickCommand extends Command {
       return interaction.reply({
         embeds: [
           errorEmbed.setDescription(
-            `An error occured with finding the member.`,
+            `An error occured with finding the member.`
           ),
         ],
       });
@@ -89,7 +89,7 @@ export class KickCommand extends Command {
       return interaction.reply({
         embeds: [
           errorEmbed.setDescription(
-            `You cannot kick ${user} because they either have a higher or equal positioned role than you or me, or they are the owner of the server!`,
+            `You cannot kick ${user} because they either have a higher or equal positioned role than you or me, or they are the owner of the server!`
           ),
         ],
         ephemeral: true,
@@ -97,7 +97,7 @@ export class KickCommand extends Command {
     }
 
     let reason =
-      interaction.options.getString('reason', false) ?? 'No reason provided';
+      interaction.options.getString("reason", false) ?? "No reason provided";
 
     reason =
       reason.length > 100
@@ -105,18 +105,18 @@ export class KickCommand extends Command {
         : reason;
 
     const cancelButton = new ButtonBuilder()
-      .setCustomId('cancel')
-      .setLabel('Cancel')
+      .setCustomId("cancel")
+      .setLabel("Cancel")
       .setStyle(ButtonStyle.Danger);
 
     const proceedButton = new ButtonBuilder()
-      .setCustomId('confirm')
-      .setLabel('Confirm')
+      .setCustomId("confirm")
+      .setLabel("Confirm")
       .setStyle(ButtonStyle.Success);
 
     const row = new ActionRowBuilder<ButtonBuilder>().addComponents(
       cancelButton,
-      proceedButton,
+      proceedButton
     );
 
     const message = await interaction.reply({
@@ -127,9 +127,9 @@ export class KickCommand extends Command {
             iconURL: interaction.user.displayAvatarURL(),
           })
           .setDescription(
-            `Are you sure you want to kick ${user}?\n\nThis will be cancelled in 1 minute if you don't respond.`,
+            `Are you sure you want to kick ${user}?\n\nThis will be cancelled in 1 minute if you don't respond.`
           )
-          .setColor('Blue'),
+          .setColor("Blue"),
       ],
       components: [row],
       fetchReply: true,
@@ -141,12 +141,12 @@ export class KickCommand extends Command {
         time: Time.Minute,
       });
 
-      if (confirmation.customId === 'confirm') {
+      if (confirmation.customId === "confirm") {
         await this.container.moderationManager.handleModeration(
           ModerationType.KICK,
           interaction,
           user,
-          reason,
+          reason
         );
 
         await member.kick(reason);
@@ -160,16 +160,16 @@ export class KickCommand extends Command {
               })
               .addFields([
                 {
-                  name: 'Reason',
+                  name: "Reason",
                   value: inlineCode(reason),
                   inline: true,
                 },
               ])
-              .setColor('Blue'),
+              .setColor("Blue"),
           ],
           components: [],
         });
-      } else if (confirmation.customId === 'cancel') {
+      } else if (confirmation.customId === "cancel") {
         await confirmation.update({
           embeds: [
             new EmbedBuilder()
@@ -178,7 +178,7 @@ export class KickCommand extends Command {
                 iconURL: interaction.user.displayAvatarURL(),
               })
               .setDescription(`Cancelled kicking ${user}`)
-              .setColor('Blue'),
+              .setColor("Blue"),
           ],
           components: [],
         });
@@ -187,7 +187,7 @@ export class KickCommand extends Command {
       await interaction.editReply({
         embeds: [
           errorEmbed.setDescription(
-            `You took too long to respond, so the kick has been cancelled.`,
+            `You took too long to respond, so the kick has been cancelled.`
           ),
         ],
         components: [],

@@ -1,10 +1,10 @@
-import { ApplyOptions } from '@sapphire/decorators';
+import { ApplyOptions } from "@sapphire/decorators";
 import {
   Events,
   Listener,
   type ChatInputCommandDeniedPayload,
   type UserError,
-} from '@sapphire/framework';
+} from "@sapphire/framework";
 
 @ApplyOptions<Listener.Options>({
   event: Events.ChatInputCommandDenied,
@@ -12,9 +12,9 @@ import {
 export class ChatInputCommandDeniedCooldownListener extends Listener {
   public async run(
     error: UserError,
-    { interaction }: ChatInputCommandDeniedPayload,
+    { interaction }: ChatInputCommandDeniedPayload
   ) {
-    if (error.identifier === 'preconditionCooldown') {
+    if (error.identifier === "preconditionCooldown") {
       if (interaction.deferred || interaction.replied) {
         await interaction.editReply({
           content: `Woah, slow down there! Try again in \`${

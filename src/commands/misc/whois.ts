@@ -1,10 +1,10 @@
-import { Command } from '@sapphire/framework';
-import { ApplyOptions } from '@sapphire/decorators';
-import { EmbedBuilder } from 'discord.js';
+import { Command } from "@sapphire/framework";
+import { ApplyOptions } from "@sapphire/decorators";
+import { EmbedBuilder } from "discord.js";
 
 @ApplyOptions<Command.Options>({
-  name: 'whois',
-  description: 'shows information about a user',
+  name: "whois",
+  description: "shows information about a user",
 })
 export class WhoisCommand extends Command {
   public override registerApplicationCommands(registry: Command.Registry) {
@@ -14,17 +14,17 @@ export class WhoisCommand extends Command {
         .setDescription(this.description)
         .addUserOption((option) =>
           option
-            .setName('user')
-            .setDescription('the user to show information about')
-            .setRequired(false),
-        ),
+            .setName("user")
+            .setDescription("the user to show information about")
+            .setRequired(false)
+        )
     );
   }
 
   public override async chatInputRun(
-    interaction: Command.ChatInputCommandInteraction,
+    interaction: Command.ChatInputCommandInteraction
   ) {
-    const user = interaction.options.getUser('user') ?? interaction.user;
+    const user = interaction.options.getUser("user") ?? interaction.user;
 
     return interaction.reply({
       embeds: [
@@ -33,10 +33,10 @@ export class WhoisCommand extends Command {
             name: `Whois | ${user.tag}`,
             iconURL: user.displayAvatarURL(),
           })
-          .setColor(user.hexAccentColor ?? 'Blue')
+          .setColor(user.hexAccentColor ?? "Blue")
           .addFields([
             {
-              name: 'General',
+              name: "General",
               value: `**❯ Name:** \`${user.tag}\` (\`${
                 user.id
               }\`)\n**❯ Bot:** \`${

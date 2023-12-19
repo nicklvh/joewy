@@ -6,8 +6,13 @@
   ],
   "compilerOptions": {
     "tsBuildInfoFile": "dist/tsconfig.tsbuildinfo",
-    "skipLibCheck": true,
-    "removeComments": true,
-    "moduleResolution": "Node16"
+    "outDir": "../dist",
+    "baseUrl": "src/",
+    "paths": {
+      "#classes/*": ["lib/classes/*"],
+      "#api/*": ["lib/api/*"],
+      "#types/*": ["lib/types/*"]
+    },
+    "composite": true
   }
 }

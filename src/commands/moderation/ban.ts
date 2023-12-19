@@ -1,4 +1,4 @@
-import { Command, CommandOptionsRunTypeEnum } from '@sapphire/framework';
+import { Command, CommandOptionsRunTypeEnum } from "@sapphire/framework";
 import {
   ActionRowBuilder,
   ButtonBuilder,
@@ -6,14 +6,14 @@ import {
   EmbedBuilder,
   PermissionFlagsBits,
   inlineCode,
-} from 'discord.js';
-import { Time } from '@sapphire/time-utilities';
-import { ApplyOptions } from '@sapphire/decorators';
-import { ModerationType } from '@prisma/client';
+} from "discord.js";
+import { Time } from "@sapphire/time-utilities";
+import { ApplyOptions } from "@sapphire/decorators";
+import { ModerationType } from "@prisma/client";
 
 @ApplyOptions<Command.Options>({
-  name: 'ban',
-  description: 'ban a member 🔨',
+  name: "ban",
+  description: "ban a member 🔨",
   requiredUserPermissions: [PermissionFlagsBits.BanMembers],
   requiredClientPermissions: [PermissionFlagsBits.BanMembers],
   runIn: CommandOptionsRunTypeEnum.GuildAny,
@@ -26,63 +26,63 @@ export class BanCommand extends Command {
         .setDescription(this.description)
         .addUserOption((option) =>
           option
-            .setName('user')
-            .setDescription('the user to ban')
-            .setRequired(true),
+            .setName("user")
+            .setDescription("the user to ban")
+            .setRequired(true)
         )
         .addStringOption((option) =>
           option
-            .setName('reason')
-            .setDescription('the reason for the ban')
-            .setRequired(false),
+            .setName("reason")
+            .setDescription("the reason for the ban")
+            .setRequired(false)
         )
         .addIntegerOption((option) =>
           option
-            .setName('days')
+            .setName("days")
             .setDescription(
-              'the amount of days to ban the user for, default is a perma ban',
+              "the amount of days to ban the user for, default is a perma ban"
             )
             .setRequired(false)
             .addChoices(
               {
-                name: '1 day',
+                name: "1 day",
                 value: 1,
               },
               {
-                name: '1 week',
+                name: "1 week",
                 value: 7,
               },
               {
-                name: '2 weeks',
+                name: "2 weeks",
                 value: 14,
               },
               {
-                name: '1 month',
+                name: "1 month",
                 value: 28,
-              },
-            ),
+              }
+            )
         )
         .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers);
     });
   }
 
   public override async chatInputRun(
-    interaction: Command.ChatInputCommandInteraction<'cached'>,
+    interaction: Command.ChatInputCommandInteraction<"cached">
   ) {
-    const user = interaction.options.getUser('user', true);
+    const user = interaction.options.getUser("user", true);
 
     const errorEmbed = new EmbedBuilder()
       .setAuthor({
         name: `Error!`,
         iconURL: interaction.user.displayAvatarURL(),
       })
-      .setColor('Blue');
+      .setColor("Blue");
 
     if (user.id === interaction.user.id) {
       return interaction.reply({
         embeds: [
           errorEmbed.setDescription(
-            `You cannot ban yourself, you silly goose!`,
+            `You cannot ban yourself, you silly goose!`
           ),
         ],
         ephemeral: true,
@@ -90,7 +90,7 @@ export class BanCommand extends Command {
     }
 
     const interactionMember = await interaction.guild.members.fetch(
-      interaction.user.id,
+      interaction.user.id
     );
 
     const member = await interaction.guild.members.fetch(user.id);
@@ -99,7 +99,7 @@ export class BanCommand extends Command {
       return interaction.reply({
         embeds: [
           errorEmbed.setDescription(
-            `An error occured with finding the member.`,
+            `An error occured with finding the member.`
           ),
         ],
       });
@@ -115,7 +115,7 @@ export class BanCommand extends Command {
       return interaction.reply({
         embeds: [
           errorEmbed.setDescription(
-            `You cannot ban ${user} because they either have a higher or equal positioned role than you or me, or they are the owner of the server!`,
+            `You cannot ban ${user} because they either have a higher or equal positioned role than you or me, or they are the owner of the server!`
           ),
         ],
         ephemeral: true,
@@ -123,7 +123,7 @@ export class BanCommand extends Command {
     }
 
     let reason =
-      interaction.options.getString('reason', false) ?? 'No reason provided';
+      interaction.options.getString("reason", false) ?? "No reason provided";
 
     reason =
       reason.length > 100
@@ -131,18 +131,18 @@ export class BanCommand extends Command {
         : reason;
 
     const cancelButton = new ButtonBuilder()
-      .setCustomId('cancel')
-      .setLabel('Cancel')
+      .setCustomId("cancel")
+      .setLabel("Cancel")
       .setStyle(ButtonStyle.Danger);
 
     const proceedButton = new ButtonBuilder()
-      .setCustomId('confirm')
-      .setLabel('Confirm')
+      .setCustomId("confirm")
+      .setLabel("Confirm")
       .setStyle(ButtonStyle.Success);
 
     const row = new ActionRowBuilder<ButtonBuilder>().addComponents(
       cancelButton,
-      proceedButton,
+      proceedButton
     );
 
     const message = await interaction.reply({
@@ -153,9 +153,9 @@ export class BanCommand extends Command {
             iconURL: interaction.user.displayAvatarURL(),
           })
           .setDescription(
-            `Are you sure you want to ban ${user}?\n\nThis will be cancelled in 1 minute if you don't respond.`,
+            `Are you sure you want to ban ${user}?\n\nThis will be cancelled in 1 minute if you don't respond.`
           )
-          .setColor('Blue'),
+          .setColor("Blue"),
       ],
       components: [row],
       fetchReply: true,
@@ -167,12 +167,12 @@ export class BanCommand extends Command {
         time: Time.Minute,
       });
 
-      if (confirmation.customId === 'confirm') {
+      if (confirmation.customId === "confirm") {
         await this.container.moderationManager.handleModeration(
           ModerationType.BAN,
           interaction,
           user,
-          reason,
+          reason
         );
 
         await interaction.guild.bans.create(user, {
@@ -188,16 +188,16 @@ export class BanCommand extends Command {
               })
               .addFields([
                 {
-                  name: 'Reason',
+                  name: "Reason",
                   value: inlineCode(reason),
                   inline: true,
                 },
               ])
-              .setColor('Blue'),
+              .setColor("Blue"),
           ],
           components: [],
         });
-      } else if (confirmation.customId === 'cancel') {
+      } else if (confirmation.customId === "cancel") {
         return interaction.editReply({
           embeds: [
             new EmbedBuilder()
@@ -206,7 +206,7 @@ export class BanCommand extends Command {
                 iconURL: interaction.user.displayAvatarURL(),
               })
               .setDescription(`Cancelled banning ${user}!`)
-              .setColor('Blue'),
+              .setColor("Blue"),
           ],
           components: [],
         });
@@ -215,7 +215,7 @@ export class BanCommand extends Command {
       return interaction.editReply({
         embeds: [
           errorEmbed.setDescription(
-            `You took too long to respond, so the ban has been cancelled.`,
+            `You took too long to respond, so the ban has been cancelled.`
           ),
         ],
         components: [],

@@ -1,26 +1,26 @@
-import { Command } from '@sapphire/framework';
-import { fetch, FetchResultTypes } from '@sapphire/fetch';
-import { EmbedBuilder } from 'discord.js';
-import type { APIPetResponse } from '#types/Util';
-import { ApplyOptions } from '@sapphire/decorators';
+import { Command } from "@sapphire/framework";
+import { fetch, FetchResultTypes } from "@sapphire/fetch";
+import { EmbedBuilder } from "discord.js";
+import type { APIPetResponse } from "#types/Util";
+import { ApplyOptions } from "@sapphire/decorators";
 
 @ApplyOptions<Command.Options>({
-  name: 'dog',
-  description: 'shows a dog 🐶',
+  name: "dog",
+  description: "shows a dog 🐶",
 })
 export class DogCommand extends Command {
   public override registerApplicationCommands(registry: Command.Registry) {
     registry.registerChatInputCommand((builder) =>
-      builder.setName(this.name).setDescription(this.description),
+      builder.setName(this.name).setDescription(this.description)
     );
   }
 
   public override async chatInputRun(
-    interaction: Command.ChatInputCommandInteraction,
+    interaction: Command.ChatInputCommandInteraction
   ) {
     const data = await fetch<APIPetResponse>(
-      'https://api.thedogapi.com/v1/images/search',
-      FetchResultTypes.JSON,
+      "https://api.thedogapi.com/v1/images/search",
+      FetchResultTypes.JSON
     ).catch((error) => this.container.logger.error(error));
 
     const embed = new EmbedBuilder();
@@ -30,10 +30,10 @@ export class DogCommand extends Command {
         embeds: [
           embed
             .setAuthor({
-              name: 'Something went wrong! 🐶',
+              name: "Something went wrong! 🐶",
               iconURL: interaction.user.avatarURL()!,
             })
-            .setColor('Red')
+            .setColor("Red")
             .setDescription(`Couldn't fetch a dog 🐶\nTry again later!`),
         ],
       });
@@ -46,8 +46,8 @@ export class DogCommand extends Command {
             iconURL: interaction.user.avatarURL()!,
           })
           .setImage(data[0].url)
-          .setColor('Blue')
-          .setFooter({ text: 'Powered by thedogapi.com' }),
+          .setColor("Blue")
+          .setFooter({ text: "Powered by thedogapi.com" }),
       ],
     });
   }

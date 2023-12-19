@@ -1,13 +1,14 @@
-import { ApplyOptions } from '@sapphire/decorators';
-import { Events, Listener } from '@sapphire/framework';
-import { EmbedBuilder, type Message } from 'discord.js';
+import { auditlogChecks } from "#classes/Utils";
+import { ApplyOptions } from "@sapphire/decorators";
+import { Events, Listener } from "@sapphire/framework";
+import { EmbedBuilder, type Message } from "discord.js";
 
 @ApplyOptions<Listener.Options>({
   event: Events.MessageDelete,
 })
 export class MessageDeleteListener extends Listener {
   public async run(message: Message<true>) {
-    const channel = await this.container.utils.auditlogChecks(message.guild);
+    const channel = await auditlogChecks(message.guild);
     if (!channel) return;
 
     if (message.author.bot) return;
@@ -19,12 +20,12 @@ export class MessageDeleteListener extends Listener {
       })
       .addFields([
         {
-          name: 'Message Content',
+          name: "Message Content",
           value: message.content,
           inline: true,
         },
       ])
-      .setColor('Blue');
+      .setColor("Blue");
 
     return channel.send({
       embeds: [embed],

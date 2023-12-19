@@ -1,5 +1,5 @@
-import { Command, CommandOptionsRunTypeEnum } from '@sapphire/framework';
-import { ApplyOptions } from '@sapphire/decorators';
+import { Command, CommandOptionsRunTypeEnum } from "@sapphire/framework";
+import { ApplyOptions } from "@sapphire/decorators";
 import {
   ActionRowBuilder,
   ButtonBuilder,
@@ -8,75 +8,75 @@ import {
   ChannelType,
   EmbedBuilder,
   PermissionFlagsBits,
-} from 'discord.js';
-import type { Guild } from '@prisma/client';
-import { Time } from '@sapphire/time-utilities';
+} from "discord.js";
+import type { Guild } from "@prisma/client";
+import { Time } from "@sapphire/time-utilities";
 
 @ApplyOptions<Command.Options>({
-  name: 'settings',
-  description: 'change the settings of the bot for the current server',
-  requiredUserPermissions: ['ManageGuild'],
-  requiredClientPermissions: ['ManageGuild'],
+  name: "settings",
+  description: "change the settings of the bot for the current server",
+  requiredUserPermissions: ["ManageGuild"],
+  requiredClientPermissions: ["ManageGuild"],
   runIn: CommandOptionsRunTypeEnum.GuildAny,
 })
 export class SettingsCommand extends Command {
-  private guildId = '';
+  private guildId = "";
 
   public override registerApplicationCommands(registry: Command.Registry) {
     registry.registerChatInputCommand((builder) =>
       builder
         .setName(this.name)
         .setDescription(this.description)
-        .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild),
+        .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
     );
   }
 
   public override async chatInputRun(
-    interaction: Command.ChatInputCommandInteraction<'cached'>,
+    interaction: Command.ChatInputCommandInteraction<"cached">
   ) {
     this.guildId = interaction.guildId!;
 
     const guildInDB: Guild = await this.getGuild();
 
     const loggingButton = new ButtonBuilder()
-      .setLabel('Logging')
+      .setLabel("Logging")
       .setStyle(ButtonStyle.Primary)
-      .setEmoji('📝')
-      .setCustomId('logging');
+      .setEmoji("📝")
+      .setCustomId("logging");
 
     const moderationButton = new ButtonBuilder()
-      .setLabel('Moderation')
+      .setLabel("Moderation")
       .setStyle(ButtonStyle.Primary)
-      .setEmoji('🔨')
-      .setCustomId('moderation');
+      .setEmoji("🔨")
+      .setCustomId("moderation");
 
     const starboardButton = new ButtonBuilder()
-      .setLabel('Starboard')
+      .setLabel("Starboard")
       .setStyle(ButtonStyle.Primary)
-      .setEmoji('⭐')
-      .setCustomId('starboard');
+      .setEmoji("⭐")
+      .setCustomId("starboard");
 
     const funButton = new ButtonBuilder()
-      .setLabel('Fun')
+      .setLabel("Fun")
       .setStyle(ButtonStyle.Primary)
-      .setEmoji('🎉')
-      .setCustomId('fun');
+      .setEmoji("🎉")
+      .setCustomId("fun");
 
     const mainRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
       loggingButton,
       moderationButton,
       starboardButton,
-      funButton,
+      funButton
     );
 
     const exitButton = new ButtonBuilder()
-      .setCustomId('exit')
-      .setLabel('Exit')
-      .setEmoji('⬅')
+      .setCustomId("exit")
+      .setLabel("Exit")
+      .setEmoji("⬅")
       .setStyle(ButtonStyle.Secondary);
 
     const exitRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
-      exitButton,
+      exitButton
     );
 
     const message = await interaction.reply({
@@ -86,16 +86,16 @@ export class SettingsCommand extends Command {
             name: `Configure ${interaction.guild!.name}`,
             iconURL: interaction.guild.iconURL() as string,
           })
-          .setColor('Blue')
+          .setColor("Blue")
           .addFields([
             {
-              name: 'Use the buttons below to configure the server.',
+              name: "Use the buttons below to configure the server.",
               value: [
-                `**Logging:** ${guildInDB?.logging ? '✅' : '❌'}`,
-                `**Moderation:** ${guildInDB?.moderation ? '✅' : '❌'}`,
-                `**Starboard:** ${guildInDB?.starboard ? '✅' : '❌'}`,
-                `**Fun:** ${guildInDB?.fun ? '✅' : '❌'}`,
-              ].join('\n'),
+                `**Logging:** ${guildInDB?.logging ? "✅" : "❌"}`,
+                `**Moderation:** ${guildInDB?.moderation ? "✅" : "❌"}`,
+                `**Starboard:** ${guildInDB?.starboard ? "✅" : "❌"}`,
+                `**Fun:** ${guildInDB?.fun ? "✅" : "❌"}`,
+              ].join("\n"),
             },
           ]),
       ],
@@ -108,17 +108,17 @@ export class SettingsCommand extends Command {
       time: Time.Minute * 5,
     });
 
-    collector.on('collect', async (componentInteraction) => {
+    collector.on("collect", async (componentInteraction) => {
       collector.resetTimer();
 
       const goBackButton = new ButtonBuilder()
-        .setCustomId('goBack')
-        .setLabel('Home')
-        .setEmoji('⬅')
+        .setCustomId("goBack")
+        .setLabel("Home")
+        .setEmoji("⬅")
         .setStyle(ButtonStyle.Secondary);
 
       const goBackRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
-        goBackButton,
+        goBackButton
       );
 
       const guild: Guild = await this.getGuild();
@@ -126,12 +126,12 @@ export class SettingsCommand extends Command {
       const id = componentInteraction.customId;
 
       if (componentInteraction.isButton()) {
-        if (id === 'logging') {
+        if (id === "logging") {
           await componentInteraction.update({
             embeds: [
               new EmbedBuilder()
                 .setAuthor({
-                  name: 'Configuring the logging system',
+                  name: "Configuring the logging system",
                   iconURL: interaction.guild.iconURL() as string,
                 })
                 .addFields([
@@ -139,59 +139,59 @@ export class SettingsCommand extends Command {
                     name: `Use the buttons below to edit the respective channel and settings`,
                     value: [
                       `**Modlog:** ${
-                        guild.modlogId ? `<#${guild.modlogId}>` : 'Not set'
+                        guild.modlogId ? `<#${guild.modlogId}>` : "Not set"
                       }`,
                       `**Auditlog:** ${
-                        guild.auditlogId ? `<#${guild.auditlogId}>` : 'Not set'
+                        guild.auditlogId ? `<#${guild.auditlogId}>` : "Not set"
                       }`,
                       `**Welcome:** ${
-                        guild.welcomeId ? `<#${guild.welcomeId}>` : 'Not set'
+                        guild.welcomeId ? `<#${guild.welcomeId}>` : "Not set"
                       }`,
-                    ].join('\n'),
+                    ].join("\n"),
                   },
                 ])
-                .setColor('Blue'),
+                .setColor("Blue"),
             ],
             components: [
               new ActionRowBuilder<ButtonBuilder>().addComponents(
                 new ButtonBuilder()
-                  .setCustomId('modlog')
-                  .setLabel('Modlog')
+                  .setCustomId("modlog")
+                  .setLabel("Modlog")
                   .setStyle(ButtonStyle.Primary),
                 new ButtonBuilder()
-                  .setCustomId('auditlog')
-                  .setLabel('Auditlog')
+                  .setCustomId("auditlog")
+                  .setLabel("Auditlog")
                   .setStyle(ButtonStyle.Primary),
                 new ButtonBuilder()
-                  .setCustomId('welcome')
-                  .setLabel('Welcome')
-                  .setStyle(ButtonStyle.Primary),
+                  .setCustomId("welcome")
+                  .setLabel("Welcome")
+                  .setStyle(ButtonStyle.Primary)
               ),
               goBackRow,
             ],
           });
-        } else if (id === 'modlog' || id === 'auditlog' || id === 'welcome') {
+        } else if (id === "modlog" || id === "auditlog" || id === "welcome") {
           const channelSelector = new ChannelSelectMenuBuilder()
             .addChannelTypes(ChannelType.GuildText)
             .setCustomId(`${id}ChannelSelect`);
 
           const disableButton = new ButtonBuilder()
-            .setLabel('Disable')
+            .setLabel("Disable")
             .setStyle(ButtonStyle.Danger)
             .setCustomId(`${id}Disable`);
 
           const channelRow =
             new ActionRowBuilder<ChannelSelectMenuBuilder>().addComponents(
-              channelSelector,
+              channelSelector
             );
 
           const goBackAndDisableRow =
             new ActionRowBuilder<ButtonBuilder>().addComponents(
               goBackButton,
-              disableButton,
+              disableButton
             );
 
-          const name = `${id}Id` as 'modlogId' | 'auditlogId' | 'welcomeId';
+          const name = `${id}Id` as "modlogId" | "auditlogId" | "welcomeId";
 
           const channel = guild[name];
 
@@ -202,44 +202,44 @@ export class SettingsCommand extends Command {
                   name: `Configuring the ${id} channel`,
                   iconURL: interaction.guild.iconURL() as string,
                 })
-                .setColor('Blue')
+                .setColor("Blue")
                 .setDescription(
                   `Pick a channel below to edit the ${id} channel for \`${
                     interaction.guild!.name
-                  }\`${channel ? '\nDisable it by selecting `Disable`' : ''}`,
+                  }\`${channel ? "\nDisable it by selecting `Disable`" : ""}`
                 ),
             ],
             components: [channelRow, channel ? goBackAndDisableRow : goBackRow],
           });
-        } else if (id === 'moderation') {
+        } else if (id === "moderation") {
           await componentInteraction.update({
             embeds: [
               new EmbedBuilder()
                 .setAuthor({
-                  name: 'Configuring the moderation system',
+                  name: "Configuring the moderation system",
                   iconURL: interaction.guild.iconURL() as string,
                 })
                 .addFields([
                   {
                     name: `Use the buttons below to edit the respective channel and settings`,
                     value: [
-                      `**Blacklist Words:** ${guild?.blacklist ? '✅' : '❌'}`,
-                    ].join('\n'),
+                      `**Blacklist Words:** ${guild?.blacklist ? "✅" : "❌"}`,
+                    ].join("\n"),
                   },
                 ])
-                .setColor('Blue'),
+                .setColor("Blue"),
             ],
             components: [
               new ActionRowBuilder<ButtonBuilder>().addComponents(
                 new ButtonBuilder()
-                  .setCustomId('blacklistWords')
-                  .setLabel('Blacklist Words')
-                  .setStyle(ButtonStyle.Primary),
+                  .setCustomId("blacklistWords")
+                  .setLabel("Blacklist Words")
+                  .setStyle(ButtonStyle.Primary)
               ),
               goBackRow,
             ],
           });
-        } else if (id === 'goBack') {
+        } else if (id === "goBack") {
           await componentInteraction.update({
             embeds: [
               new EmbedBuilder()
@@ -247,23 +247,23 @@ export class SettingsCommand extends Command {
                   name: `Configure ${interaction.guild!.name}`,
                   iconURL: interaction.guild.iconURL() ?? undefined,
                 })
-                .setColor('Blue')
+                .setColor("Blue")
                 .addFields([
                   {
-                    name: 'Use the buttons below to configure the server.',
+                    name: "Use the buttons below to configure the server.",
                     value: [
-                      `**Logging:** ${guildInDB?.logging ? '✅' : '❌'}`,
-                      `**Moderation:** ${guildInDB?.moderation ? '✅' : '❌'}`,
-                      `**Starboard:** ${guildInDB?.starboard ? '✅' : '❌'}`,
-                      `**Fun:** ${guildInDB?.fun ? '✅' : '❌'}`,
-                    ].join('\n'),
+                      `**Logging:** ${guildInDB?.logging ? "✅" : "❌"}`,
+                      `**Moderation:** ${guildInDB?.moderation ? "✅" : "❌"}`,
+                      `**Starboard:** ${guildInDB?.starboard ? "✅" : "❌"}`,
+                      `**Fun:** ${guildInDB?.fun ? "✅" : "❌"}`,
+                    ].join("\n"),
                   },
                 ]),
             ],
             components: [mainRow, exitRow],
           });
-        } else if (id.endsWith('Disable')) {
-          const name = id.split('Disable')[0];
+        } else if (id.endsWith("Disable")) {
+          const name = id.split("Disable")[0];
 
           const customId = `${name}Id`;
 
@@ -283,11 +283,11 @@ export class SettingsCommand extends Command {
                   name: `Success`,
                   iconURL: interaction.guild.iconURL() as string,
                 })
-                .setColor('Blue')
+                .setColor("Blue")
                 .setDescription(
                   `Successfully disabled the ${name} channel for \`${
                     interaction.guild!.name
-                  }\``,
+                  }\``
                 ),
             ],
             components: [goBackRow],
@@ -296,9 +296,9 @@ export class SettingsCommand extends Command {
       } else if (componentInteraction.isChannelSelectMenu()) {
         const channelId = componentInteraction.values[0];
 
-        const name = id.split('ChannelSelect')[0];
+        const name = id.split("ChannelSelect")[0];
 
-        const customId = `${name}Id` as 'modlogId' | 'auditlogId' | 'welcomeId';
+        const customId = `${name}Id` as "modlogId" | "auditlogId" | "welcomeId";
 
         if (guild[customId] === channelId) {
           await componentInteraction.update({
@@ -308,9 +308,9 @@ export class SettingsCommand extends Command {
                   name: `Error while editing ${interaction.guild!.name}`,
                   iconURL: interaction.guild.iconURL() as string,
                 })
-                .setColor('Blue')
+                .setColor("Blue")
                 .setDescription(
-                  `<#${channelId}> is already set as the ${name} channel!`,
+                  `<#${channelId}> is already set as the ${name} channel!`
                 ),
             ],
             components: [goBackRow],
@@ -334,9 +334,9 @@ export class SettingsCommand extends Command {
                 name: `Success`,
                 iconURL: interaction.guild.iconURL() as string,
               })
-              .setColor('Blue')
+              .setColor("Blue")
               .setDescription(
-                `Successfully set the ${name} channel to <#${channelId}>`,
+                `Successfully set the ${name} channel to <#${channelId}>`
               ),
           ],
           components: [goBackRow],
@@ -344,18 +344,18 @@ export class SettingsCommand extends Command {
       }
     });
 
-    collector.on('dispose', async () => {
+    collector.on("dispose", async () => {
       const embed = new EmbedBuilder()
         .setAuthor({
-          name: 'Exited',
+          name: "Exited",
           iconURL: interaction.user.displayAvatarURL(),
         })
         .setDescription(
           `Run the \`/settings\` command again to change the settings for \`${
             interaction.guild!.name
-          }\``,
+          }\``
         )
-        .setColor('Blue');
+        .setColor("Blue");
 
       await interaction.editReply({ embeds: [embed] });
     });

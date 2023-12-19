@@ -4,8 +4,8 @@
   "description": "Discord bot made in Sapphire, Discord.js and TypeScript",
   "main": "./dist/index.js",
   "scripts": {
-    "build": "tsc -b src",
-    "start": "tsc -b src && node ."
+    "build": "tsc src",
+    "start": "tsc src && node ."
   },
   "private": true,
   "repository": {
@@ -40,8 +40,5 @@
     "prisma": "^5.7.1",
     "typescript": "^5.3.3"
   },
-  "packageManager": "yarn@4.0.2",
-  "_moduleAliases": {
-    "@lib": "dist/lib"
-  }
+  "packageManager": "yarn@4.0.2"
 }

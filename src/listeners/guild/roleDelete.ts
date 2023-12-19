@@ -1,7 +1,7 @@
-import { auditlogChecks } from '#classes/Utils';
-import { ApplyOptions } from '@sapphire/decorators';
-import { Events, Listener } from '@sapphire/framework';
-import { EmbedBuilder, roleMention, type Role } from 'discord.js';
+import { auditlogChecks } from "#classes/Utils";
+import { ApplyOptions } from "@sapphire/decorators";
+import { Events, Listener } from "@sapphire/framework";
+import { EmbedBuilder, roleMention, type Role } from "discord.js";
 
 @ApplyOptions<Listener.Options>({
   event: Events.GuildRoleDelete,
@@ -17,23 +17,23 @@ export class RoleDeleteListener extends Listener {
       })
       .addFields([
         {
-          name: 'Role',
+          name: "Role",
           value: `${roleMention(role.id)} (\`${role.id}\`)`,
           inline: true,
         },
         {
-          name: 'Color',
+          name: "Color",
           value: role.hexColor,
           inline: true,
         },
         {
-          name: 'Hoisted',
-          value: role.hoist ? '`Yes`' : '`No`',
+          name: "Hoisted",
+          value: role.hoist ? "`Yes`" : "`No`",
           inline: true,
         },
         {
-          name: 'Mentionable',
-          value: role.mentionable ? '`Yes`' : '`No`',
+          name: "Mentionable",
+          value: role.mentionable ? "`Yes`" : "`No`",
           inline: true,
         },
       ])
