@@ -1,6 +1,6 @@
 # Environment variables
-.env.development.local
-.env.production.local
+.env
+.env.development
 
 node_modules
 dist

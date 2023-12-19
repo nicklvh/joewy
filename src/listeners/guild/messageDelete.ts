@@ -7,9 +7,10 @@ import { EmbedBuilder, type Message } from 'discord.js';
 })
 export class MessageDeleteListener extends Listener {
   public async run(message: Message<true>) {
-    if (message.author.bot) return;
     const channel = await this.container.utils.auditlogChecks(message.guild);
     if (!channel) return;
+
+    if (message.author.bot) return;
 
     const embed = new EmbedBuilder()
       .setAuthor({
