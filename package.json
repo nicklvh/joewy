@@ -26,7 +26,7 @@
     "@sapphire/fetch": "^3.0.0",
     "@sapphire/framework": "^5.0.0",
     "@sapphire/plugin-api": "^6.0.0",
-    "@sapphire/plugin-logger": "^3.0.7",
+    "@sapphire/plugin-logger": "^4.0.0",
     "@sapphire/ratelimits": "^2.4.7",
     "@sapphire/time-utilities": "^1.7.10",
     "@sapphire/utilities": "^3.13.0",
