@@ -482,12 +482,12 @@ __metadata:
   linkType: hard
 
 "@skyra/env-utilities@npm:^1.2.2":
-  version: 1.2.2
-  resolution: "@skyra/env-utilities@npm:1.2.2"
+  version: 1.3.0
+  resolution: "@skyra/env-utilities@npm:1.3.0"
   dependencies:
     dotenv: "npm:^16.3.1"
     dotenv-expand: "npm:^10.0.0"
-  checksum: f262491acd4560b62457814bed0cad45d1168064f76841f6b1719061c22e35d162f240817c3b59651558e380f0a857eacf4bbc538db980cc6ef28671b4439293
+  checksum: 5073fcf83f8f32a5f127230831cf5faa294982f3f9c420d054f2f57a87cd9f78349033a9a2368a63e30742bd5efee9ebb0e1534a98df90617967da171e35fccf
   languageName: node
   linkType: hard
 
