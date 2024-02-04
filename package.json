@@ -15,9 +15,8 @@
   "author": "nicklvh",
   "license": "GPL-3.0-or-later",
   "imports": {
-    "#classes/*": "./dist/lib/classes/*.js",
-    "#api/*": "./dist/lib/api/*.js",
-    "#types/*": "./dist/lib/types/*.js"
+    "#classes": "./dist/lib/classes/index.js",
+    "#utils": "./dist/lib/utils/index.js"
   },
   "dependencies": {
     "@prisma/client": "^5.9.1",
