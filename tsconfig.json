@@ -5,14 +5,11 @@
     "@sapphire/ts-config/extra-strict"
   ],
   "compilerOptions": {
-    "tsBuildInfoFile": "dist/tsconfig.tsbuildinfo",
-    "outDir": "../dist",
-    "baseUrl": "src/",
+    "outDir": "dist",
+    "baseUrl": "src",
     "paths": {
-      "#classes/*": ["lib/classes/*"],
-      "#api/*": ["lib/api/*"],
-      "#types/*": ["lib/types/*"]
-    },
-    "composite": true
+      "#classes": ["lib/classes"],
+      "#utils": ["lib/utils"]
+    }
   }
 }

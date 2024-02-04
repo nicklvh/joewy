@@ -1,5 +1,4 @@
-import { auditlogChecks } from "#classes/Utils";
-import { ChannelTypeNames } from "#types/Util";
+import { auditlogChecks, ChannelTypeNames } from "#utils";
 import { ApplyOptions } from "@sapphire/decorators";
 import { Events, Listener } from "@sapphire/framework";
 import { EmbedBuilder, type GuildChannel } from "discord.js";

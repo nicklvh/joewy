@@ -9,7 +9,7 @@ import {
 import { ApplyOptions } from "@sapphire/decorators";
 import { PaginatedMessage } from "@sapphire/discord.js-utilities";
 import { chunk } from "@sapphire/utilities";
-import { ModerationTypeStrings } from "#types/index";
+import { ModerationTypeStrings } from "#utils";
 
 @ApplyOptions<Command.Options>({
   name: "infractions",

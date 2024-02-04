@@ -1,4 +1,4 @@
-import { auditlogChecks } from "#classes/Utils";
+import { auditlogChecks } from "#utils";
 import { ApplyOptions } from "@sapphire/decorators";
 import { Events, Listener } from "@sapphire/framework";
 import { EmbedBuilder, type Message } from "discord.js";
