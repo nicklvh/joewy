@@ -4,8 +4,8 @@
   "description": "Discord bot made in Sapphire, Discord.js and TypeScript",
   "main": "./dist/index.js",
   "scripts": {
-    "build": "tsc src",
-    "start": "tsc src && node ."
+    "build": "tsc",
+    "start": "tsc && node ."
   },
   "private": true,
   "repository": {
