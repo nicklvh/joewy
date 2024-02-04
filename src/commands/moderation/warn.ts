@@ -10,6 +10,7 @@ import {
 import { ApplyOptions } from "@sapphire/decorators";
 import { ModerationType } from "@prisma/client";
 import { Time } from "@sapphire/time-utilities";
+import { Moderation } from "#classes";
 
 @ApplyOptions<Command.Options>({
   name: "warn",
@@ -140,12 +141,7 @@ export class WarnCommand extends Command {
       });
 
       if (confirmation.customId === "confirm") {
-        await this.container.moderationManager.handleModeration(
-          ModerationType.WARN,
-          interaction,
-          user,
-          reason
-        );
+        new Moderation(ModerationType.WARN, interaction, user, reason);
 
         await confirmation.update({
           embeds: [

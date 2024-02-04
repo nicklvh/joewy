@@ -6,11 +6,21 @@ import {
   EmbedBuilder,
   ChannelType,
 } from "discord.js";
-import { ModerationTypeNames } from "../types";
+import { ModerationTypeNames } from "../utils";
 import { container } from "@sapphire/framework";
 
-export class ModerationManager {
-  public async handleModeration(
+export class Moderation {
+  public constructor(
+    type: ModerationType,
+    interaction: ChatInputCommandInteraction,
+    user: User,
+    reason: string,
+    days?: number
+  ) {
+    this.handleModeration(type, interaction, user, reason, days);
+  }
+
+  private async handleModeration(
     type: ModerationType,
     interaction: ChatInputCommandInteraction,
     user: User,

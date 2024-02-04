@@ -10,6 +10,7 @@ import {
 import { ApplyOptions } from "@sapphire/decorators";
 import { ModerationType } from "@prisma/client";
 import { Time } from "@sapphire/time-utilities";
+import { Moderation } from "#classes";
 
 @ApplyOptions<Command.Options>({
   name: "mute",
@@ -207,12 +208,7 @@ export class MuteCommand extends Command {
       });
 
       if (confirmation.customId === "confirm") {
-        await this.container.moderationManager.handleModeration(
-          ModerationType.MUTE,
-          interaction,
-          user,
-          reason
-        );
+        new Moderation(ModerationType.MUTE, interaction, user, reason);
 
         await member.timeout(duration, reason);
 
