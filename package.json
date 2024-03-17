@@ -19,8 +19,8 @@
     "#utils": "./dist/lib/utils/index.js"
   },
   "dependencies": {
-    "@prisma/client": "^5.9.1",
-    "@sapphire/decorators": "^6.0.4",
+    "@prisma/client": "^5.11.0",
+    "@sapphire/decorators": "^6.1.0",
     "@sapphire/discord.js-utilities": "^7.1.6",
     "@sapphire/fetch": "^3.0.2",
     "@sapphire/framework": "^5.0.7",
@@ -29,14 +29,14 @@
     "@sapphire/time-utilities": "^1.7.12",
     "@sapphire/utilities": "^3.15.3",
     "discord.js": "^14.14.1",
-    "dotenv": "^16.4.1"
+    "dotenv": "^16.4.5"
   },
   "devDependencies": {
-    "@sapphire/eslint-config": "^5.0.3",
-    "@sapphire/ts-config": "^5.0.0",
-    "@types/node": "^20.11.16",
-    "prisma": "^5.9.1",
-    "typescript": "^5.3.3"
+    "@sapphire/eslint-config": "^5.0.4",
+    "@sapphire/ts-config": "^5.0.1",
+    "@types/node": "^20.11.28",
+    "prisma": "^5.11.0",
+    "typescript": "^5.4.2"
   },
-  "packageManager": "yarn@4.0.2"
+  "packageManager": "yarn@4.1.1"
 }
