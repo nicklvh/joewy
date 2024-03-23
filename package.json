@@ -14,16 +14,15 @@
   },
   "author": "nicklvh",
   "license": "GPL-3.0-or-later",
-  "imports": {
-    "#classes": "./dist/lib/classes/index.js",
-    "#utils": "./dist/lib/utils/index.js"
+  "eslintConfig": {
+    "extends": "@sapphire"
   },
   "dependencies": {
     "@prisma/client": "^5.11.0",
     "@sapphire/decorators": "^6.1.0",
     "@sapphire/discord.js-utilities": "^7.1.6",
     "@sapphire/fetch": "^3.0.2",
-    "@sapphire/framework": "^5.0.7",
+    "@sapphire/framework": "^5.0.10",
     "@sapphire/plugin-logger": "^4.0.2",
     "@sapphire/ratelimits": "^2.4.9",
     "@sapphire/time-utilities": "^1.7.12",
@@ -33,10 +32,11 @@
   },
   "devDependencies": {
     "@sapphire/eslint-config": "^5.0.4",
+    "@sapphire/prettier-config": "^2.0.0",
     "@sapphire/ts-config": "^5.0.1",
-    "@types/node": "^20.11.28",
+    "@types/node": "^20.11.30",
     "prisma": "^5.11.0",
-    "typescript": "^5.4.2"
+    "typescript": "^5.4.3"
   },
   "packageManager": "yarn@4.1.1"
 }

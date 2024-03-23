@@ -291,6 +291,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@sapphire/discord-utilities@npm:^3.2.3":
+  version: 3.2.3
+  resolution: "@sapphire/discord-utilities@npm:3.2.3"
+  dependencies:
+    discord-api-types: "npm:^0.37.73"
+  checksum: 10c0/8e0bfc5a287a23c510a937b2584d86e4ac185b1a24b4bc5aa4ce98ab860074c5c2e8916000ad3a483bca12f209eeef0b413b844ec7691fbc86eded997f07bff1
+  languageName: node
+  linkType: hard
+
 "@sapphire/discord.js-utilities@npm:^7.1.6":
   version: 7.1.6
   resolution: "@sapphire/discord.js-utilities@npm:7.1.6"
@@ -332,12 +341,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sapphire/framework@npm:^5.0.7":
-  version: 5.0.7
-  resolution: "@sapphire/framework@npm:5.0.7"
+"@sapphire/framework@npm:^5.0.10":
+  version: 5.0.10
+  resolution: "@sapphire/framework@npm:5.0.10"
   dependencies:
     "@discordjs/builders": "npm:^1.7.0"
-    "@sapphire/discord-utilities": "npm:^3.2.2"
+    "@sapphire/discord-utilities": "npm:^3.2.3"
     "@sapphire/discord.js-utilities": "npm:^7.1.6"
     "@sapphire/lexure": "npm:^1.1.7"
     "@sapphire/pieces": "npm:^4.2.2"
@@ -345,7 +354,7 @@ __metadata:
     "@sapphire/result": "npm:^2.6.6"
     "@sapphire/stopwatch": "npm:^1.5.2"
     "@sapphire/utilities": "npm:^3.15.3"
-  checksum: 10c0/83deb563ab552d95798ad8dee3bbd2076942e7a4fb2175778b1e7dba114c3f87b85deab135dbf1d9797f80af711e02ef3ef6206888d9dd09e19487cc839f920d
+  checksum: 10c0/f68cd136a0f90bd9457d431f99c6eb8887c198c703f606bc64f7f7e2ae9f1937e187bcb3a19ed5906e2a715e668accc77b01a9037637ab9cb8776829f66f9d4e
   languageName: node
   linkType: hard
 
@@ -376,6 +385,15 @@ __metadata:
     "@sapphire/timestamp": "npm:^1.0.3"
     colorette: "npm:^2.0.20"
   checksum: 10c0/d1672f454e3dd4d8e08e9790e021541011faf407a10c0ea780e159e62fba7afb1994f97e293522b886e6c517fdc28842567f906d6294b33a07e071e6439e3435
+  languageName: node
+  linkType: hard
+
+"@sapphire/prettier-config@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "@sapphire/prettier-config@npm:2.0.0"
+  dependencies:
+    prettier: "npm:^3.0.0"
+  checksum: 10c0/87aa87f0b47662f1b2b2f3de415ac5db54240f1b1848d068eebdd33d396d08991f5fe9b8fe229640a8392440a3bbd09380f279999f4a66367d5fff1cb91579e2
   languageName: node
   linkType: hard
 
@@ -478,12 +496,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^20.11.28":
-  version: 20.11.28
-  resolution: "@types/node@npm:20.11.28"
+"@types/node@npm:^20.11.30":
+  version: 20.11.30
+  resolution: "@types/node@npm:20.11.30"
   dependencies:
     undici-types: "npm:~5.26.4"
-  checksum: 10c0/c599745243ed9ae4ca87460f18f88d02ab7424b545136aa504ed7a1d898e3a9bb133c927bcc7e861f79d7f6043ef917a173e780c8a001e129221e92f6d97b0ee
+  checksum: 10c0/867cfaf969c6d8850d8d7304e7ab739898a50ecb1395b61ff2335644f5f48d7a46fbc4a14cee967aed65ec134b61a746edae70d1f32f11321ccf29165e3bc4e6
   languageName: node
   linkType: hard
 
@@ -832,6 +850,13 @@ __metadata:
   version: 0.37.67
   resolution: "discord-api-types@npm:0.37.67"
   checksum: 10c0/b003ff4c0c82814f2dc3450d6765d470111c001d6f1eb1ec29f2d99c43590adeef1d400c0247f7c5c9044a3c93027d1d6409454401f091e4434dfa1408723545
+  languageName: node
+  linkType: hard
+
+"discord-api-types@npm:^0.37.73":
+  version: 0.37.76
+  resolution: "discord-api-types@npm:0.37.76"
+  checksum: 10c0/42dc28d58343aa98ff47d49b2bddb607a5c84d5d43c1f5cce33a314b2cde1581dadd52d0c61875c31bcd3b2df40fcc16bf524ab08ee95b9d661d5729e55f9752
   languageName: node
   linkType: hard
 
@@ -1278,17 +1303,18 @@ __metadata:
     "@sapphire/discord.js-utilities": "npm:^7.1.6"
     "@sapphire/eslint-config": "npm:^5.0.4"
     "@sapphire/fetch": "npm:^3.0.2"
-    "@sapphire/framework": "npm:^5.0.7"
+    "@sapphire/framework": "npm:^5.0.10"
     "@sapphire/plugin-logger": "npm:^4.0.2"
+    "@sapphire/prettier-config": "npm:^2.0.0"
     "@sapphire/ratelimits": "npm:^2.4.9"
     "@sapphire/time-utilities": "npm:^1.7.12"
     "@sapphire/ts-config": "npm:^5.0.1"
     "@sapphire/utilities": "npm:^3.15.3"
-    "@types/node": "npm:^20.11.28"
+    "@types/node": "npm:^20.11.30"
     discord.js: "npm:^14.14.1"
     dotenv: "npm:^16.4.5"
     prisma: "npm:^5.11.0"
-    typescript: "npm:^5.4.2"
+    typescript: "npm:^5.4.3"
   languageName: unknown
   linkType: soft
 
@@ -1539,7 +1565,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier@npm:^3.2.5":
+"prettier@npm:^3.0.0, prettier@npm:^3.2.5":
   version: 3.2.5
   resolution: "prettier@npm:3.2.5"
   bin:
@@ -1741,6 +1767,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"typescript@npm:^5.4.3":
+  version: 5.4.3
+  resolution: "typescript@npm:5.4.3"
+  bin:
+    tsc: bin/tsc
+    tsserver: bin/tsserver
+  checksum: 10c0/22443a8760c3668e256c0b34b6b45c359ef6cecc10c42558806177a7d500ab1a7d7aac1f976d712e26989ddf6731d2fbdd3212b7c73290a45127c1c43ba2005a
+  languageName: node
+  linkType: hard
+
 "typescript@patch:typescript@npm%3A^5.4.2#optional!builtin<compat/typescript>":
   version: 5.4.2
   resolution: "typescript@patch:typescript@npm%3A5.4.2#optional!builtin<compat/typescript>::version=5.4.2&hash=5adc0c"
@@ -1748,6 +1784,16 @@ __metadata:
     tsc: bin/tsc
     tsserver: bin/tsserver
   checksum: 10c0/fcf6658073d07283910d9a0e04b1d5d0ebc822c04dbb7abdd74c3151c7aa92fcddbac7d799404e358197222006ccdc4c0db219d223d2ee4ccd9e2b01333b49be
+  languageName: node
+  linkType: hard
+
+"typescript@patch:typescript@npm%3A^5.4.3#optional!builtin<compat/typescript>":
+  version: 5.4.3
+  resolution: "typescript@patch:typescript@npm%3A5.4.3#optional!builtin<compat/typescript>::version=5.4.3&hash=5adc0c"
+  bin:
+    tsc: bin/tsc
+    tsserver: bin/tsserver
+  checksum: 10c0/6e51f8b7e6ec55b897b9e56b67e864fe8f44e30f4a14357aad5dc0f7432db2f01efc0522df0b6c36d361c51f2dc3dcac5c832efd96a404cfabf884e915d38828
   languageName: node
   linkType: hard
 

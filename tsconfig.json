@@ -5,11 +5,6 @@
     "@sapphire/ts-config/extra-strict"
   ],
   "compilerOptions": {
-    "outDir": "dist",
-    "baseUrl": "src",
-    "paths": {
-      "#classes": ["lib/classes"],
-      "#utils": ["lib/utils"]
-    }
+    "outDir": "dist"
   }
 }
