@@ -1,26 +1,57 @@
-import { ModerationType } from "@prisma/client";
+import { ModerationTypeNamesPast } from "../types/index";
+import { ModerationType, PrismaClient } from "@prisma/client";
+import { SapphireClient, container } from "@sapphire/framework";
 import {
-  ChatInputCommandInteraction,
-  User,
-  Guild,
-  EmbedBuilder,
   ChannelType,
+  ChatInputCommandInteraction,
+  EmbedBuilder,
+  GatewayIntentBits,
+  Guild,
+  GuildTextBasedChannel,
+  User,
 } from "discord.js";
-import { ModerationTypeNames } from "../utils";
-import { container } from "@sapphire/framework";
 
-export class Moderation {
-  public constructor(
-    type: ModerationType,
-    interaction: ChatInputCommandInteraction,
-    user: User,
-    reason: string,
-    days?: number
-  ) {
-    this.handleModeration(type, interaction, user, reason, days);
+export class JoewyClient extends SapphireClient {
+  public constructor() {
+    super({
+      intents: [
+        GatewayIntentBits.Guilds,
+        GatewayIntentBits.GuildMembers,
+        GatewayIntentBits.GuildMessageReactions,
+        GatewayIntentBits.GuildEmojisAndStickers,
+      ],
+    });
   }
 
-  private async handleModeration(
+  public override async auditlogChecks(
+    guild: Guild
+  ): Promise<GuildTextBasedChannel | false> {
+    const guildInDB = await container.prisma.guild.findUnique({
+      where: {
+        id: guild.id,
+      },
+    });
+
+    container.logger.info(guildInDB);
+
+    if (!guildInDB || !guildInDB.logging || !guildInDB.auditlogId) return false;
+
+    const loggingChannel = await container.client.channels
+      .fetch(guildInDB.auditlogId)
+      .catch(() =>
+        container.logger.error(
+          `Invalid logging channel ID for Guild ${guild.name} (${guild.id})`
+        )
+      );
+
+    container.logger.info("Auditlog Check Ran");
+
+    if (!loggingChannel || !loggingChannel.isTextBased()) return false;
+
+    return loggingChannel as GuildTextBasedChannel;
+  }
+
+  public override async handleModeration(
     type: ModerationType,
     interaction: ChatInputCommandInteraction,
     user: User,
@@ -53,17 +84,11 @@ export class Moderation {
       reason,
       user.id
     );
-    await this.sendModerationMessageToUser(type, user, guild!, reason);
-    await this.sendModerationMessageToModlog(
-      type,
-      guild!,
-      user,
-      moderator,
-      reason
-    );
+    await this.sendModMsgToUser(type, user, guild!, reason);
+    await this.sendModMsgToModlog(type, guild!, user, moderator, reason);
   }
 
-  private async sendModerationMessageToUser(
+  private async sendModMsgToUser(
     type: ModerationType,
     user: User,
     guild: Guild,
@@ -71,7 +96,7 @@ export class Moderation {
   ) {
     const embed = new EmbedBuilder()
       .setAuthor({
-        name: `You have been ${ModerationTypeNames[type]} from ${guild.name}`,
+        name: `You have been ${ModerationTypeNamesPast[type]} from ${guild.name}`,
         iconURL: guild.iconURL() || undefined,
       })
       .addFields([
@@ -109,7 +134,7 @@ export class Moderation {
     });
   }
 
-  private async sendModerationMessageToModlog(
+  private async sendModMsgToModlog(
     type: ModerationType,
     guild: Guild,
     user: User,
@@ -146,7 +171,7 @@ export class Moderation {
 
     const embed = new EmbedBuilder()
       .setAuthor({
-        name: `${ModerationTypeNames[type]} ${user.tag}`,
+        name: `${ModerationTypeNamesPast[type]} ${user.tag}`,
         iconURL: user.displayAvatarURL(),
       })
       .addFields([
@@ -163,5 +188,16 @@ export class Moderation {
       .setTimestamp();
 
     return modlogChannel.send({ embeds: [embed] });
+  }
+
+  public async start(token: string) {
+    await this.login(token);
+
+    const prisma = new PrismaClient();
+    container.prisma = prisma;
+
+    await prisma.$connect().then(() => {
+      container.logger.info("Connected to Database successfully!");
+    });
   }
 }

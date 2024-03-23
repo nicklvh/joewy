@@ -1,4 +1,4 @@
-import { auditlogChecks, ChannelTypeNames } from "#utils";
+import { ChannelTypeNames } from "../../types/index";
 import { ApplyOptions } from "@sapphire/decorators";
 import { Events, Listener } from "@sapphire/framework";
 import { EmbedBuilder, type GuildChannel } from "discord.js";
@@ -8,7 +8,11 @@ import { EmbedBuilder, type GuildChannel } from "discord.js";
 })
 export class ChannelCreateListener extends Listener {
   public async run(channel: GuildChannel) {
-    const audit_channel = await auditlogChecks(channel.guild);
+    this.container.logger.info("ChannelCreateListener");
+
+    const audit_channel = await this.container.client.auditlogChecks(
+      channel.guild
+    );
     if (!audit_channel) return;
 
     const embed = new EmbedBuilder()

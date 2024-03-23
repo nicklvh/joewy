@@ -9,7 +9,7 @@ import {
 import { ApplyOptions } from "@sapphire/decorators";
 import { PaginatedMessage } from "@sapphire/discord.js-utilities";
 import { chunk } from "@sapphire/utilities";
-import { ModerationTypeStrings } from "#utils";
+import { ModerationTypeNamesPresent } from "../../types/index";
 
 @ApplyOptions<Command.Options>({
   name: "infractions",
@@ -105,7 +105,7 @@ export class InfractionsCommand extends Command {
 
           embed.addFields([
             {
-              name: `${ModerationTypeStrings[infraction.type]} - Case #${id}`,
+              name: `${ModerationTypeNamesPresent[infraction.type]} - Case #${id}`,
               value: [
                 `${bold("❯ Moderator:")} ${moderator} (${inlineCode(
                   moderator.id

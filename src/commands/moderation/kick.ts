@@ -10,7 +10,6 @@ import {
 import { ApplyOptions } from "@sapphire/decorators";
 import { ModerationType } from "@prisma/client";
 import { Time } from "@sapphire/time-utilities";
-import { Moderation } from "#classes";
 
 @ApplyOptions<Command.Options>({
   name: "kick",
@@ -143,7 +142,12 @@ export class KickCommand extends Command {
       });
 
       if (confirmation.customId === "confirm") {
-        new Moderation(ModerationType.KICK, interaction, user, reason);
+        this.container.client.handleModeration(
+          ModerationType.KICK,
+          interaction,
+          user,
+          reason
+        );
 
         await member.kick(reason);
 

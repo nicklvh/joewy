@@ -1,5 +1,11 @@
-import { ModerationType } from "@prisma/client";
-import { ChannelType } from "discord.js";
+import { ModerationType, type PrismaClient } from "@prisma/client";
+import {
+  ChannelType,
+  type Guild,
+  type ChatInputCommandInteraction,
+  type User,
+  type GuildTextBasedChannel,
+} from "discord.js";
 
 export type APIPetResponse = Array<APIPetInterface>;
 
@@ -8,14 +14,14 @@ export interface APIPetInterface {
   message?: string;
 }
 
-export const ModerationTypeNames = {
+export const ModerationTypeNamesPast = {
   [ModerationType.BAN]: "Banned",
   [ModerationType.KICK]: "Kicked",
   [ModerationType.MUTE]: "Muted",
   [ModerationType.WARN]: "Warned",
 };
 
-export const ModerationTypeStrings = {
+export const ModerationTypeNamesPresent = {
   [ModerationType.BAN]: "Ban",
   [ModerationType.KICK]: "Kick",
   [ModerationType.MUTE]: "Mute",
@@ -35,3 +41,22 @@ export const ChannelTypeNames = {
   [ChannelType.GuildDirectory]: "Directory",
   [ChannelType.GuildMedia]: "Media",
 };
+
+declare module "@sapphire/pieces" {
+  interface Container {
+    prisma: PrismaClient;
+  }
+}
+
+declare module "@sapphire/framework" {
+  interface SapphireClient {
+    handleModeration(
+      type: ModerationType,
+      interaction: ChatInputCommandInteraction,
+      user: User,
+      reason: string,
+      days?: number
+    ): Promise<void>;
+    auditlogChecks(guild: Guild): Promise<false | GuildTextBasedChannel>;
+  }
+}

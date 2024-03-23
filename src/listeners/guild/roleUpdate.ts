@@ -1,4 +1,3 @@
-import { auditlogChecks } from "#utils";
 import { ApplyOptions } from "@sapphire/decorators";
 import { Events, Listener } from "@sapphire/framework";
 import { EmbedBuilder, roleMention, type Role } from "discord.js";
@@ -8,7 +7,7 @@ import { EmbedBuilder, roleMention, type Role } from "discord.js";
 })
 export class RoleUpdateListener extends Listener {
   public async run(oldRole: Role, newRole: Role) {
-    const channel = await auditlogChecks(oldRole.guild);
+    const channel = await this.container.client.auditlogChecks(oldRole.guild);
     if (!channel) return;
 
     const embed = new EmbedBuilder()

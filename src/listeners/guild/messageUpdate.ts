@@ -1,4 +1,3 @@
-import { auditlogChecks } from "#utils";
 import { ApplyOptions } from "@sapphire/decorators";
 import { Events, Listener } from "@sapphire/framework";
 import { EmbedBuilder, type Message } from "discord.js";
@@ -8,7 +7,9 @@ import { EmbedBuilder, type Message } from "discord.js";
 })
 export class MessageUpdateListener extends Listener {
   public async run(oldMessage: Message<true>, newMessage: Message<true>) {
-    const channel = await auditlogChecks(oldMessage.guild);
+    const channel = await this.container.client.auditlogChecks(
+      oldMessage.guild
+    );
     if (!channel) return;
 
     if (oldMessage.content === newMessage.content || oldMessage.author.bot)

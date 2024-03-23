@@ -10,7 +10,6 @@ import {
 import { Time } from "@sapphire/time-utilities";
 import { ApplyOptions } from "@sapphire/decorators";
 import { ModerationType } from "@prisma/client";
-import { Moderation } from "#classes";
 
 @ApplyOptions<Command.Options>({
   name: "ban",
@@ -169,7 +168,12 @@ export class BanCommand extends Command {
       });
 
       if (confirmation.customId === "confirm") {
-        new Moderation(ModerationType.BAN, interaction, user, reason);
+        this.container.client.handleModeration(
+          ModerationType.BAN,
+          interaction,
+          user,
+          reason
+        );
 
         await interaction.guild.bans.create(user, {
           reason,
