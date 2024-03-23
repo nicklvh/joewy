@@ -291,6 +291,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@sapphire/discord-utilities@npm:^3.2.3":
+  version: 3.2.3
+  resolution: "@sapphire/discord-utilities@npm:3.2.3"
+  dependencies:
+    discord-api-types: "npm:^0.37.73"
+  checksum: 10c0/8e0bfc5a287a23c510a937b2584d86e4ac185b1a24b4bc5aa4ce98ab860074c5c2e8916000ad3a483bca12f209eeef0b413b844ec7691fbc86eded997f07bff1
+  languageName: node
+  linkType: hard
+
 "@sapphire/discord.js-utilities@npm:^7.1.6":
   version: 7.1.6
   resolution: "@sapphire/discord.js-utilities@npm:7.1.6"
@@ -333,11 +342,11 @@ __metadata:
   linkType: hard
 
 "@sapphire/framework@npm:^5.0.7":
-  version: 5.0.7
-  resolution: "@sapphire/framework@npm:5.0.7"
+  version: 5.0.9
+  resolution: "@sapphire/framework@npm:5.0.9"
   dependencies:
     "@discordjs/builders": "npm:^1.7.0"
-    "@sapphire/discord-utilities": "npm:^3.2.2"
+    "@sapphire/discord-utilities": "npm:^3.2.3"
     "@sapphire/discord.js-utilities": "npm:^7.1.6"
     "@sapphire/lexure": "npm:^1.1.7"
     "@sapphire/pieces": "npm:^4.2.2"
@@ -345,7 +354,7 @@ __metadata:
     "@sapphire/result": "npm:^2.6.6"
     "@sapphire/stopwatch": "npm:^1.5.2"
     "@sapphire/utilities": "npm:^3.15.3"
-  checksum: 10c0/83deb563ab552d95798ad8dee3bbd2076942e7a4fb2175778b1e7dba114c3f87b85deab135dbf1d9797f80af711e02ef3ef6206888d9dd09e19487cc839f920d
+  checksum: 10c0/4170f06c2ea12fd2077a57f9a5df64d11a64ac6d002e525550eec3de1075d942981966bc87151f6df88def1631f7e8c597cf7112f00c036d05ce52af8f9635ee
   languageName: node
   linkType: hard
 
@@ -832,6 +841,13 @@ __metadata:
   version: 0.37.67
   resolution: "discord-api-types@npm:0.37.67"
   checksum: 10c0/b003ff4c0c82814f2dc3450d6765d470111c001d6f1eb1ec29f2d99c43590adeef1d400c0247f7c5c9044a3c93027d1d6409454401f091e4434dfa1408723545
+  languageName: node
+  linkType: hard
+
+"discord-api-types@npm:^0.37.73":
+  version: 0.37.76
+  resolution: "discord-api-types@npm:0.37.76"
+  checksum: 10c0/42dc28d58343aa98ff47d49b2bddb607a5c84d5d43c1f5cce33a314b2cde1581dadd52d0c61875c31bcd3b2df40fcc16bf524ab08ee95b9d661d5729e55f9752
   languageName: node
   linkType: hard
 
