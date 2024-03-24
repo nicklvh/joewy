@@ -7,7 +7,7 @@ import { EmbedBuilder, roleMention, type Role } from "discord.js";
 })
 export class RoleCreateListener extends Listener {
   public async run(role: Role) {
-    const channel = await this.container.client.auditlogChecks(role.guild);
+    const channel = await this.container.helpers.auditlogChecks(role.guild);
     if (!channel) return;
 
     const embed = new EmbedBuilder()

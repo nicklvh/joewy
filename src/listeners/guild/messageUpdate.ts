@@ -7,7 +7,7 @@ import { EmbedBuilder, type Message } from "discord.js";
 })
 export class MessageUpdateListener extends Listener {
   public async run(oldMessage: Message<true>, newMessage: Message<true>) {
-    const channel = await this.container.client.auditlogChecks(
+    const channel = await this.container.helpers.auditlogChecks(
       oldMessage.guild
     );
     if (!channel) return;

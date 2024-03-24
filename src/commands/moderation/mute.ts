@@ -207,7 +207,7 @@ export class MuteCommand extends Command {
       });
 
       if (confirmation.customId === "confirm") {
-        this.container.client.handleModeration(
+        this.container.helpers.handleModeration(
           ModerationType.MUTE,
           interaction,
           user,

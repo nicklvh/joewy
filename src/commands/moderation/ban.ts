@@ -168,7 +168,7 @@ export class BanCommand extends Command {
       });
 
       if (confirmation.customId === "confirm") {
-        this.container.client.handleModeration(
+        this.container.helpers.handleModeration(
           ModerationType.BAN,
           interaction,
           user,

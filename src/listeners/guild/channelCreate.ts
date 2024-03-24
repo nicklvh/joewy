@@ -1,4 +1,4 @@
-import { ChannelTypeNames } from "../../types/index";
+import { ChannelTypeNames } from "../../types/index.js";
 import { ApplyOptions } from "@sapphire/decorators";
 import { Events, Listener } from "@sapphire/framework";
 import { EmbedBuilder, type GuildChannel } from "discord.js";
@@ -8,12 +8,10 @@ import { EmbedBuilder, type GuildChannel } from "discord.js";
 })
 export class ChannelCreateListener extends Listener {
   public async run(channel: GuildChannel) {
-    this.container.logger.info("ChannelCreateListener");
-
-    const audit_channel = await this.container.client.auditlogChecks(
+    const auditlogChannel = await this.container.helpers.auditlogChecks(
       channel.guild
     );
-    if (!audit_channel) return;
+    if (!auditlogChannel) return;
 
     const embed = new EmbedBuilder()
       .setAuthor({
@@ -39,7 +37,7 @@ export class ChannelCreateListener extends Listener {
       ])
       .setColor("Blue");
 
-    return audit_channel.send({
+    return auditlogChannel.send({
       embeds: [embed],
     });
   }

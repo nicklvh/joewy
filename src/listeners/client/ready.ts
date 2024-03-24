@@ -8,6 +8,6 @@ import type { Client } from "discord.js";
 })
 export class ReadyListener extends Listener {
   public run(client: Client) {
-    return this.container.logger.info(`Logged in as ${client.user!.tag}`);
+    return this.container.logger.info(`Logged in as ${client.user!.tag}!`);
   }
 }

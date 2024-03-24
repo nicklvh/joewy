@@ -142,7 +142,7 @@ export class KickCommand extends Command {
       });
 
       if (confirmation.customId === "confirm") {
-        this.container.client.handleModeration(
+        this.container.helpers.handleModeration(
           ModerationType.KICK,
           interaction,
           user,

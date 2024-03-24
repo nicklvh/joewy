@@ -7,7 +7,7 @@ import { EmbedBuilder, type Message } from "discord.js";
 })
 export class MessageDeleteListener extends Listener {
   public async run(message: Message<true>) {
-    const channel = await this.container.client.auditlogChecks(message.guild);
+    const channel = await this.container.helpers.auditlogChecks(message.guild);
     if (!channel) return;
 
     if (message.author.bot) return;
