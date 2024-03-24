@@ -32,7 +32,6 @@
   },
   "devDependencies": {
     "@sapphire/eslint-config": "^5.0.4",
-    "@sapphire/prettier-config": "^2.0.0",
     "@sapphire/ts-config": "^5.0.1",
     "@types/node": "^20.11.30",
     "prisma": "^5.11.0",
