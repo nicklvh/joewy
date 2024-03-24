@@ -20,6 +20,7 @@ model Guild {
   welcome    Boolean? @default(false)
   starboard  Boolean? @default(false)
   fun        Boolean? @default(false)
+  banned     Boolean? @default(false)
 }
 
 model Member {
