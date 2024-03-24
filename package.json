@@ -17,6 +17,7 @@
   "eslintConfig": {
     "extends": "@sapphire"
   },
+  "type": "module",
   "dependencies": {
     "@prisma/client": "^5.11.0",
     "@sapphire/decorators": "^6.1.0",
