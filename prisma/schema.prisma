@@ -16,13 +16,10 @@ model Guild {
   welcomeId  String?
   auditlogId String?
   members    Member[]
-  moderation Boolean? @default(false)
   logging    Boolean? @default(false)
   welcome    Boolean? @default(false)
   starboard  Boolean? @default(false)
   fun        Boolean? @default(false)
-  blacklist  Boolean? @default(false)
-  blacklistWords String[]
 }
 
 model Member {
