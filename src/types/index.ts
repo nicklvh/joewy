@@ -1,11 +1,6 @@
 import { ModerationType, type PrismaClient } from "@prisma/client";
-import {
-  ChannelType,
-  type Guild,
-  type ChatInputCommandInteraction,
-  type User,
-  type GuildTextBasedChannel,
-} from "discord.js";
+import { ChannelType } from "discord.js";
+import { Helpers } from "../classes/Helpers.js";
 
 export type APIPetResponse = Array<APIPetInterface>;
 
@@ -45,18 +40,6 @@ export const ChannelTypeNames = {
 declare module "@sapphire/pieces" {
   interface Container {
     prisma: PrismaClient;
-  }
-}
-
-declare module "@sapphire/framework" {
-  interface SapphireClient {
-    handleModeration(
-      type: ModerationType,
-      interaction: ChatInputCommandInteraction,
-      user: User,
-      reason: string,
-      days?: number
-    ): Promise<void>;
-    auditlogChecks(guild: Guild): Promise<false | GuildTextBasedChannel>;
+    helpers: Helpers;
   }
 }
