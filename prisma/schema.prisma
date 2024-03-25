@@ -11,25 +11,48 @@ datasource db {
 }
 
 model Guild {
-  id         String   @id
+  id        String     @id
+  members   Member[]
+  logging   Logging?
+  fun       Fun?
+  banned    Boolean?   @default(false)
+  starboard Starboard?
+  modlogs   Modlog[]
+}
+
+model Fun {
+  enabled         Boolean @default(false)
+  economyEnabled  Boolean @default(false)
+  countingId      String?
+  countingEnabled Boolean @default(false)
+  guildId         String  @unique
+  guild           Guild   @relation(fields: [guildId], references: [id])
+}
+
+model Logging {
+  enabled    Boolean @default(false)
   modlogId   String?
-  welcomeId  String?
   auditlogId String?
-  members    Member[]
-  logging    Boolean? @default(false)
-  welcome    Boolean? @default(false)
-  starboard  Boolean? @default(false)
-  fun        Boolean? @default(false)
-  banned     Boolean? @default(false)
+  welcomeId  String?
+  guildId    String  @unique
+  guild      Guild   @relation(fields: [guildId], references: [id])
+}
+
+model Starboard {
+  enabled         Boolean  @default(false)
+  starsRequired   Int?     @default(5)
+  starredMessages String[]
+  guildId         String   @unique
+  guild           Guild    @relation(fields: [guildId], references: [id])
 }
 
 model Member {
-  id      String   @id
+  id      String @id
   coins   Int?
   xp      Int?
   level   Int?
-  Guild   Guild    @relation(fields: [guildId], references: [id])
   guildId String
+  Guild   Guild  @relation(fields: [guildId], references: [id])
 }
 
 model Modlog {
@@ -39,6 +62,7 @@ model Modlog {
   type        ModerationType
   createdAt   DateTime       @unique @default(now())
   guildId     String
+  guild       Guild          @relation(fields: [guildId], references: [id])
 }
 
 model Ban {

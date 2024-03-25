@@ -5,25 +5,21 @@ import {
   ButtonBuilder,
   ButtonStyle,
   ChannelSelectMenuBuilder,
-  ChannelSelectMenuInteraction,
   ChannelType,
   EmbedBuilder,
   MessageComponentInteraction,
   PermissionFlagsBits,
+  bold,
 } from "discord.js";
-import type { Guild } from "@prisma/client";
 import { Time } from "@sapphire/time-utilities";
 
 @ApplyOptions<Command.Options>({
   name: "settings",
   description: "change the settings of the bot for the current server",
   requiredUserPermissions: ["ManageGuild"],
-  requiredClientPermissions: ["ManageGuild"],
   runIn: CommandOptionsRunTypeEnum.GuildAny,
 })
 export class SettingsCommand extends Command {
-  private guildId = "";
-
   public override registerApplicationCommands(registry: Command.Registry) {
     registry.registerChatInputCommand((builder) =>
       builder
@@ -36,9 +32,9 @@ export class SettingsCommand extends Command {
   public override async chatInputRun(
     interaction: Command.ChatInputCommandInteraction<"cached">
   ) {
-    this.guildId = interaction.guildId!;
-
-    const guildInDB: Guild = await this.getGuild();
+    const guildInDB = await this.container.helpers.getGuild(
+      interaction.guildId
+    );
 
     const loggingButton = new ButtonBuilder()
       .setLabel("Logging")
@@ -74,6 +70,8 @@ export class SettingsCommand extends Command {
       exitButton
     );
 
+    const { logging, fun, starboard } = guildInDB;
+
     const message = await interaction.reply({
       embeds: [
         new EmbedBuilder()
@@ -86,9 +84,9 @@ export class SettingsCommand extends Command {
             {
               name: "Use the buttons below to configure the server.",
               value: [
-                `**Logging:** ${guildInDB?.logging ? "✅" : "❌"}`,
-                `**Starboard:** ${guildInDB?.starboard ? "✅" : "❌"}`,
-                `**Fun:** ${guildInDB?.fun ? "✅" : "❌"}`,
+                `**Logging:** ${logging!.enabled ? "✅" : "❌"}`,
+                `**Starboard:** ${starboard!.enabled ? "✅" : "❌"}`,
+                `**Fun:** ${fun!.enabled ? "✅" : "❌"}`,
               ].join("\n"),
             },
           ]),
@@ -105,7 +103,12 @@ export class SettingsCommand extends Command {
     collector.on(
       "collect",
       async (componentInteraction: MessageComponentInteraction<"cached">) => {
+        this.container.logger.info(componentInteraction.customId);
+
         collector.resetTimer();
+
+        const { logging, fun, starboard } =
+          await this.container.helpers.getGuild(interaction.guildId);
 
         const goBackButton = new ButtonBuilder()
           .setCustomId("goBack")
@@ -117,18 +120,20 @@ export class SettingsCommand extends Command {
           goBackButton
         );
 
-        const guild: Guild = await this.getGuild();
-
         const id = componentInteraction.customId;
 
         if (componentInteraction.isButton()) {
-          if (id === "logging" || "starboard" || "fun") {
-            const dbOption = guild[id as "logging" | "starboard" | "fun"];
-
+          if (id === "logging" || id === "starboard" || id === "fun") {
             const toggleButton = new ButtonBuilder()
-              .setCustomId(`${id}${dbOption ? "Disable" : "Enable"}`)
-              .setLabel(dbOption ? "Disable" : "Enable")
-              .setStyle(dbOption ? ButtonStyle.Danger : ButtonStyle.Success);
+              .setCustomId(
+                `${id}${guildInDB[id]!.enabled ? "Disable" : "Enable"}`
+              )
+              .setLabel(guildInDB[id]!.enabled ? "Disable" : "Enable")
+              .setStyle(
+                guildInDB[id]!.enabled
+                  ? ButtonStyle.Danger
+                  : ButtonStyle.Success
+              );
 
             if (id === "logging") {
               await componentInteraction.update({
@@ -142,9 +147,9 @@ export class SettingsCommand extends Command {
                       {
                         name: `Use the buttons below to edit the respective channel and settings`,
                         value: [
-                          `**Modlog:** ${guild.modlogId ? `<#${guild.modlogId}>` : "Not set"}`,
-                          `**Auditlog:** ${guild.auditlogId ? `<#${guild.auditlogId}>` : "Not set"}`,
-                          `**Welcome:** ${guild.welcomeId ? `<#${guild.welcomeId}>` : "Not set"}`,
+                          `**Modlog:** ${logging!.modlogId ? `<#${logging!.modlogId}>` : "Disabled"}`,
+                          `**Auditlog:** ${logging!.auditlogId ? `<#${logging!.auditlogId}>` : "Disabled"}`,
+                          `**Welcome:** ${logging!.welcomeId ? `<#${logging!.welcomeId}>` : "Disabled"}`,
                         ].join("\n"),
                       },
                     ])
@@ -171,204 +176,117 @@ export class SettingsCommand extends Command {
               });
             }
 
-            if (id === "modlog" || id === "auditlog" || id === "welcome") {
-              const channelSelector = new ChannelSelectMenuBuilder()
-                .addChannelTypes(ChannelType.GuildText)
-                .setCustomId(`${id}ChannelSelect`);
-
-              const disableButton = new ButtonBuilder()
-                .setLabel("Disable")
-                .setStyle(ButtonStyle.Danger)
-                .setCustomId(`${id}DisableMod`);
-
-              const channelRow =
-                new ActionRowBuilder<ChannelSelectMenuBuilder>().addComponents(
-                  channelSelector
-                );
-
-              const goBackAndDisableRow =
-                new ActionRowBuilder<ButtonBuilder>().addComponents(
-                  goBackButton,
-                  disableButton
-                );
-
-              const name = `${id}Id` as "modlogId" | "auditlogId" | "welcomeId";
-
-              const channel = guild[name];
-
+            if (id === "starboard") {
               await componentInteraction.update({
                 embeds: [
                   new EmbedBuilder()
                     .setAuthor({
-                      name: `Configuring the ${id} channel`,
+                      name: "Configuring the starboard system",
                       iconURL: interaction.guild.iconURL() as string,
                     })
-                    .setColor("Blue")
-                    .setDescription(
-                      `Pick a channel below to edit the ${id} channel for \`${
-                        interaction.guild!.name
-                      }\`${channel ? "\nDisable it by selecting `Disable`" : ""}`
-                    ),
-                ],
-                components: [
-                  channelRow,
-                  channel ? goBackAndDisableRow : goBackRow,
-                ],
-              });
-            }
-
-            if (id === "goBack") {
-              const guildInDB: Guild = await this.getGuild();
-
-              await componentInteraction.update({
-                embeds: [
-                  new EmbedBuilder()
-                    .setAuthor({
-                      name: `Configure ${interaction.guild!.name}`,
-                      iconURL: interaction.guild.iconURL() ?? undefined,
-                    })
-                    .setColor("Blue")
                     .addFields([
                       {
-                        name: "Use the buttons below to configure the server.",
+                        name: `Use the buttons below to edit the settings for ${bold(`${interaction.guild.name}'s`)} starboard!`,
                         value: [
-                          `**Logging:** ${guildInDB?.logging ? "✅" : "❌"}`,
-                          `**Starboard:** ${guildInDB?.starboard ? "✅" : "❌"}`,
-                          `**Fun:** ${guildInDB?.fun ? "✅" : "❌"}`,
+                          `**Stars Required:** ${bold(starboard?.starsRequired?.toString()!)}`,
                         ].join("\n"),
                       },
-                    ]),
+                    ])
+                    .setColor("Yellow"),
                 ],
-                components: [mainRow, exitRow],
-              });
-            }
-
-            if (id.endsWith("DisableMod")) {
-              const name = id.split("DisableMod")[0];
-
-              const customId = `${name}Id`;
-
-              await this.container.prisma.guild.update({
-                where: {
-                  id: interaction.guildId!,
-                },
-                data: {
-                  [customId]: null,
-                },
-              });
-
-              await componentInteraction.update({
-                embeds: [
-                  new EmbedBuilder()
-                    .setAuthor({
-                      name: `Success`,
-                      iconURL: interaction.guild.iconURL() as string,
-                    })
-                    .setColor("Blue")
-                    .setDescription(
-                      `Successfully disabled the ${name} channel for \`${interaction.guild!.name}\``
-                    ),
+                components: [
+                  new ActionRowBuilder<ButtonBuilder>().addComponents(
+                    toggleButton
+                  ),
+                  goBackRow,
                 ],
-                components: [goBackRow],
-              });
-            }
-
-            if (id.endsWith("Enable")) {
-              const name = id.split("Enable")[0];
-
-              await this.container.prisma.guild.update({
-                where: {
-                  id: interaction.guildId!,
-                },
-                data: {
-                  [name]: true,
-                },
-              });
-
-              await componentInteraction.update({
-                embeds: [
-                  new EmbedBuilder()
-                    .setAuthor({
-                      name: `Success`,
-                      iconURL: interaction.guild.iconURL() as string,
-                    })
-                    .setColor("Blue")
-                    .setDescription(
-                      `Successfully enabled the ${name} system for \`${interaction.guild!.name}\``
-                    ),
-                ],
-                components: [goBackRow],
-              });
-            }
-
-            if (id.endsWith("Disable")) {
-              const name = id.split("Disable")[0];
-
-              await this.container.prisma.guild.update({
-                where: {
-                  id: interaction.guildId!,
-                },
-                data: {
-                  [name]: false,
-                },
-              });
-
-              await componentInteraction.update({
-                embeds: [
-                  new EmbedBuilder()
-                    .setAuthor({
-                      name: `Success`,
-                      iconURL: interaction.guild.iconURL() as string,
-                    })
-                    .setColor("Blue")
-                    .setDescription(
-                      `Successfully disabled the ${name} system for \`${interaction.guild!.name}\``
-                    ),
-                ],
-                components: [goBackRow],
               });
             }
           }
 
-          if (componentInteraction.isChannelSelectMenu()) {
-            componentInteraction =
-              componentInteraction as ChannelSelectMenuInteraction<"cached">;
+          if (id === "modlog" || id === "auditlog" || id === "welcome") {
+            const channelSelector = new ChannelSelectMenuBuilder()
+              .addChannelTypes(ChannelType.GuildText)
+              .setCustomId(`${id}ChannelSelect`);
 
-            const channelId = (
-              componentInteraction as ChannelSelectMenuInteraction<"cached">
-            ).values[0];
+            const disableButton = new ButtonBuilder()
+              .setLabel("Disable")
+              .setStyle(ButtonStyle.Danger)
+              .setCustomId(`${id}Disable`);
 
-            const name = id.split("ChannelSelect")[0];
+            const channelRow =
+              new ActionRowBuilder<ChannelSelectMenuBuilder>().addComponents(
+                channelSelector
+              );
 
-            const customId = `${name}Id` as
-              | "modlogId"
-              | "auditlogId"
-              | "welcomeId";
+            const goBackAndDisableRow =
+              new ActionRowBuilder<ButtonBuilder>().addComponents(
+                goBackButton,
+                disableButton
+              );
 
-            if (guild[customId] === channelId) {
-              await componentInteraction.update({
-                embeds: [
-                  new EmbedBuilder()
-                    .setAuthor({
-                      name: `Error while editing ${interaction.guild!.name}`,
-                      iconURL: interaction.guild.iconURL() as string,
-                    })
-                    .setColor("Blue")
-                    .setDescription(
-                      `<#${channelId}> is already set as the ${name} channel!`
-                    ),
-                ],
-                components: [goBackRow],
-              });
-              return;
-            }
+            const name = `${id}Id` as "modlogId" | "auditlogId" | "welcomeId";
+
+            const channel = logging![name];
+
+            await componentInteraction.update({
+              embeds: [
+                new EmbedBuilder()
+                  .setAuthor({
+                    name: `Configuring the ${id} channel`,
+                    iconURL: interaction.guild.iconURL() as string,
+                  })
+                  .setColor("Blue")
+                  .setDescription(
+                    `Pick a channel below to edit the ${id} channel for \`${
+                      interaction.guild!.name
+                    }\`${channel ? "\nDisable it by selecting `Disable`" : ""}`
+                  ),
+              ],
+              components: [
+                channelRow,
+                channel ? goBackAndDisableRow : goBackRow,
+              ],
+            });
+          }
+
+          if (id === "goBack") {
+            await componentInteraction.update({
+              embeds: [
+                new EmbedBuilder()
+                  .setAuthor({
+                    name: `Configure ${interaction.guild!.name}`,
+                    iconURL: interaction.guild.iconURL() ?? undefined,
+                  })
+                  .setColor("Blue")
+                  .addFields([
+                    {
+                      name: "Use the buttons below to configure the server.",
+                      value: [
+                        `**Logging:** ${logging!.enabled ? "✅" : "❌"}`,
+                        `**Starboard:** ${starboard!.enabled ? "✅" : "❌"}`,
+                        `**Fun:** ${fun!.enabled ? "✅" : "❌"}`,
+                      ].join("\n"),
+                    },
+                  ]),
+              ],
+              components: [mainRow, exitRow],
+            });
+          }
+
+          if (id.endsWith("Enable")) {
+            const name = id.split("Enable")[0];
 
             await this.container.prisma.guild.update({
               where: {
                 id: interaction.guildId!,
               },
               data: {
-                [customId]: channelId,
+                [name]: {
+                  update: {
+                    enabled: true,
+                  },
+                },
               },
             });
 
@@ -381,17 +299,131 @@ export class SettingsCommand extends Command {
                   })
                   .setColor("Blue")
                   .setDescription(
-                    `Successfully set the ${name} channel to <#${channelId}>`
+                    `Successfully ${bold("enabled")} the ${name} system for \`${interaction.guild!.name}\``
                   ),
               ],
               components: [goBackRow],
             });
           }
+
+          if (id.endsWith("Disable")) {
+            let name = id.split("Disable")[0];
+            let data = null;
+
+            if (name === "modlog" || name == "auditlog" || name === "welcome") {
+              name = name + "Id";
+              data = {
+                logging: {
+                  update: {
+                    [name]: null,
+                  },
+                },
+              };
+            }
+
+            if (data) {
+              await this.container.prisma.guild.update({
+                where: {
+                  id: interaction.guildId!,
+                },
+                data,
+              });
+            } else {
+              await this.container.prisma.guild.update({
+                where: {
+                  id: interaction.guildId!,
+                },
+                data: {
+                  [name]: {
+                    update: {
+                      enabled: false,
+                    },
+                  },
+                },
+              });
+            }
+
+            await componentInteraction.update({
+              embeds: [
+                new EmbedBuilder()
+                  .setAuthor({
+                    name: `Success`,
+                    iconURL: interaction.guild.iconURL() as string,
+                  })
+                  .setColor("Blue")
+                  .setDescription(
+                    `Successfully ${bold("disabled")} the ${name.endsWith("Id") ? name.split("Id")[0] : name} ${name.endsWith("Id") ? "channel" : "system"} for \`${interaction.guild!.name}\``
+                  ),
+              ],
+              components: [goBackRow],
+            });
+          }
+
+          if (id === "exit") {
+            collector.emit("dispose", componentInteraction);
+          }
+        }
+
+        if (componentInteraction.isChannelSelectMenu()) {
+          const channelId = componentInteraction.values[0];
+
+          const name = id.split("ChannelSelect")[0];
+
+          const customId = `${name}Id` as
+            | "modlogId"
+            | "auditlogId"
+            | "welcomeId";
+
+          if (logging![customId] === channelId) {
+            await componentInteraction.update({
+              embeds: [
+                new EmbedBuilder()
+                  .setAuthor({
+                    name: `Error while editing ${interaction.guild!.name}`,
+                    iconURL: interaction.guild.iconURL() as string,
+                  })
+                  .setColor("Blue")
+                  .setDescription(
+                    `<#${channelId}> is already set as the ${name} channel!`
+                  ),
+              ],
+              components: [goBackRow],
+            });
+            return;
+          }
+
+          await this.container.prisma.guild.update({
+            where: {
+              id: interaction.guildId!,
+            },
+            data: {
+              logging: {
+                update: {
+                  [customId]: channelId,
+                },
+              },
+            },
+          });
+
+          await componentInteraction.update({
+            embeds: [
+              new EmbedBuilder()
+                .setAuthor({
+                  name: `Success`,
+                  iconURL: interaction.guild.iconURL() as string,
+                })
+                .setColor("Blue")
+                .setDescription(
+                  `Successfully set the ${name} channel to <#${channelId}>`
+                ),
+            ],
+            components: [goBackRow],
+          });
         }
       }
     );
 
-    collector.on("dispose", async () => {
+    collector.on("dispose", async (componentInteraction) => {
       const embed = new EmbedBuilder()
         .setAuthor({
           name: "Exited",
@@ -402,20 +434,7 @@ export class SettingsCommand extends Command {
         )
         .setColor("Blue");
 
-      await interaction.editReply({ embeds: [embed] });
+      await componentInteraction.update({ embeds: [embed], components: [] });
     });
-  }
-
-  private async getGuild(): Promise<Guild> {
-    let guild: Guild | null = await this.container.prisma.guild.findUnique({
-      where: { id: this.guildId },
-    });
-
-    if (!guild)
-      guild = await this.container.prisma.guild.create({
-        data: { id: this.guildId },
-      });
-
-    return guild;
   }
 }

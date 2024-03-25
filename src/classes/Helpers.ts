@@ -1,7 +1,7 @@
 import { ModerationType } from "@prisma/client";
 import { container } from "@sapphire/framework";
 import {
-  Guild,
+  Guild as DiscordGuild,
   type GuildTextBasedChannel,
   ChatInputCommandInteraction,
   User,
@@ -11,19 +11,47 @@ import {
 import { ModerationTypeNamesPast } from "../types/index.js";
 
 export class Helpers {
-  public async welcomeChecks(
-    guild: Guild
-  ): Promise<GuildTextBasedChannel | false> {
-    const guildInDB = await container.prisma.guild.findUnique({
-      where: {
-        id: guild.id,
+  public async getGuild(guildId: string) {
+    let guild = await container.prisma.guild.findUnique({
+      where: { id: guildId },
+      include: {
+        logging: true,
+        starboard: true,
+        fun: true,
+        modlogs: true,
       },
     });
 
-    if (!guildInDB || !guildInDB.logging || !guildInDB.welcomeId) return false;
+    if (!guild) {
+      guild = await container.prisma.guild.create({
+        data: {
+          id: guildId,
+          starboard: { create: {} },
+          logging: { create: {} },
+          fun: { create: {} },
+        },
+        include: {
+          logging: true,
+          starboard: true,
+          fun: true,
+          modlogs: true,
+        },
+      });
+    }
+
+    return guild;
+  }
+
+  public async welcomeChecks(
+    guild: DiscordGuild
+  ): Promise<GuildTextBasedChannel | false> {
+    const guildInDB = await this.getGuild(guild.id);
+
+    if (!guildInDB.logging?.enabled || !guildInDB.logging.welcomeId)
+      return false;
 
     const welcomeChannel = await container.client.channels
-      .fetch(guildInDB.welcomeId)
+      .fetch(guildInDB.logging.welcomeId)
       .catch(() =>
         container.logger.error(
           `Invalid welcome channel ID for Guild ${guild.name} (${guild.id})`
@@ -36,18 +64,15 @@ export class Helpers {
   }
 
   public async auditlogChecks(
-    guild: Guild
+    guild: DiscordGuild
   ): Promise<GuildTextBasedChannel | false> {
-    const guildInDB = await container.prisma.guild.findUnique({
-      where: {
-        id: guild.id,
-      },
-    });
+    const guildInDB = await this.getGuild(guild.id);
 
-    if (!guildInDB || !guildInDB.logging || !guildInDB.auditlogId) return false;
+    if (!guildInDB.logging?.enabled || !guildInDB.logging.auditlogId)
+      return false;
 
     const loggingChannel = await container.client.channels
-      .fetch(guildInDB.auditlogId)
+      .fetch(guildInDB.logging.auditlogId)
       .catch(() =>
         container.logger.error(
           `Invalid logging channel ID for Guild ${guild.name} (${guild.id})`
@@ -99,7 +124,7 @@ export class Helpers {
   private async sendModMsgToUser(
     type: ModerationType,
     user: User,
-    guild: Guild,
+    guild: DiscordGuild,
     reason: string
   ) {
     const embed = new EmbedBuilder()
@@ -144,33 +169,21 @@ export class Helpers {
 
   private async sendModMsgToModlog(
     type: ModerationType,
-    guild: Guild,
+    guild: DiscordGuild,
     user: User,
     moderator: User,
     reason: string
   ) {
-    let guildInDB = await container.prisma.guild.findUnique({
-      where: {
-        id: guild.id,
-      },
-    })!;
+    const guildInDB = await this.getGuild(guild.id);
 
-    if (!guildInDB) {
-      guildInDB = await container.prisma.guild.create({
-        data: {
-          id: guild.id,
-        },
-      })!;
-    }
-
-    if (!guildInDB || !guildInDB.modlogId) return;
+    if (!guildInDB.logging!.enabled || !guildInDB.logging!.modlogId) return;
 
     const modlogChannel = await guild.channels
-      .fetch(guildInDB.modlogId!)
+      .fetch(guildInDB.logging!.modlogId)
       .catch(() =>
         container.logger.error(
           `[${guild.name} (${guild.id})] Could not fetch modlog channel ${
-            guildInDB!.modlogId
+            guildInDB.logging!.modlogId
           }`
         )
       );
