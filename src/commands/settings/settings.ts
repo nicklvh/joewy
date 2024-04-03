@@ -123,7 +123,41 @@ export class SettingsCommand extends Command {
         const id = componentInteraction.customId;
 
         if (componentInteraction.isButton()) {
+          if (id.startsWith("stars")) {
+            if (id.endsWith("Change")) {
+              const leftButton = new ButtonBuilder()
+                .setEmoji("⬅")
+                .setStyle(ButtonStyle.Secondary)
+                .setCustomId("starsLeft");
+
+              const rightButton = new ButtonBuilder()
+                .setEmoji("➡")
+                .setStyle(ButtonStyle.Secondary)
+                .setCustomId("starsRight");
+
+              await componentInteraction.update({
+                embeds: [
+                  new EmbedBuilder()
+                    .setAuthor({
+                      name: "Configuring the stars required",
+                      iconURL: interaction.guild.iconURL() || "",
+                    })
+                    .addFields([
+                      {
+                        name: "Use the arrows below to increase or decrease the amount of stars needed to post in the starboard",
+                        value: `**Current:** ${starboard!.starsRequired}`,
+                      },
+                    ])
+                    .setColor("Yellow"),
+                ],
+              });
+            }
+          }
+
           if (id === "logging" || id === "starboard" || id === "fun") {
+            const { logging, starboard } =
+              await this.container.helpers.getGuild(interaction.guildId);
+
             const toggleButton = new ButtonBuilder()
               .setCustomId(
                 `${id}${guildInDB[id]!.enabled ? "Disable" : "Enable"}`
@@ -177,6 +211,12 @@ export class SettingsCommand extends Command {
             }
 
             if (id === "starboard") {
+              const starsButton = new ButtonBuilder()
+                .setLabel("Stars")
+                .setCustomId("starsChange")
+                .setEmoji("⭐")
+                .setStyle(ButtonStyle.Primary);
+
               await componentInteraction.update({
                 embeds: [
                   new EmbedBuilder()
@@ -188,7 +228,7 @@ export class SettingsCommand extends Command {
                       {
                         name: `Use the buttons below to edit the settings for ${bold(`${interaction.guild.name}'s`)} starboard!`,
                         value: [
-                          `**Stars Required:** ${bold(starboard?.starsRequired?.toString()!)}`,
+                          `**Stars Required:** ${bold(starboard?.starsRequired?.toString()!)} ${starboard?.starsRequired === 5 ? "(Default)" : ""}`,
                         ].join("\n"),
                       },
                     ])
@@ -196,6 +236,7 @@ export class SettingsCommand extends Command {
                 ],
                 components: [
                   new ActionRowBuilder<ButtonBuilder>().addComponents(
+                    starsButton,
                     toggleButton
                   ),
                   goBackRow,
