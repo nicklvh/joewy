@@ -103,8 +103,6 @@ export class SettingsCommand extends Command {
     collector.on(
       "collect",
       async (componentInteraction: MessageComponentInteraction<"cached">) => {
-        this.container.logger.info(componentInteraction.customId);
-
         collector.resetTimer();
 
         const { logging, fun, starboard } =
@@ -124,34 +122,116 @@ export class SettingsCommand extends Command {
 
         if (componentInteraction.isButton()) {
           if (id.startsWith("stars")) {
-            if (id.endsWith("Change")) {
-              const leftButton = new ButtonBuilder()
-                .setEmoji("⬅")
-                .setStyle(ButtonStyle.Secondary)
-                .setCustomId("starsLeft");
-
-              const rightButton = new ButtonBuilder()
-                .setEmoji("➡")
-                .setStyle(ButtonStyle.Secondary)
-                .setCustomId("starsRight");
-
-              await componentInteraction.update({
-                embeds: [
-                  new EmbedBuilder()
-                    .setAuthor({
-                      name: "Configuring the stars required",
-                      iconURL: interaction.guild.iconURL() || "",
-                    })
-                    .addFields([
-                      {
-                        name: "Use the arrows below to increase or decrease the amount of stars needed to post in the starboard",
-                        value: `**Current:** ${starboard!.starsRequired}`,
+            if (id.endsWith("Left")) {
+              await this.container.prisma.guild.update({
+                where: {
+                  id: interaction.guildId!,
+                },
+                data: {
+                  starboard: {
+                    update: {
+                      starsRequired: {
+                        decrement: 1,
                       },
-                    ])
-                    .setColor("Yellow"),
-                ],
+                    },
+                  },
+                },
               });
             }
+
+            if (id.endsWith("Right")) {
+              await this.container.prisma.guild.update({
+                where: {
+                  id: interaction.guildId!,
+                },
+                data: {
+                  starboard: {
+                    update: {
+                      starsRequired: {
+                        increment: 1,
+                      },
+                    },
+                  },
+                },
+              });
+            }
+
+            const { starboard } = await this.container.helpers.getGuild(
+              interaction.guildId
+            );
+
+            const leftButton = new ButtonBuilder()
+              .setEmoji("⬅")
+              .setStyle(ButtonStyle.Secondary)
+              .setCustomId("starsLeft");
+
+            const rightButton = new ButtonBuilder()
+              .setEmoji("➡")
+              .setStyle(ButtonStyle.Secondary)
+              .setCustomId("starsRight");
+
+            await componentInteraction.update({
+              embeds: [
+                new EmbedBuilder()
+                  .setAuthor({
+                    name: "Configuring the stars required",
+                    iconURL: interaction.guild.iconURL() || "",
+                  })
+                  .addFields([
+                    {
+                      name: "Use the arrows below to increase or decrease the amount of stars needed to be posted in the starboard",
+                      value: `**Current:** ${starboard!.starsRequired}`,
+                    },
+                  ])
+                  .setColor("Yellow"),
+              ],
+              components: [
+                new ActionRowBuilder<ButtonBuilder>().addComponents(
+                  leftButton,
+                  rightButton
+                ),
+                goBackRow,
+              ],
+            });
+          }
+
+          if (id === "starboardChannel") {
+            const channelSelector = new ChannelSelectMenuBuilder()
+              .addChannelTypes(ChannelType.GuildText)
+              .setCustomId("starboardChannelSelect");
+
+            const disableButton = new ButtonBuilder()
+              .setLabel("Disable")
+              .setStyle(ButtonStyle.Danger)
+              .setCustomId(`starboardChannelDisable`);
+
+            const goBackAndDisableRow =
+              new ActionRowBuilder<ButtonBuilder>().addComponents(
+                goBackButton,
+                disableButton
+              );
+
+            const channel = starboard!.channelId;
+
+            await componentInteraction.update({
+              embeds: [
+                new EmbedBuilder()
+                  .setAuthor({
+                    name: "Configuring the starboard channel",
+                    iconURL: interaction.guild.iconURL() as string,
+                  })
+                  .setColor("Yellow")
+                  .setDescription(
+                    `Pick a channel below to set as the starboard channel for \`${interaction.guild!.name}\`${channel ? "\nDisable it by selecting `Disable`" : ""}`
+                  ),
+              ],
+              components: [
+                new ActionRowBuilder<ChannelSelectMenuBuilder>().addComponents(
+                  channelSelector
+                ),
+                channel ? goBackAndDisableRow : goBackRow,
+              ],
+            });
           }
 
           if (id === "logging" || id === "starboard" || id === "fun") {
@@ -217,6 +297,11 @@ export class SettingsCommand extends Command {
                 .setEmoji("⭐")
                 .setStyle(ButtonStyle.Primary);
 
+              const channelSelectButton = new ButtonBuilder()
+                .setLabel("Channel")
+                .setCustomId("starboardChannel")
+                .setStyle(ButtonStyle.Primary);
+
               await componentInteraction.update({
                 embeds: [
                   new EmbedBuilder()
@@ -229,6 +314,7 @@ export class SettingsCommand extends Command {
                         name: `Use the buttons below to edit the settings for ${bold(`${interaction.guild.name}'s`)} starboard!`,
                         value: [
                           `**Stars Required:** ${bold(starboard?.starsRequired?.toString()!)} ${starboard?.starsRequired === 5 ? "(Default)" : ""}`,
+                          `**Channel:** ${starboard?.channelId ? `<#${starboard.channelId}>` : "Not set"}`,
                         ].join("\n"),
                       },
                     ])
@@ -237,6 +323,7 @@ export class SettingsCommand extends Command {
                 components: [
                   new ActionRowBuilder<ButtonBuilder>().addComponents(
                     starsButton,
+                    channelSelectButton,
                     toggleButton
                   ),
                   goBackRow,
@@ -351,6 +438,17 @@ export class SettingsCommand extends Command {
             let name = id.split("Disable")[0];
             let data = null;
 
+            if (name === "starboardChannel") {
+              name = "starboardId";
+              data = {
+                starboard: {
+                  update: {
+                    channelId: null,
+                  },
+                },
+              };
+            }
+
             if (name === "modlog" || name == "auditlog" || name === "welcome") {
               name = name + "Id";
               data = {
@@ -407,6 +505,55 @@ export class SettingsCommand extends Command {
 
         if (componentInteraction.isChannelSelectMenu()) {
           const channelId = componentInteraction.values[0];
+
+          if (id === "starboardChannelSelect") {
+            if (starboard!.channelId === channelId) {
+              await componentInteraction.update({
+                embeds: [
+                  new EmbedBuilder()
+                    .setAuthor({
+                      name: `Error while editing ${interaction.guild!.name}`,
+                      iconURL: interaction.guild.iconURL() as string,
+                    })
+                    .setColor("Blue")
+                    .setDescription(
+                      `<#${channelId}> is already set as the starboard channel!`
+                    ),
+                ],
+                components: [goBackRow],
+              });
+              return;
+            }
+
+            await this.container.prisma.guild.update({
+              where: {
+                id: interaction.guildId!,
+              },
+              data: {
+                starboard: {
+                  update: {
+                    channelId,
+                  },
+                },
+              },
+            });
+
+            await componentInteraction.update({
+              embeds: [
+                new EmbedBuilder()
+                  .setAuthor({
+                    name: `Success`,
+                    iconURL: interaction.guild.iconURL() as string,
+                  })
+                  .setColor("Blue")
+                  .setDescription(
+                    `Successfully set the starboard channel to <#${channelId}>`
+                  ),
+              ],
+              components: [goBackRow],
+            });
+            return;
+          }
 
           const name = id.split("ChannelSelect")[0];
 

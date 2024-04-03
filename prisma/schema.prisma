@@ -42,6 +42,7 @@ model Starboard {
   enabled         Boolean  @default(false)
   starsRequired   Int?     @default(5)
   starredMessages String[]
+  channelId       String?
   guildId         String   @unique
   guild           Guild    @relation(fields: [guildId], references: [id])
 }
