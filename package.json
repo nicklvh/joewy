@@ -19,7 +19,7 @@
   },
   "type": "module",
   "dependencies": {
-    "@prisma/client": "^5.11.0",
+    "@prisma/client": "^5.12.0",
     "@sapphire/decorators": "^6.1.0",
     "@sapphire/discord.js-utilities": "^7.1.6",
     "@sapphire/fetch": "^3.0.2",
@@ -34,8 +34,8 @@
   "devDependencies": {
     "@sapphire/eslint-config": "^5.0.4",
     "@sapphire/ts-config": "^5.0.1",
-    "@types/node": "^20.11.30",
-    "prisma": "^5.11.0",
+    "@types/node": "^20.12.3",
+    "prisma": "^5.12.0",
     "typescript": "^5.4.3"
   },
   "packageManager": "yarn@4.1.1"
