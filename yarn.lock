@@ -27,6 +27,21 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@discordjs/builders@npm:^1.8.1":
+  version: 1.8.1
+  resolution: "@discordjs/builders@npm:1.8.1"
+  dependencies:
+    "@discordjs/formatters": "npm:^0.4.0"
+    "@discordjs/util": "npm:^1.1.0"
+    "@sapphire/shapeshift": "npm:^3.9.7"
+    discord-api-types: "npm:0.37.83"
+    fast-deep-equal: "npm:^3.1.3"
+    ts-mixer: "npm:^6.0.4"
+    tslib: "npm:^2.6.2"
+  checksum: 10c0/9447a0848aeafc66a00005f466a4a5fb25e1fe3a3fe8bea82f8f1cc04a6ad78b81a7cbfe59948f22f4f6a7fe994b33914dde0feca67dc82d00ffa3fbcd4d94cd
+  languageName: node
+  linkType: hard
+
 "@discordjs/collection@npm:1.5.3, @discordjs/collection@npm:^1.5.3":
   version: 1.5.3
   resolution: "@discordjs/collection@npm:1.5.3"
@@ -47,6 +62,15 @@ __metadata:
   dependencies:
     discord-api-types: "npm:0.37.61"
   checksum: 10c0/1833c2e20b87aa6ae03202502a64d5ae235ee6a25feb41786bb86b7414fac7c59e518f99f2a60b15ad713165c91e16f17b3e8024898d6a3cd3df9f3e94488cd1
+  languageName: node
+  linkType: hard
+
+"@discordjs/formatters@npm:^0.4.0":
+  version: 0.4.0
+  resolution: "@discordjs/formatters@npm:0.4.0"
+  dependencies:
+    discord-api-types: "npm:0.37.83"
+  checksum: 10c0/9788e00559155f1767f85d02f14b0368affd4b7b86c1ff2207779906093ad9caf86cd74a60e681da5e762234b45fc9368c044247a484b4691cd652d5ff0d4f70
   languageName: node
   linkType: hard
 
@@ -71,6 +95,13 @@ __metadata:
   version: 1.0.2
   resolution: "@discordjs/util@npm:1.0.2"
   checksum: 10c0/2fbf790dc2ac9e65f53dafe814714630c094a6fad2ee7e12ebd6160aa2a3c17e0d5600454e857801adfd04db7aee3133f85aadc6eb7daa8d9bf783d5d8b551aa
+  languageName: node
+  linkType: hard
+
+"@discordjs/util@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "@discordjs/util@npm:1.1.0"
+  checksum: 10c0/e4a7945b17eb86b3fa5bf49e49e0d0786c8f39e66bbeee19f01db4e817cf5a4761e684ec63a7d832722648d0e23236eeb21c450c34a11683102813a23701bda4
   languageName: node
   linkType: hard
 
@@ -312,6 +343,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@sapphire/discord.js-utilities@npm:^7.2.0":
+  version: 7.2.0
+  resolution: "@sapphire/discord.js-utilities@npm:7.2.0"
+  dependencies:
+    "@sapphire/discord-utilities": "npm:^3.2.3"
+    "@sapphire/duration": "npm:^1.1.2"
+    "@sapphire/utilities": "npm:^3.15.3"
+    tslib: "npm:^2.6.2"
+  checksum: 10c0/e9a21d988acd4b7e6d5d64f642ecc1e0859afb4a4209b5b561061a30c5525774767b1bc4a0096e36538305b6c310ae0a4bc067fd26fee24ca8920c529a9de9d9
+  languageName: node
+  linkType: hard
+
 "@sapphire/duration@npm:^1.1.2":
   version: 1.1.2
   resolution: "@sapphire/duration@npm:1.1.2"
@@ -342,19 +385,19 @@ __metadata:
   linkType: hard
 
 "@sapphire/framework@npm:^5.0.10":
-  version: 5.0.10
-  resolution: "@sapphire/framework@npm:5.0.10"
+  version: 5.2.1
+  resolution: "@sapphire/framework@npm:5.2.1"
   dependencies:
-    "@discordjs/builders": "npm:^1.7.0"
+    "@discordjs/builders": "npm:^1.8.1"
     "@sapphire/discord-utilities": "npm:^3.2.3"
-    "@sapphire/discord.js-utilities": "npm:^7.1.6"
+    "@sapphire/discord.js-utilities": "npm:^7.2.0"
     "@sapphire/lexure": "npm:^1.1.7"
     "@sapphire/pieces": "npm:^4.2.2"
     "@sapphire/ratelimits": "npm:^2.4.9"
     "@sapphire/result": "npm:^2.6.6"
     "@sapphire/stopwatch": "npm:^1.5.2"
     "@sapphire/utilities": "npm:^3.15.3"
-  checksum: 10c0/f68cd136a0f90bd9457d431f99c6eb8887c198c703f606bc64f7f7e2ae9f1937e187bcb3a19ed5906e2a715e668accc77b01a9037637ab9cb8776829f66f9d4e
+  checksum: 10c0/ecaaaa8d38dee4c4f24c491d4ef46da063342a4fbc78c5177baf31d97a5dffa0505a90eb0816aa7b7ca1edd09edafbb7f46c3617cee2cb20aa638e5173a82858
   languageName: node
   linkType: hard
 
@@ -409,6 +452,16 @@ __metadata:
     fast-deep-equal: "npm:^3.1.3"
     lodash: "npm:^4.17.21"
   checksum: 10c0/6d096ca3a3abac5bfbc38e51da3c4bb1d0bdb81cf2f5e4ab6fae3621d73f3cdbb1acf337b932296d84b780814f90c6a6d8553d533883197c15d9673e845cfeda
+  languageName: node
+  linkType: hard
+
+"@sapphire/shapeshift@npm:^3.9.7":
+  version: 3.9.7
+  resolution: "@sapphire/shapeshift@npm:3.9.7"
+  dependencies:
+    fast-deep-equal: "npm:^3.1.3"
+    lodash: "npm:^4.17.21"
+  checksum: 10c0/29883d4c1986714fd4b2a7e4a58bf30a4598a02bbe031605dd99b766310a98889e2ae6f16bf37f43d91cf5960733dc1a619bfdaa85a96bc0ff9cc5ce57b8e689
   languageName: node
   linkType: hard
 
@@ -834,6 +887,13 @@ __metadata:
   version: 0.37.61
   resolution: "discord-api-types@npm:0.37.61"
   checksum: 10c0/ce3d28df71df26fbd32f7a13c8b5c77ff3f9ad3612e8bbd44236a498388b73e34e39e1c5f6c4652950a1f54024f934275e0f10e49c2dcf3aafe58a1eb3776b74
+  languageName: node
+  linkType: hard
+
+"discord-api-types@npm:0.37.83":
+  version: 0.37.83
+  resolution: "discord-api-types@npm:0.37.83"
+  checksum: 10c0/cc1fd6c27a4076a47b1dae71212da52dd2265785edc3b099e3f0b05dae1df469e1a90e8159beff8fbdb37d65324cae4196625568541df6b9afdc80c300936ed6
   languageName: node
   linkType: hard
 
@@ -1721,6 +1781,13 @@ __metadata:
   version: 6.0.3
   resolution: "ts-mixer@npm:6.0.3"
   checksum: 10c0/9e459c5d91f42039e9bafd4056e61d63ba82306381074c6b42f07bdac3014e5f2fdebb02cd9bd171547f2952210a9e3d3f05b5e6e121a8e185438a3a1a46f234
+  languageName: node
+  linkType: hard
+
+"ts-mixer@npm:^6.0.4":
+  version: 6.0.4
+  resolution: "ts-mixer@npm:6.0.4"
+  checksum: 10c0/4c442fc99cdffd4a3f0ce55c624fb703f4ded5cab6912f97705489565c4a74d3e4213f10c33499ec5150900a628d38537a9a6a9e35b5045b65129a84b4db21ae
   languageName: node
   linkType: hard
 
