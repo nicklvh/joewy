@@ -7,36 +7,42 @@ import {
   PermissionFlagsBits,
   inlineCode,
 } from "discord.js";
-import { ApplyOptions } from "@sapphire/decorators";
 import { ModerationType } from "@prisma/client";
-import { Time } from "@sapphire/time-utilities";
+import { handleInfraction } from "../../utils";
 
-@ApplyOptions<Command.Options>({
-  name: "warn",
-  description: "warn a member",
-  requiredUserPermissions: [PermissionFlagsBits.ManageGuild],
-  runIn: CommandOptionsRunTypeEnum.GuildAny,
-})
 export class WarnCommand extends Command {
-  public override registerApplicationCommands(registry: Command.Registry) {
-    registry.registerChatInputCommand((builder) => {
-      builder
-        .setName(this.name)
-        .setDescription(this.description)
-        .addUserOption((option) =>
-          option
-            .setName("user")
-            .setDescription("the user to warn")
-            .setRequired(true)
-        )
-        .addStringOption((option) =>
-          option
-            .setName("reason")
-            .setDescription("the reason for the warn")
-            .setRequired(false)
-        )
-        .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild);
+  public constructor(context: Command.LoaderContext, options: Command.Options) {
+    super(context, {
+      ...options,
+      name: "warn",
+      description: "warn a member",
+      requiredUserPermissions: [PermissionFlagsBits.ManageGuild],
+      runIn: CommandOptionsRunTypeEnum.GuildAny,
     });
+  }
+
+  public override registerApplicationCommands(registry: Command.Registry) {
+    registry.registerChatInputCommand(
+      (builder) => {
+        builder
+          .setName(this.name)
+          .setDescription(this.description)
+          .addUserOption((option) =>
+            option
+              .setName("user")
+              .setDescription("the user to warn")
+              .setRequired(true)
+          )
+          .addStringOption((option) =>
+            option
+              .setName("reason")
+              .setDescription("the reason for the warn")
+              .setRequired(false)
+          )
+          .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild);
+      },
+      { idHints: ["1175535354334421063"] }
+    );
   }
 
   public override async chatInputRun(
@@ -136,16 +142,11 @@ export class WarnCommand extends Command {
     try {
       const confirmation = await message.awaitMessageComponent({
         filter: (i) => interaction.user.id === i.user.id,
-        time: Time.Minute,
+        time: 60000, // 1 min,
       });
 
       if (confirmation.customId === "confirm") {
-        this.container.helpers.handleModeration(
-          ModerationType.WARN,
-          interaction,
-          user,
-          reason
-        );
+        await handleInfraction(ModerationType.WARN, interaction, user, reason);
 
         await confirmation.update({
           embeds: [

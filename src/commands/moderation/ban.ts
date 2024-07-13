@@ -7,63 +7,69 @@ import {
   PermissionFlagsBits,
   inlineCode,
 } from "discord.js";
-import { Time } from "@sapphire/time-utilities";
-import { ApplyOptions } from "@sapphire/decorators";
 import { ModerationType } from "@prisma/client";
+import { handleInfraction } from "../../utils";
 
-@ApplyOptions<Command.Options>({
-  name: "ban",
-  description: "ban a member 🔨",
-  requiredUserPermissions: [PermissionFlagsBits.BanMembers],
-  requiredClientPermissions: [PermissionFlagsBits.BanMembers],
-  runIn: CommandOptionsRunTypeEnum.GuildAny,
-})
 export class BanCommand extends Command {
-  public override registerApplicationCommands(registry: Command.Registry) {
-    registry.registerChatInputCommand((builder) => {
-      builder
-        .setName(this.name)
-        .setDescription(this.description)
-        .addUserOption((option) =>
-          option
-            .setName("user")
-            .setDescription("the user to ban")
-            .setRequired(true)
-        )
-        .addStringOption((option) =>
-          option
-            .setName("reason")
-            .setDescription("the reason for the ban")
-            .setRequired(false)
-        )
-        .addIntegerOption((option) =>
-          option
-            .setName("days")
-            .setDescription(
-              "the amount of days to ban the user for, default is a perma ban"
-            )
-            .setRequired(false)
-            .addChoices(
-              {
-                name: "1 day",
-                value: 1,
-              },
-              {
-                name: "1 week",
-                value: 7,
-              },
-              {
-                name: "2 weeks",
-                value: 14,
-              },
-              {
-                name: "1 month",
-                value: 28,
-              }
-            )
-        )
-        .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers);
+  public constructor(context: Command.LoaderContext, options: Command.Options) {
+    super(context, {
+      ...options,
+      name: "ban",
+      description: "ban a member 🔨",
+      requiredUserPermissions: [PermissionFlagsBits.BanMembers],
+      requiredClientPermissions: [PermissionFlagsBits.BanMembers],
+      runIn: CommandOptionsRunTypeEnum.GuildAny,
     });
+  }
+
+  public override registerApplicationCommands(registry: Command.Registry) {
+    registry.registerChatInputCommand(
+      (builder) => {
+        builder
+          .setName(this.name)
+          .setDescription(this.description)
+          .addUserOption((option) =>
+            option
+              .setName("user")
+              .setDescription("the user to ban")
+              .setRequired(true)
+          )
+          .addStringOption((option) =>
+            option
+              .setName("reason")
+              .setDescription("the reason for the ban")
+              .setRequired(false)
+          )
+          .addIntegerOption((option) =>
+            option
+              .setName("days")
+              .setDescription(
+                "the amount of days to ban the user for, default is a perma ban"
+              )
+              .setRequired(false)
+              .addChoices(
+                {
+                  name: "1 day",
+                  value: 1,
+                },
+                {
+                  name: "1 week",
+                  value: 7,
+                },
+                {
+                  name: "2 weeks",
+                  value: 14,
+                },
+                {
+                  name: "1 month",
+                  value: 28,
+                }
+              )
+          )
+          .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers);
+      },
+      { idHints: ["1169766210443956264"] }
+    );
   }
 
   public override async chatInputRun(
@@ -164,16 +170,11 @@ export class BanCommand extends Command {
     try {
       const confirmation = await message.awaitMessageComponent({
         filter: (i) => interaction.user.id === i.user.id,
-        time: Time.Minute,
+        time: 60000, // 1 min,
       });
 
       if (confirmation.customId === "confirm") {
-        this.container.helpers.handleModeration(
-          ModerationType.BAN,
-          interaction,
-          user,
-          reason
-        );
+        await handleInfraction(ModerationType.BAN, interaction, user, reason);
 
         await interaction.guild.bans.create(user, {
           reason,

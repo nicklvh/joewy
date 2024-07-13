@@ -7,37 +7,43 @@ import {
   PermissionFlagsBits,
   inlineCode,
 } from "discord.js";
-import { ApplyOptions } from "@sapphire/decorators";
 import { ModerationType } from "@prisma/client";
-import { Time } from "@sapphire/time-utilities";
+import { handleInfraction } from "../../utils";
 
-@ApplyOptions<Command.Options>({
-  name: "kick",
-  description: "kick a member",
-  requiredUserPermissions: [PermissionFlagsBits.KickMembers],
-  requiredClientPermissions: [PermissionFlagsBits.KickMembers],
-  runIn: CommandOptionsRunTypeEnum.GuildAny,
-})
 export class KickCommand extends Command {
-  public override registerApplicationCommands(registry: Command.Registry) {
-    registry.registerChatInputCommand((builder) => {
-      builder
-        .setName(this.name)
-        .setDescription(this.description)
-        .addUserOption((option) =>
-          option
-            .setName("user")
-            .setDescription("the user to kick")
-            .setRequired(true)
-        )
-        .addStringOption((option) =>
-          option
-            .setName("reason")
-            .setDescription("the reason for the kick")
-            .setRequired(false)
-        )
-        .setDefaultMemberPermissions(PermissionFlagsBits.KickMembers);
+  public constructor(context: Command.LoaderContext, options: Command.Options) {
+    super(context, {
+      ...options,
+      name: "kick",
+      description: "kick a member",
+      requiredUserPermissions: [PermissionFlagsBits.KickMembers],
+      requiredClientPermissions: [PermissionFlagsBits.KickMembers],
+      runIn: CommandOptionsRunTypeEnum.GuildAny,
     });
+  }
+
+  public override registerApplicationCommands(registry: Command.Registry) {
+    registry.registerChatInputCommand(
+      (builder) => {
+        builder
+          .setName(this.name)
+          .setDescription(this.description)
+          .addUserOption((option) =>
+            option
+              .setName("user")
+              .setDescription("the user to kick")
+              .setRequired(true)
+          )
+          .addStringOption((option) =>
+            option
+              .setName("reason")
+              .setDescription("the reason for the kick")
+              .setRequired(false)
+          )
+          .setDefaultMemberPermissions(PermissionFlagsBits.KickMembers);
+      },
+      { idHints: ["1180299697680822332"] }
+    );
   }
 
   public override async chatInputRun(
@@ -138,16 +144,11 @@ export class KickCommand extends Command {
     try {
       const confirmation = await message.awaitMessageComponent({
         filter: (i) => interaction.user.id === i.user.id,
-        time: Time.Minute,
+        time: 60000, // 1 min,
       });
 
       if (confirmation.customId === "confirm") {
-        this.container.helpers.handleModeration(
-          ModerationType.KICK,
-          interaction,
-          user,
-          reason
-        );
+        await handleInfraction(ModerationType.KICK, interaction, user, reason);
 
         await member.kick(reason);
 

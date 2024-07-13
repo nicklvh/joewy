@@ -6,31 +6,38 @@ import {
   inlineCode,
   time,
 } from "discord.js";
-import { ApplyOptions } from "@sapphire/decorators";
 import { PaginatedMessage } from "@sapphire/discord.js-utilities";
 import { chunk } from "@sapphire/utilities";
-import { ModerationTypeNamesPresent } from "../../types/index.js";
+import { ModerationTypeNamesPresent } from "../../utils";
 
-@ApplyOptions<Command.Options>({
-  name: "infractions",
-  description: "show all of a members infractions, warns/bans/mutes/kicks...",
-  requiredUserPermissions: [PermissionFlagsBits.ManageMessages],
-  runIn: CommandOptionsRunTypeEnum.GuildAny,
-})
 export class InfractionsCommand extends Command {
-  public override registerApplicationCommands(registry: Command.Registry) {
-    registry.registerChatInputCommand((builder) => {
-      builder
-        .setName(this.name)
-        .setDescription(this.description)
-        .addUserOption((option) =>
-          option
-            .setName("user")
-            .setDescription("the user to show infractions for")
-            .setRequired(false)
-        )
-        .setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages);
+  public constructor(context: Command.LoaderContext, options: Command.Options) {
+    super(context, {
+      ...options,
+      name: "infractions",
+      description:
+        "show all of a members infractions, warns/bans/mutes/kicks...",
+      requiredUserPermissions: [PermissionFlagsBits.ManageMessages],
+      runIn: CommandOptionsRunTypeEnum.GuildAny,
     });
+  }
+
+  public override registerApplicationCommands(registry: Command.Registry) {
+    registry.registerChatInputCommand(
+      (builder) => {
+        builder
+          .setName(this.name)
+          .setDescription(this.description)
+          .addUserOption((option) =>
+            option
+              .setName("user")
+              .setDescription("the user to show infractions for")
+              .setRequired(false)
+          )
+          .setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages);
+      },
+      { idHints: ["1175550972718747740"] }
+    );
   }
 
   public override async chatInputRun(

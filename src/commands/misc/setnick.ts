@@ -1,33 +1,38 @@
 import { Command, CommandOptionsRunTypeEnum } from "@sapphire/framework";
-import { ApplyOptions } from "@sapphire/decorators";
 import { EmbedBuilder, PermissionFlagsBits } from "discord.js";
 
-@ApplyOptions<Command.Options>({
-  name: "setnick",
-  description: "set the nickname of a user",
-  requiredClientPermissions: [PermissionFlagsBits.ManageNicknames],
-  requiredUserPermissions: [PermissionFlagsBits.ManageNicknames],
-  runIn: CommandOptionsRunTypeEnum.GuildAny,
-})
 export class SetNickCommand extends Command {
+  public constructor(context: Command.LoaderContext, options: Command.Options) {
+    super(context, {
+      ...options,
+      name: "setnick",
+      description: "set the nickname of a user",
+      requiredClientPermissions: [PermissionFlagsBits.ManageNicknames],
+      requiredUserPermissions: [PermissionFlagsBits.ManageNicknames],
+      runIn: CommandOptionsRunTypeEnum.GuildAny,
+    });
+  }
+
   public override registerApplicationCommands(registry: Command.Registry) {
-    registry.registerChatInputCommand((builder) =>
-      builder
-        .setName(this.name)
-        .setDescription(this.description)
-        .addUserOption((option) =>
-          option
-            .setName("user")
-            .setDescription("the user to set the nickname of")
-            .setRequired(true)
-        )
-        .addStringOption((option) =>
-          option
-            .setName("nickname")
-            .setDescription("the nickname to set")
-            .setRequired(true)
-            .setMaxLength(32)
-        )
+    registry.registerChatInputCommand(
+      (builder) =>
+        builder
+          .setName(this.name)
+          .setDescription(this.description)
+          .addUserOption((option) =>
+            option
+              .setName("user")
+              .setDescription("the user to set the nickname of")
+              .setRequired(true)
+          )
+          .addStringOption((option) =>
+            option
+              .setName("nickname")
+              .setDescription("the nickname to set")
+              .setRequired(true)
+              .setMaxLength(32)
+          ),
+      { idHints: ["1171942330958360587"] }
     );
   }
 

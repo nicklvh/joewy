@@ -1,17 +1,21 @@
 import { Command } from "@sapphire/framework";
 import { fetch, FetchResultTypes } from "@sapphire/fetch";
 import { EmbedBuilder } from "discord.js";
-import { ApplyOptions } from "@sapphire/decorators";
-import type { APIPetInterface } from "../../types/index.js";
+import type { APIPetInterface } from "../../utils/types/types.js";
 
-@ApplyOptions<Command.Options>({
-  name: "duck",
-  description: "shows a duck 🦆",
-})
 export class DuckCommand extends Command {
+  public constructor(context: Command.LoaderContext, options: Command.Options) {
+    super(context, {
+      ...options,
+      name: "duck",
+      description: "shows a duck 🦆",
+    });
+  }
+
   public override registerApplicationCommands(registry: Command.Registry) {
-    registry.registerChatInputCommand((builder) =>
-      builder.setName(this.name).setDescription(this.description)
+    registry.registerChatInputCommand(
+      (builder) => builder.setName(this.name).setDescription(this.description),
+      { idHints: ["1169732840691355659"] }
     );
   }
 

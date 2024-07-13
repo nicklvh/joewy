@@ -7,101 +7,99 @@ import {
   PermissionFlagsBits,
   inlineCode,
 } from "discord.js";
-import { ApplyOptions } from "@sapphire/decorators";
 import { ModerationType } from "@prisma/client";
-import { Time } from "@sapphire/time-utilities";
+import { handleInfraction } from "../../utils";
 
-@ApplyOptions<Command.Options>({
-  name: "mute",
-  description: "mute a member",
-  requiredUserPermissions: [PermissionFlagsBits.ModerateMembers],
-  requiredClientPermissions: [PermissionFlagsBits.ModerateMembers],
-  runIn: CommandOptionsRunTypeEnum.GuildAny,
-})
 export class MuteCommand extends Command {
-  public override registerApplicationCommands(registry: Command.Registry) {
-    registry.registerChatInputCommand((builder) => {
-      builder
-        .setName(this.name)
-        .setDescription(this.description)
-        .addUserOption((option) =>
-          option
-            .setName("user")
-            .setDescription("the user to mute")
-            .setRequired(true)
-        )
-        .addIntegerOption((option) =>
-          option
-            .setName("duration")
-            .setDescription("the duration of the mute")
-            .setRequired(true)
-            .setChoices(
-              {
-                name: "1 minute",
-                value: Time.Minute,
-              },
-              {
-                name: "5 minutes",
-                value: Time.Minute * 5,
-              },
-              {
-                name: "10 minutes",
-                value: Time.Minute * 10,
-              },
-              {
-                name: "30 minutes",
-                value: Time.Minute * 30,
-              },
-              {
-                name: "1 hour",
-                value: Time.Hour,
-              },
-              {
-                name: "6 hours",
-                value: Time.Hour * 6,
-              },
-              {
-                name: "12 hours",
-                value: Time.Hour * 12,
-              },
-              {
-                name: "1 day",
-                value: Time.Day,
-              },
-              {
-                name: "3 days",
-                value: Time.Day * 3,
-              },
-              {
-                name: "1 week",
-                value: Time.Week,
-              },
-              {
-                name: "2 weeks",
-                value: Time.Week * 2,
-              },
-              {
-                name: "1 month",
-                value: Time.Month,
-              },
-              {
-                name: "3 months",
-                value: Time.Month * 3,
-              },
-              {
-                name: "6 months",
-                value: Time.Month * 6,
-              }
-            )
-        )
-        .addStringOption((option) =>
-          option
-            .setName("reason")
-            .setDescription("the reason for the mute")
-            .setRequired(false)
-        )
-        .setDefaultMemberPermissions(PermissionFlagsBits.ModerateMembers);
+  public constructor(context: Command.LoaderContext, options: Command.Options) {
+    super(context, {
+      ...options,
+      name: "mute",
+      description: "mute a member",
+      requiredUserPermissions: [PermissionFlagsBits.ModerateMembers],
+      requiredClientPermissions: [PermissionFlagsBits.ModerateMembers],
+      runIn: CommandOptionsRunTypeEnum.GuildAny,
     });
+  }
+
+  public override registerApplicationCommands(registry: Command.Registry) {
+    registry.registerChatInputCommand(
+      (builder) => {
+        builder
+          .setName(this.name)
+          .setDescription(this.description)
+          .addUserOption((option) =>
+            option
+              .setName("user")
+              .setDescription("the user to mute")
+              .setRequired(true)
+          )
+          .addIntegerOption((option) =>
+            option
+              .setName("duration")
+              .setDescription("the duration of the mute")
+              .setRequired(true)
+              .setChoices(
+                {
+                  name: "1 minute",
+                  value: 60000,
+                },
+                {
+                  name: "5 minutes",
+                  value: 300000,
+                },
+                {
+                  name: "10 minutes",
+                  value: 600000,
+                },
+                {
+                  name: "30 minutes",
+                  value: 1800000,
+                },
+                {
+                  name: "1 hour",
+                  value: 3600000,
+                },
+                {
+                  name: "6 hours",
+                  value: 21600000,
+                },
+                {
+                  name: "12 hours",
+                  value: 43200000,
+                },
+                {
+                  name: "1 day",
+                  value: 86400000,
+                },
+                {
+                  name: "3 days",
+                  value: 259200000,
+                },
+                {
+                  name: "1 week",
+                  value: 604800000,
+                },
+                {
+                  name: "2 weeks",
+                  value: 1209600000,
+                },
+                {
+                  name: "1 month",
+                  value: 2629800000,
+                }
+              )
+          )
+          .addStringOption((option) =>
+            option
+              .setName("reason")
+              .setDescription("the reason for the mute")
+              .setRequired(false)
+          )
+          .setDefaultMemberPermissions(PermissionFlagsBits.ModerateMembers);
+      },
+      { idHints: ["1180633819628458004"] }
+    );
   }
 
   public override async chatInputRun(
@@ -203,16 +201,11 @@ export class MuteCommand extends Command {
     try {
       const confirmation = await message.awaitMessageComponent({
         filter: (i) => interaction.user.id === i.user.id,
-        time: Time.Minute,
+        time: 60000, // 1 min,
       });
 
       if (confirmation.customId === "confirm") {
-        this.container.helpers.handleModeration(
-          ModerationType.MUTE,
-          interaction,
-          user,
-          reason
-        );
+        await handleInfraction(ModerationType.MUTE, interaction, user, reason);
 
         await member.timeout(duration, reason);
 
@@ -226,7 +219,7 @@ export class MuteCommand extends Command {
               .addFields([
                 {
                   name: "Duration",
-                  value: inlineCode(`${duration * Time.Minute}`),
+                  value: inlineCode(`${duration * 60000}`),
                   inline: true,
                 },
                 {

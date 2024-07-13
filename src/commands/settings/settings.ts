@@ -1,5 +1,4 @@
 import { Command, CommandOptionsRunTypeEnum } from "@sapphire/framework";
-import { ApplyOptions } from "@sapphire/decorators";
 import {
   ActionRowBuilder,
   ButtonBuilder,
@@ -11,30 +10,34 @@ import {
   PermissionFlagsBits,
   bold,
 } from "discord.js";
-import { Time } from "@sapphire/time-utilities";
+import { getGuild } from "../../utils";
 
-@ApplyOptions<Command.Options>({
-  name: "settings",
-  description: "change the settings of the bot for the current server",
-  requiredUserPermissions: ["ManageGuild"],
-  runIn: CommandOptionsRunTypeEnum.GuildAny,
-})
 export class SettingsCommand extends Command {
+  public constructor(context: Command.LoaderContext, options: Command.Options) {
+    super(context, {
+      ...options,
+      name: "settings",
+      description: "change the settings of the bot for the current server",
+      requiredUserPermissions: ["ManageGuild"],
+      runIn: CommandOptionsRunTypeEnum.GuildAny,
+    });
+  }
+
   public override registerApplicationCommands(registry: Command.Registry) {
-    registry.registerChatInputCommand((builder) =>
-      builder
-        .setName(this.name)
-        .setDescription(this.description)
-        .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
+    registry.registerChatInputCommand(
+      (builder) =>
+        builder
+          .setName(this.name)
+          .setDescription(this.description)
+          .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild),
+      { idHints: ["1170836355543212052"] }
     );
   }
 
   public override async chatInputRun(
     interaction: Command.ChatInputCommandInteraction<"cached">
   ) {
-    const guildInDB = await this.container.helpers.getGuild(
-      interaction.guildId
-    );
+    const guildInDB = await getGuild(interaction.guildId);
 
     const loggingButton = new ButtonBuilder()
       .setLabel("Logging")
@@ -97,7 +100,7 @@ export class SettingsCommand extends Command {
 
     const collector = message.createMessageComponentCollector({
       filter: (i) => i.user.id === interaction.user.id,
-      time: Time.Minute * 5,
+      time: 300000, // 5 min,
     });
 
     collector.on(
@@ -105,8 +108,7 @@ export class SettingsCommand extends Command {
       async (componentInteraction: MessageComponentInteraction<"cached">) => {
         collector.resetTimer();
 
-        const { logging, fun, starboard } =
-          await this.container.helpers.getGuild(interaction.guildId);
+        const { logging, fun, starboard } = await getGuild(interaction.guildId);
 
         const goBackButton = new ButtonBuilder()
           .setCustomId("goBack")
@@ -156,9 +158,7 @@ export class SettingsCommand extends Command {
               });
             }
 
-            const { starboard } = await this.container.helpers.getGuild(
-              interaction.guildId
-            );
+            const { starboard } = await getGuild(interaction.guildId);
 
             const leftButton = new ButtonBuilder()
               .setEmoji("⬅")
@@ -222,7 +222,9 @@ export class SettingsCommand extends Command {
                   })
                   .setColor("Yellow")
                   .setDescription(
-                    `Pick a channel below to set as the starboard channel for \`${interaction.guild!.name}\`${channel ? "\nDisable it by selecting `Disable`" : ""}`
+                    `Pick a channel below to set as the starboard channel for \`${
+                      interaction.guild!.name
+                    }\`${channel ? "\nDisable it by selecting `Disable`" : ""}`
                   ),
               ],
               components: [
@@ -235,8 +237,7 @@ export class SettingsCommand extends Command {
           }
 
           if (id === "logging" || id === "starboard" || id === "fun") {
-            const { logging, starboard } =
-              await this.container.helpers.getGuild(interaction.guildId);
+            const { logging, starboard } = await getGuild(interaction.guildId);
 
             const toggleButton = new ButtonBuilder()
               .setCustomId(
@@ -261,9 +262,21 @@ export class SettingsCommand extends Command {
                       {
                         name: `Use the buttons below to edit the respective channel and settings`,
                         value: [
-                          `**Modlog:** ${logging!.modlogId ? `<#${logging!.modlogId}>` : "Disabled"}`,
-                          `**Auditlog:** ${logging!.auditlogId ? `<#${logging!.auditlogId}>` : "Disabled"}`,
-                          `**Welcome:** ${logging!.welcomeId ? `<#${logging!.welcomeId}>` : "Disabled"}`,
+                          `**Modlog:** ${
+                            logging!.modlogId
+                              ? `<#${logging!.modlogId}>`
+                              : "Disabled"
+                          }`,
+                          `**Auditlog:** ${
+                            logging!.auditlogId
+                              ? `<#${logging!.auditlogId}>`
+                              : "Disabled"
+                          }`,
+                          `**Welcome:** ${
+                            logging!.welcomeId
+                              ? `<#${logging!.welcomeId}>`
+                              : "Disabled"
+                          }`,
                         ].join("\n"),
                       },
                     ])
@@ -311,10 +324,20 @@ export class SettingsCommand extends Command {
                     })
                     .addFields([
                       {
-                        name: `Use the buttons below to edit the settings for ${bold(`${interaction.guild.name}'s`)} starboard!`,
+                        name: `Use the buttons below to edit the settings for ${bold(
+                          `${interaction.guild.name}'s`
+                        )} starboard!`,
                         value: [
-                          `**Stars Required:** ${bold(starboard?.starsRequired?.toString()!)} ${starboard?.starsRequired === 5 ? "(Default)" : ""}`,
-                          `**Channel:** ${starboard?.channelId ? `<#${starboard.channelId}>` : "Not set"}`,
+                          `**Stars Required:** ${bold(
+                            starboard?.starsRequired?.toString()!
+                          )} ${
+                            starboard?.starsRequired === 5 ? "(Default)" : ""
+                          }`,
+                          `**Channel:** ${
+                            starboard?.channelId
+                              ? `<#${starboard.channelId}>`
+                              : "Not set"
+                          }`,
                         ].join("\n"),
                       },
                     ])
@@ -427,7 +450,9 @@ export class SettingsCommand extends Command {
                   })
                   .setColor("Blue")
                   .setDescription(
-                    `Successfully ${bold("enabled")} the ${name} system for \`${interaction.guild!.name}\``
+                    `Successfully ${bold("enabled")} the ${name} system for \`${
+                      interaction.guild!.name
+                    }\``
                   ),
               ],
               components: [goBackRow],
@@ -450,7 +475,7 @@ export class SettingsCommand extends Command {
             }
 
             if (name === "modlog" || name == "auditlog" || name === "welcome") {
-              name = name + "Id";
+              name += "Id";
               data = {
                 logging: {
                   update: {
@@ -491,7 +516,11 @@ export class SettingsCommand extends Command {
                   })
                   .setColor("Blue")
                   .setDescription(
-                    `Successfully ${bold("disabled")} the ${name.endsWith("Id") ? name.split("Id")[0] : name} ${name.endsWith("Id") ? "channel" : "system"} for \`${interaction.guild!.name}\``
+                    `Successfully ${bold("disabled")} the ${
+                      name.endsWith("Id") ? name.split("Id")[0] : name
+                    } ${name.endsWith("Id") ? "channel" : "system"} for \`${
+                      interaction.guild!.name
+                    }\``
                   ),
               ],
               components: [goBackRow],
@@ -499,7 +528,7 @@ export class SettingsCommand extends Command {
           }
 
           if (id === "exit") {
-            collector.emit("dispose", componentInteraction);
+            collector.stop();
           }
         }
 
@@ -618,7 +647,9 @@ export class SettingsCommand extends Command {
           iconURL: interaction.user.displayAvatarURL(),
         })
         .setDescription(
-          `Run the \`/settings\` command again to change the settings for \`${interaction.guild!.name}\``
+          `Run the \`/settings\` command again to change the settings for \`${
+            interaction.guild!.name
+          }\``
         )
         .setColor("Blue");
 

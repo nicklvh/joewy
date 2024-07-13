@@ -1,15 +1,22 @@
-import { ChannelTypeNames } from "../../types/index.js";
-import { ApplyOptions } from "@sapphire/decorators";
+import { ChannelTypeNames, logChecks, LoggingTypes } from "../../utils";
 import { Events, Listener } from "@sapphire/framework";
 import { EmbedBuilder, channelMention, type GuildChannel } from "discord.js";
 
-@ApplyOptions<Listener.Options>({
-  event: Events.ChannelDelete,
-})
 export class ChannelDeleteListener extends Listener {
+  public constructor(
+    context: Listener.LoaderContext,
+    options: Listener.Options
+  ) {
+    super(context, {
+      ...options,
+      event: Events.ChannelDelete,
+    });
+  }
+
   public async run(channel: GuildChannel) {
-    const auditlogChannel = await this.container.helpers.auditlogChecks(
-      channel.guild
+    const auditlogChannel = await logChecks(
+      channel.guild,
+      LoggingTypes.AUDITLOG
     );
     if (!auditlogChannel) return;
 

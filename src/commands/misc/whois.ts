@@ -1,23 +1,28 @@
 import { Command } from "@sapphire/framework";
-import { ApplyOptions } from "@sapphire/decorators";
 import { EmbedBuilder } from "discord.js";
 
-@ApplyOptions<Command.Options>({
-  name: "whois",
-  description: "shows information about a user",
-})
 export class WhoisCommand extends Command {
+  public constructor(context: Command.LoaderContext, options: Command.Options) {
+    super(context, {
+      ...options,
+      name: "whois",
+      description: "shows information about a user",
+    });
+  }
+
   public override registerApplicationCommands(registry: Command.Registry) {
-    registry.registerChatInputCommand((builder) =>
-      builder
-        .setName(this.name)
-        .setDescription(this.description)
-        .addUserOption((option) =>
-          option
-            .setName("user")
-            .setDescription("the user to show information about")
-            .setRequired(false)
-        )
+    registry.registerChatInputCommand(
+      (builder) =>
+        builder
+          .setName(this.name)
+          .setDescription(this.description)
+          .addUserOption((option) =>
+            option
+              .setName("user")
+              .setDescription("the user to show information about")
+              .setRequired(false)
+          ),
+      { idHints: ["1171934682846330916"] }
     );
   }
 

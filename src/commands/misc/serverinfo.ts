@@ -1,5 +1,4 @@
 import { Command, CommandOptionsRunTypeEnum } from "@sapphire/framework";
-import { ApplyOptions } from "@sapphire/decorators";
 import {
   ChannelType,
   EmbedBuilder,
@@ -9,15 +8,20 @@ import {
   time,
 } from "discord.js";
 
-@ApplyOptions<Command.Options>({
-  name: "serverinfo",
-  description: "shows information about the server",
-  runIn: CommandOptionsRunTypeEnum.GuildAny,
-})
 export class ServerInfoCommand extends Command {
+  public constructor(context: Command.LoaderContext, options: Command.Options) {
+    super(context, {
+      ...options,
+      name: "serverinfo",
+      description: "shows information about the server",
+      runIn: CommandOptionsRunTypeEnum.GuildAny,
+    });
+  }
+
   public override registerApplicationCommands(registry: Command.Registry) {
-    registry.registerChatInputCommand((builder) =>
-      builder.setName(this.name).setDescription(this.description)
+    registry.registerChatInputCommand(
+      (builder) => builder.setName(this.name).setDescription(this.description),
+      { idHints: ["1171934681726468106"] }
     );
   }
 
@@ -39,49 +43,22 @@ export class ServerInfoCommand extends Command {
     const generalContent = [
       `${bold("❯ Name:")} ${inlineCode(interaction.guild.name)}`,
       `${bold("❯ ID:")} ${inlineCode(interaction.guildId)}`,
-      `${bold("❯ Owner:")} ${inlineCode(owner!.user.tag)} (${inlineCode(
-        interaction.guild.ownerId
-      )})`,
+      `${bold("❯ Owner:")} ${inlineCode(owner!.user.tag)} (${inlineCode(interaction.guild.ownerId)})`,
       `${bold("❯ Boost Tier:")} ${inlineCode(premiumTier)}`,
-      `${bold("❯ Time Created:")} ${time(
-        Math.floor(interaction.guild.createdTimestamp) / 1000,
-        TimestampStyles.ShortDateTime
-      )}`,
+      `${bold("❯ Time Created:")} ${time(Math.floor(interaction.guild.createdTimestamp) / 1000, TimestampStyles.ShortDateTime)}`,
     ];
 
     const statisticsContent = [
       `${bold("❯ Role Count:")} ${inlineCode(`${roles.length}`)}`,
       `${bold("❯ Emoji Count:")} ${inlineCode(`${emojis.size}`)}`,
-      `${bold("❯ Regular Emoji Count:")} ${inlineCode(
-        `${emojis.filter((emoji) => !emoji.animated).size}`
-      )}`,
-      `${bold("❯ Animated Emoji Count:")} ${inlineCode(
-        `${emojis.filter((emoji) => emoji.animated).size}`
-      )}`,
-      `${bold("❯ Member Count:")} ${inlineCode(
-        `${interaction.guild.memberCount}`
-      )}`,
-      `${bold("❯ Humans:")} ${inlineCode(
-        `${members.filter((member) => !member.user.bot).size}`
-      )}`,
-      `${bold("❯ Bots:")} ${inlineCode(
-        `${members.filter((member) => member.user.bot).size}`
-      )}`,
-      `${bold("❯ Text Channels:")} ${inlineCode(
-        `${
-          channels.filter((channel) => channel.type === ChannelType.GuildText)
-            .size
-        }`
-      )}`,
-      `${bold("❯ Voice Channels:")} ${inlineCode(
-        `${
-          channels.filter((channel) => channel.type === ChannelType.GuildVoice)
-            .size
-        }`
-      )}`,
-      `${bold("❯ Boost Count:")} ${inlineCode(
-        `${interaction.guild.premiumSubscriptionCount || "0"}`
-      )}}`,
+      `${bold("❯ Regular Emoji Count:")} ${inlineCode(`${emojis.filter((emoji) => !emoji.animated).size}`)}`,
+      `${bold("❯ Animated Emoji Count:")} ${inlineCode(`${emojis.filter((emoji) => emoji.animated).size}`)}`,
+      `${bold("❯ Member Count:")} ${inlineCode(`${interaction.guild.memberCount}`)}`,
+      `${bold("❯ Humans:")} ${inlineCode(`${members.filter((member) => !member.user.bot).size}`)}`,
+      `${bold("❯ Bots:")} ${inlineCode(`${members.filter((member) => member.user.bot).size}`)}`,
+      `${bold("❯ Text Channels:")} ${inlineCode(`${channels.filter((channel) => channel.type === ChannelType.GuildText).size}`)}`,
+      `${bold("❯ Voice Channels:")} ${inlineCode(`${channels.filter((channel) => channel.type === ChannelType.GuildVoice).size}`)}`,
+      `${bold("❯ Boost Count:")} ${inlineCode(`${interaction.guild.premiumSubscriptionCount || "0"}`)}}`,
     ];
 
     return interaction.reply({

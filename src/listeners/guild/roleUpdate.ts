@@ -1,13 +1,20 @@
-import { ApplyOptions } from "@sapphire/decorators";
 import { Events, Listener } from "@sapphire/framework";
 import { EmbedBuilder, roleMention, type Role } from "discord.js";
+import { logChecks, LoggingTypes } from "../../utils";
 
-@ApplyOptions<Listener.Options>({
-  event: Events.GuildRoleUpdate,
-})
 export class RoleUpdateListener extends Listener {
+  public constructor(
+    context: Listener.LoaderContext,
+    options: Listener.Options
+  ) {
+    super(context, {
+      ...options,
+      event: Events.GuildRoleUpdate,
+    });
+  }
+
   public async run(oldRole: Role, newRole: Role) {
-    const channel = await this.container.helpers.auditlogChecks(oldRole.guild);
+    const channel = await logChecks(oldRole.guild, LoggingTypes.AUDITLOG);
     if (!channel) return;
 
     const embed = new EmbedBuilder()

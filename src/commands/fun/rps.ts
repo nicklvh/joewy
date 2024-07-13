@@ -1,37 +1,42 @@
 import { Command } from "@sapphire/framework";
-import { ApplyOptions } from "@sapphire/decorators";
 import { EmbedBuilder } from "discord.js";
 
-@ApplyOptions<Command.Options>({
-  name: "rps",
-  description: "will it be: rock, paper, or scissors? 🤔",
-})
 export class RockPaperScissorsCommand extends Command {
+  public constructor(context: Command.LoaderContext, options: Command.Options) {
+    super(context, {
+      ...options,
+      name: "rps",
+      description: "will it be: rock, paper, or scissors? 🤔",
+    });
+  }
+
   public override registerApplicationCommands(registry: Command.Registry) {
-    registry.registerChatInputCommand((builder) =>
-      builder
-        .setName(this.name)
-        .setDescription(this.description)
-        .addStringOption((option) =>
-          option
-            .setName("choice")
-            .setDescription("your choice of rock, paper, or scissors")
-            .setRequired(true)
-            .setChoices(
-              {
-                name: "Rock",
-                value: "Rock",
-              },
-              {
-                name: "Paper",
-                value: "Paper",
-              },
-              {
-                name: "Scissors",
-                value: "Scissors",
-              }
-            )
-        )
+    registry.registerChatInputCommand(
+      (builder) =>
+        builder
+          .setName(this.name)
+          .setDescription(this.description)
+          .addStringOption((option) =>
+            option
+              .setName("choice")
+              .setDescription("your choice of rock, paper, or scissors")
+              .setRequired(true)
+              .setChoices(
+                {
+                  name: "Rock",
+                  value: "Rock",
+                },
+                {
+                  name: "Paper",
+                  value: "Paper",
+                },
+                {
+                  name: "Scissors",
+                  value: "Scissors",
+                }
+              )
+          ),
+      { idHints: ["1171945619875696672"] }
     );
   }
 
