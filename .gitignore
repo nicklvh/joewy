@@ -1,6 +1,5 @@
 # Environment variables
 .env
-.env.development
 
 node_modules
 dist
