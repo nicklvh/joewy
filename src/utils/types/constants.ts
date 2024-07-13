@@ -1,13 +1,5 @@
-import { ModerationType, type PrismaClient } from "@prisma/client";
+import { ModerationType } from "@prisma/client";
 import { ChannelType } from "discord.js";
-import { Helpers } from "../classes/Helpers.js";
-
-export type APIPetResponse = Array<APIPetInterface>;
-
-export interface APIPetInterface {
-  url: string;
-  message?: string;
-}
 
 export const ModerationTypeNamesPast = {
   [ModerationType.BAN]: "Banned",
@@ -36,10 +28,3 @@ export const ChannelTypeNames = {
   [ChannelType.GuildDirectory]: "Directory",
   [ChannelType.GuildMedia]: "Media",
 };
-
-declare module "@sapphire/pieces" {
-  interface Container {
-    prisma: PrismaClient;
-    helpers: Helpers;
-  }
-}
