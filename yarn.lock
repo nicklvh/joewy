@@ -294,9 +294,9 @@ __metadata:
   linkType: hard
 
 "@sapphire/fetch@npm:^3.0.2":
-  version: 3.0.2
-  resolution: "@sapphire/fetch@npm:3.0.2"
-  checksum: 10c0/c6d14fcfde4cf968204c2bc02f80ffe84bffc54d8673d619b3a739e084f9dd8390719f689100698b211de8a170a2eca2e905222ea366644b0ebb0af3f176040d
+  version: 3.0.3
+  resolution: "@sapphire/fetch@npm:3.0.3"
+  checksum: 10c0/b015de8e112889429cbd855efbd90aab0d51006462f6f48513995c5d095ca1dbc0f3a330a8937978d728a63a6b3511a40478184cdd8810f49f7d2d6bae1e6870
   languageName: node
   linkType: hard
 
