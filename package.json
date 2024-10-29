@@ -30,7 +30,7 @@
   "devDependencies": {
     "@sapphire/eslint-config": "^5.0.5",
     "@sapphire/ts-config": "^5.0.1",
-    "@types/node": "^20.14.10",
+    "@types/node": "^22.0.0",
     "prisma": "^5.16.2",
     "typescript": "~5.4.5"
   },
