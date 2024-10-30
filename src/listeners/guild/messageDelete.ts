@@ -1,18 +1,12 @@
 import { Events, Listener } from "@sapphire/framework";
 import { EmbedBuilder, type Message } from "discord.js";
 import { logChecks, LoggingTypes } from "../../utils";
+import { ApplyOptions } from "@sapphire/decorators";
 
+@ApplyOptions<Listener.Options>({
+    event: Events.MessageDelete,
+})
 export class MessageDeleteListener extends Listener {
-  public constructor(
-    context: Listener.LoaderContext,
-    options: Listener.Options
-  ) {
-    super(context, {
-      ...options,
-      event: Events.MessageDelete,
-    });
-  }
-
   public async run(message: Message<true>) {
     const channel = await logChecks(message.guild, LoggingTypes.AUDITLOG);
     if (!channel) return;

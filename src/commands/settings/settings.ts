@@ -11,18 +11,15 @@ import {
   bold,
 } from "discord.js";
 import { getGuild } from "../../utils";
+import { ApplyOptions } from "@sapphire/decorators";
 
+@ApplyOptions<Command.Options>({
+    name: "settings",
+    description: "change the settings of the bot for the current server",
+    requiredUserPermissions: ["ManageGuild"],
+    runIn: CommandOptionsRunTypeEnum.GuildAny,
+})
 export class SettingsCommand extends Command {
-  public constructor(context: Command.LoaderContext, options: Command.Options) {
-    super(context, {
-      ...options,
-      name: "settings",
-      description: "change the settings of the bot for the current server",
-      requiredUserPermissions: ["ManageGuild"],
-      runIn: CommandOptionsRunTypeEnum.GuildAny,
-    });
-  }
-
   public override registerApplicationCommands(registry: Command.Registry) {
     registry.registerChatInputCommand(
       (builder) =>

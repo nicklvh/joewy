@@ -4,18 +4,12 @@ import type {
   ContextMenuCommandInteraction,
   Message,
 } from "discord.js";
+import { ApplyOptions } from "@sapphire/decorators";
 
+@ApplyOptions<AllFlowsPrecondition.Options>({
+  position: 20
+})
 export class GuildBannedPrecondition extends AllFlowsPrecondition {
-  public constructor(
-    context: AllFlowsPrecondition.LoaderContext,
-    options: AllFlowsPrecondition.Options
-  ) {
-    super(context, {
-      ...options,
-      position: 20,
-    });
-  }
-
   public override chatInputRun(interaction: ChatInputCommandInteraction) {
     return this.checkBanned(interaction.guildId);
   }

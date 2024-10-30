@@ -1,16 +1,13 @@
 import { Command } from "@sapphire/framework";
 import { EmbedBuilder, type ImageExtension, type ImageSize } from "discord.js";
+import { ApplyOptions } from "@sapphire/decorators";
 
+@ApplyOptions<Command.Options>({
+    name: "avatar",
+    description: "shows a user's avatar",
+})
 export class AvatarCommand extends Command {
-  public constructor(context: Command.LoaderContext, options: Command.Options) {
-    super(context, {
-      ...options,
-      name: "avatar",
-      description: "shows a user's avatar",
-    });
-  }
-
-  public override registerApplicationCommands(registry: Command.Registry) {
+    public override registerApplicationCommands(registry: Command.Registry) {
     registry.registerChatInputCommand(
       (builder) =>
         builder

@@ -1,18 +1,15 @@
 import { Command, CommandOptionsRunTypeEnum } from "@sapphire/framework";
 import { EmbedBuilder, PermissionFlagsBits } from "discord.js";
+import { ApplyOptions } from "@sapphire/decorators";
 
+@ApplyOptions<Command.Options>({
+  name: "setnick",
+  description: "set the nickname of a user",
+  requiredClientPermissions: [PermissionFlagsBits.ManageNicknames],
+  requiredUserPermissions: [PermissionFlagsBits.ManageNicknames],
+  runIn: CommandOptionsRunTypeEnum.GuildAny,
+})
 export class SetNickCommand extends Command {
-  public constructor(context: Command.LoaderContext, options: Command.Options) {
-    super(context, {
-      ...options,
-      name: "setnick",
-      description: "set the nickname of a user",
-      requiredClientPermissions: [PermissionFlagsBits.ManageNicknames],
-      requiredUserPermissions: [PermissionFlagsBits.ManageNicknames],
-      runIn: CommandOptionsRunTypeEnum.GuildAny,
-    });
-  }
-
   public override registerApplicationCommands(registry: Command.Registry) {
     registry.registerChatInputCommand(
       (builder) =>

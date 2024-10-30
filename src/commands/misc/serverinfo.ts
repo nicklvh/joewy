@@ -7,17 +7,14 @@ import {
   inlineCode,
   time,
 } from "discord.js";
+import { ApplyOptions } from "@sapphire/decorators";
 
+@ApplyOptions<Command.Options>({
+  name: "serverinfo",
+  description: "shows information about the server",
+  runIn: CommandOptionsRunTypeEnum.GuildAny,
+})
 export class ServerInfoCommand extends Command {
-  public constructor(context: Command.LoaderContext, options: Command.Options) {
-    super(context, {
-      ...options,
-      name: "serverinfo",
-      description: "shows information about the server",
-      runIn: CommandOptionsRunTypeEnum.GuildAny,
-    });
-  }
-
   public override registerApplicationCommands(registry: Command.Registry) {
     registry.registerChatInputCommand(
       (builder) => builder.setName(this.name).setDescription(this.description),

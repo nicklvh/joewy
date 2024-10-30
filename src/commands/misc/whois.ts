@@ -1,15 +1,12 @@
 import { Command } from "@sapphire/framework";
 import { EmbedBuilder } from "discord.js";
+import { ApplyOptions } from "@sapphire/decorators";
 
+@ApplyOptions<Command.Options>({
+  name: "whois",
+  description: "shows information about a user",
+})
 export class WhoisCommand extends Command {
-  public constructor(context: Command.LoaderContext, options: Command.Options) {
-    super(context, {
-      ...options,
-      name: "whois",
-      description: "shows information about a user",
-    });
-  }
-
   public override registerApplicationCommands(registry: Command.Registry) {
     registry.registerChatInputCommand(
       (builder) =>

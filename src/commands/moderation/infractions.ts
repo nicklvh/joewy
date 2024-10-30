@@ -9,19 +9,16 @@ import {
 import { PaginatedMessage } from "@sapphire/discord.js-utilities";
 import { chunk } from "@sapphire/utilities";
 import { ModerationTypeNamesPresent } from "../../utils";
+import { ApplyOptions } from "@sapphire/decorators";
 
+@ApplyOptions<Command.Options>({
+  name: "infractions",
+  description:
+      "show all of a members infractions: warns/bans/mutes/kicks...",
+  requiredUserPermissions: [PermissionFlagsBits.ManageMessages],
+  runIn: CommandOptionsRunTypeEnum.GuildAny,
+})
 export class InfractionsCommand extends Command {
-  public constructor(context: Command.LoaderContext, options: Command.Options) {
-    super(context, {
-      ...options,
-      name: "infractions",
-      description:
-        "show all of a members infractions, warns/bans/mutes/kicks...",
-      requiredUserPermissions: [PermissionFlagsBits.ManageMessages],
-      runIn: CommandOptionsRunTypeEnum.GuildAny,
-    });
-  }
-
   public override registerApplicationCommands(registry: Command.Registry) {
     registry.registerChatInputCommand(
       (builder) => {

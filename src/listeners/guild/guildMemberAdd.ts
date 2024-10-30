@@ -1,18 +1,12 @@
 import { Listener, Events } from "@sapphire/framework";
 import { EmbedBuilder, type GuildMember } from "discord.js";
 import { logChecks, LoggingTypes } from "../../utils";
+import { ApplyOptions } from "@sapphire/decorators";
 
+@ApplyOptions<Listener.Options>({
+    event: Events.GuildMemberAdd,
+})
 export class GuildMemberAddListener extends Listener {
-  public constructor(
-    context: Listener.LoaderContext,
-    options: Listener.Options
-  ) {
-    super(context, {
-      ...options,
-      event: Events.GuildMemberAdd,
-    });
-  }
-
   public override async run(member: GuildMember) {
     const welcomeChannel = await logChecks(member.guild, LoggingTypes.WELCOME);
     if (!welcomeChannel) return;

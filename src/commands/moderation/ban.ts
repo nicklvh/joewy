@@ -9,19 +9,16 @@ import {
 } from "discord.js";
 import { ModerationType } from "@prisma/client";
 import { handleInfraction } from "../../utils";
+import { ApplyOptions } from "@sapphire/decorators";
 
+@ApplyOptions<Command.Options>({
+  name: "ban",
+  description: "ban a member 🔨",
+  requiredUserPermissions: [PermissionFlagsBits.BanMembers],
+  requiredClientPermissions: [PermissionFlagsBits.BanMembers],
+  runIn: CommandOptionsRunTypeEnum.GuildAny,
+})
 export class BanCommand extends Command {
-  public constructor(context: Command.LoaderContext, options: Command.Options) {
-    super(context, {
-      ...options,
-      name: "ban",
-      description: "ban a member 🔨",
-      requiredUserPermissions: [PermissionFlagsBits.BanMembers],
-      requiredClientPermissions: [PermissionFlagsBits.BanMembers],
-      runIn: CommandOptionsRunTypeEnum.GuildAny,
-    });
-  }
-
   public override registerApplicationCommands(registry: Command.Registry) {
     registry.registerChatInputCommand(
       (builder) => {

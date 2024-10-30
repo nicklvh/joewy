@@ -5,18 +5,12 @@ import {
   type UserError,
 } from "@sapphire/framework";
 import { ChatInputCommandInteraction } from "discord.js";
+import { ApplyOptions } from "@sapphire/decorators";
 
+@ApplyOptions<Listener.Options>({
+  event: Events.ChatInputCommandDenied,
+})
 export class ChatInputCommandDeniedListener extends Listener {
-  public constructor(
-    context: Listener.LoaderContext,
-    options: Listener.Options
-  ) {
-    super(context, {
-      ...options,
-      event: Events.ChatInputCommandDenied,
-    });
-  }
-
   public async run(
     error: UserError,
     { interaction }: ChatInputCommandDeniedPayload

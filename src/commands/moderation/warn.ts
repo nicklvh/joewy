@@ -9,18 +9,15 @@ import {
 } from "discord.js";
 import { ModerationType } from "@prisma/client";
 import { handleInfraction } from "../../utils";
+import { ApplyOptions } from "@sapphire/decorators";
 
+@ApplyOptions<Command.Options>({
+  name: "warn",
+  description: "warn a member",
+  requiredUserPermissions: [PermissionFlagsBits.ManageGuild],
+  runIn: CommandOptionsRunTypeEnum.GuildAny,
+})
 export class WarnCommand extends Command {
-  public constructor(context: Command.LoaderContext, options: Command.Options) {
-    super(context, {
-      ...options,
-      name: "warn",
-      description: "warn a member",
-      requiredUserPermissions: [PermissionFlagsBits.ManageGuild],
-      runIn: CommandOptionsRunTypeEnum.GuildAny,
-    });
-  }
-
   public override registerApplicationCommands(registry: Command.Registry) {
     registry.registerChatInputCommand(
       (builder) => {

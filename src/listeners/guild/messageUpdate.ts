@@ -1,18 +1,12 @@
 import { Events, Listener } from "@sapphire/framework";
 import { EmbedBuilder, type Message } from "discord.js";
 import { logChecks, LoggingTypes } from "../../utils";
+import { ApplyOptions } from "@sapphire/decorators";
 
+@ApplyOptions<Listener.Options>({
+    event: Events.MessageUpdate,
+})
 export class MessageUpdateListener extends Listener {
-  public constructor(
-    context: Listener.LoaderContext,
-    options: Listener.Options
-  ) {
-    super(context, {
-      ...options,
-      event: Events.MessageUpdate,
-    });
-  }
-
   public async run(oldMessage: Message<true>, newMessage: Message<true>) {
     const channel = await logChecks(oldMessage.guild, LoggingTypes.AUDITLOG);
     if (!channel) return;

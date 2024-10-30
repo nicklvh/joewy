@@ -2,17 +2,14 @@ import { Command } from "@sapphire/framework";
 import { fetch, FetchResultTypes } from "@sapphire/fetch";
 import { EmbedBuilder } from "discord.js";
 import type { APIPetResponse } from "../../utils";
+import { ApplyOptions } from "@sapphire/decorators";
 
+@ApplyOptions<Command.Options>({
+  name: "cat",
+  description: "shows a cat 😽",
+  requiredClientPermissions: ["EmbedLinks"],
+})
 export class CatCommand extends Command {
-  public constructor(context: Command.LoaderContext, options: Command.Options) {
-    super(context, {
-      ...options,
-      name: "cat",
-      description: "shows a cat 😽",
-      requiredClientPermissions: ["EmbedLinks"],
-    });
-  }
-
   public override registerApplicationCommands(registry: Command.Registry) {
     registry.registerChatInputCommand(
       (builder) => builder.setName(this.name).setDescription(this.description),

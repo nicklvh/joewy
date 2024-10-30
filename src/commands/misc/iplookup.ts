@@ -1,16 +1,13 @@
 import { Command } from "@sapphire/framework";
 import { fetch, FetchResultTypes } from "@sapphire/fetch";
 import { EmbedBuilder } from "discord.js";
+import { ApplyOptions } from "@sapphire/decorators";
 
+@ApplyOptions<Command.Options>({
+    name: "iplookup",
+    description: "shows information about an ip address",
+})
 export class ServerInfoCommand extends Command {
-  public constructor(context: Command.LoaderContext, options: Command.Options) {
-    super(context, {
-      ...options,
-      name: "iplookup",
-      description: "shows information about an ip address",
-    });
-  }
-
   public override registerApplicationCommands(registry: Command.Registry) {
     registry.registerChatInputCommand(
       (builder) =>
@@ -44,7 +41,7 @@ export class ServerInfoCommand extends Command {
     }
 
     const res: any = await fetch(
-      `http://ip-api.com/json/${ip}?fields=156435`,
+      `https://ip-api.com/json/${ip}?fields=156435`,
       FetchResultTypes.JSON
     );
 

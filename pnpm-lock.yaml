@@ -14,6 +14,9 @@ importers:
       '@prisma/client':
         specifier: ^5.21.1
         version: 5.21.1(prisma@5.21.1)
+      '@sapphire/decorators':
+        specifier: ^6.1.0
+        version: 6.1.0
       '@sapphire/discord.js-utilities':
         specifier: ^7.3.0
         version: 7.3.0
@@ -26,6 +29,9 @@ importers:
       '@sapphire/plugin-logger':
         specifier: ^4.0.2
         version: 4.0.2
+      '@sapphire/time-utilities':
+        specifier: ^1.7.12
+        version: 1.7.12
       '@sapphire/utilities':
         specifier: ^3.17.0
         version: 3.17.0
@@ -205,6 +211,14 @@ packages:
     resolution: {integrity: sha512-x7zadcfJGxFka1Q3f8gCts1F0xMwCKbZweM85xECGI0hBTeIZJGGCrHgLggihBoprlQ/hBmDR5LKfIPqnmHM3w==}
     engines: {node: '>=v14.0.0', npm: '>=7.0.0'}
 
+  '@sapphire/cron@1.1.3':
+    resolution: {integrity: sha512-Sc0ebl3aD6RNUx4WkWgBOucI/azyVYGBpmO8oLnyCX6GBtF+YSQv8jODQ2sf/szkimhqTXrFYk6pEhA74CGtYg==}
+    engines: {node: '>=v14.0.0', npm: '>=7.0.0'}
+
+  '@sapphire/decorators@6.1.0':
+    resolution: {integrity: sha512-LAml5F/JN1PMm0krKsuZQ7R32DboQZE1A1ULyEK/m1hkxRt/ympYWSBKVwnurDb+kyPD2CaHMOgKgDW2Gt6mwA==}
+    engines: {node: '>=v14.0.0', npm: '>=7.0.0'}
+
   '@sapphire/discord-utilities@3.4.1':
     resolution: {integrity: sha512-DmBrle7uorAJUoh1mJo6aZ5pVjVnAOt9n5DXcZRN3ZWlu28cz0g3X6JYdwjAFdvBHlJIt9nobVPDMNDLUg6O4Q==}
     engines: {node: '>=v14.0.0', npm: '>=7.0.0'}
@@ -259,6 +273,14 @@ packages:
 
   '@sapphire/stopwatch@1.5.2':
     resolution: {integrity: sha512-FrR1GnaEIuXpEfnaz7DjNgoN/Cp8dJ5XFgb8CxXTCAJi8LYk0YsyGSdmmcs9R3ZNZrA1vOSv0dFVLitgiVA36Q==}
+    engines: {node: '>=v14.0.0', npm: '>=7.0.0'}
+
+  '@sapphire/time-utilities@1.7.12':
+    resolution: {integrity: sha512-naqA2CxIseXyAx3OnzB1dW8b9iEsUJHzzlXs4QCBmssQ28nRTfuPSE86c/ELfLGr6f+S0Sca2dxUwTsL5Wf8MQ==}
+    engines: {node: '>=v14.0.0', npm: '>=7.0.0'}
+
+  '@sapphire/timer-manager@1.0.2':
+    resolution: {integrity: sha512-0/wQEeiYeENQNtCVjhLZA2hDFqshNwWRR0ewXXENggTtkSqL7l+FadP1FZIMLRB69vnsZKdL2GuEHDuWayJbAQ==}
     engines: {node: '>=v14.0.0', npm: '>=7.0.0'}
 
   '@sapphire/timestamp@1.0.3':
@@ -1140,6 +1162,14 @@ snapshots:
 
   '@sapphire/async-queue@1.5.3': {}
 
+  '@sapphire/cron@1.1.3':
+    dependencies:
+      '@sapphire/utilities': 3.17.0
+
+  '@sapphire/decorators@6.1.0':
+    dependencies:
+      tslib: 2.8.0
+
   '@sapphire/discord-utilities@3.4.1':
     dependencies:
       discord-api-types: 0.37.103
@@ -1159,7 +1189,7 @@ snapshots:
       '@typescript-eslint/parser': 7.18.0(eslint@8.57.1)(typescript@5.4.5)
       eslint: 8.57.1
       eslint-config-prettier: 9.1.0(eslint@8.57.1)
-      eslint-plugin-prettier: 5.2.1(eslint-config-prettier@9.1.0(eslint@8.57.1))(eslint@8.57.1)(prettier@3.3.3)
+      eslint-plugin-prettier: 5.2.1(eslint-config-prettier@9.1.0(eslint@9.13.0))(eslint@8.57.1)(prettier@3.3.3)
       prettier: 3.3.3
       typescript: 5.4.5
     transitivePeerDependencies:
@@ -1209,6 +1239,15 @@ snapshots:
   '@sapphire/stopwatch@1.5.2':
     dependencies:
       tslib: 2.8.0
+
+  '@sapphire/time-utilities@1.7.12':
+    dependencies:
+      '@sapphire/cron': 1.1.3
+      '@sapphire/duration': 1.1.2
+      '@sapphire/timer-manager': 1.0.2
+      '@sapphire/timestamp': 1.0.3
+
+  '@sapphire/timer-manager@1.0.2': {}
 
   '@sapphire/timestamp@1.0.3': {}
 
@@ -1506,7 +1545,7 @@ snapshots:
     dependencies:
       eslint: 8.57.1
 
-  eslint-plugin-prettier@5.2.1(eslint-config-prettier@9.1.0(eslint@8.57.1))(eslint@8.57.1)(prettier@3.3.3):
+  eslint-plugin-prettier@5.2.1(eslint-config-prettier@9.1.0(eslint@9.13.0))(eslint@8.57.1)(prettier@3.3.3):
     dependencies:
       eslint: 8.57.1
       prettier: 3.3.3

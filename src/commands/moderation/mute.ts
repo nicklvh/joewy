@@ -9,19 +9,16 @@ import {
 } from "discord.js";
 import { ModerationType } from "@prisma/client";
 import { handleInfraction } from "../../utils";
+import { ApplyOptions } from "@sapphire/decorators";
 
+@ApplyOptions<Command.Options>({
+  name: "mute",
+  description: "mute a member",
+  requiredUserPermissions: [PermissionFlagsBits.ModerateMembers],
+  requiredClientPermissions: [PermissionFlagsBits.ModerateMembers],
+  runIn: CommandOptionsRunTypeEnum.GuildAny,
+})
 export class MuteCommand extends Command {
-  public constructor(context: Command.LoaderContext, options: Command.Options) {
-    super(context, {
-      ...options,
-      name: "mute",
-      description: "mute a member",
-      requiredUserPermissions: [PermissionFlagsBits.ModerateMembers],
-      requiredClientPermissions: [PermissionFlagsBits.ModerateMembers],
-      runIn: CommandOptionsRunTypeEnum.GuildAny,
-    });
-  }
-
   public override registerApplicationCommands(registry: Command.Registry) {
     registry.registerChatInputCommand(
       (builder) => {

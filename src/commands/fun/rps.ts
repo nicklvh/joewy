@@ -1,15 +1,12 @@
 import { Command } from "@sapphire/framework";
 import { EmbedBuilder } from "discord.js";
+import { ApplyOptions } from "@sapphire/decorators";
 
+@ApplyOptions<Command.Options>({
+    name: "rps",
+    description: "will it be: rock, paper, or scissors? 🤔",
+})
 export class RockPaperScissorsCommand extends Command {
-  public constructor(context: Command.LoaderContext, options: Command.Options) {
-    super(context, {
-      ...options,
-      name: "rps",
-      description: "will it be: rock, paper, or scissors? 🤔",
-    });
-  }
-
   public override registerApplicationCommands(registry: Command.Registry) {
     registry.registerChatInputCommand(
       (builder) =>

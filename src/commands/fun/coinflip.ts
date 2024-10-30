@@ -1,15 +1,12 @@
 import { Command } from "@sapphire/framework";
 import { EmbedBuilder } from "discord.js";
+import { ApplyOptions } from "@sapphire/decorators";
 
+@ApplyOptions<Command.Options>({
+    name: "coinflip",
+    description: "flip! shows heads or tails 🪙",
+})
 export class CoinflipCommand extends Command {
-  public constructor(context: Command.LoaderContext, options: Command.Options) {
-    super(context, {
-      ...options,
-      name: "coinflip",
-      description: "flip! shows heads or tails 🪙",
-    });
-  }
-
   public override registerApplicationCommands(registry: Command.Registry) {
     registry.registerChatInputCommand(
       (builder) => builder.setName(this.name).setDescription(this.description),

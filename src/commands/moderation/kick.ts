@@ -9,19 +9,16 @@ import {
 } from "discord.js";
 import { ModerationType } from "@prisma/client";
 import { handleInfraction } from "../../utils";
+import { ApplyOptions } from "@sapphire/decorators";
 
+@ApplyOptions<Command.Options>({
+  name: "kick",
+  description: "kick a member",
+  requiredUserPermissions: [PermissionFlagsBits.KickMembers],
+  requiredClientPermissions: [PermissionFlagsBits.KickMembers],
+  runIn: CommandOptionsRunTypeEnum.GuildAny,
+})
 export class KickCommand extends Command {
-  public constructor(context: Command.LoaderContext, options: Command.Options) {
-    super(context, {
-      ...options,
-      name: "kick",
-      description: "kick a member",
-      requiredUserPermissions: [PermissionFlagsBits.KickMembers],
-      requiredClientPermissions: [PermissionFlagsBits.KickMembers],
-      runIn: CommandOptionsRunTypeEnum.GuildAny,
-    });
-  }
-
   public override registerApplicationCommands(registry: Command.Registry) {
     registry.registerChatInputCommand(
       (builder) => {

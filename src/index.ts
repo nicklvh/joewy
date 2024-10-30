@@ -9,6 +9,7 @@ import {
   container,
 } from "@sapphire/framework";
 import { GatewayIntentBits } from "discord.js";
+import { Time } from "@sapphire/time-utilities";
 
 const client = new SapphireClient({
   intents: [
@@ -18,7 +19,7 @@ const client = new SapphireClient({
     GatewayIntentBits.GuildEmojisAndStickers,
   ],
   defaultCooldown: {
-    delay: 3000, // 3 seconds
+    delay: Time.Second * 3,
     limit: 2,
     scope: BucketScope.User,
   },
