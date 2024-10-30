@@ -27,7 +27,7 @@ const client = new SapphireClient({
   },
 });
 
-client.login(process.env.TOKEN);
+void client.login(process.env.TOKEN);
 
 const prisma = new PrismaClient();
 container.prisma = prisma;
@@ -35,3 +35,9 @@ container.prisma = prisma;
 prisma.$connect().then(() => {
   container.logger.info("Connected to the database successfully!");
 });
+
+declare module "@sapphire/pieces" {
+  interface Container {
+    prisma: PrismaClient;
+  }
+}
