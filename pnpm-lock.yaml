@@ -16,7 +16,7 @@ importers:
         version: 5.21.1(prisma@5.21.1)
       '@sapphire/decorators':
         specifier: ^6.1.0
-        version: 6.1.0
+        version: 6.1.1
       '@sapphire/discord.js-utilities':
         specifier: ^7.3.0
         version: 7.3.0
@@ -215,8 +215,8 @@ packages:
     resolution: {integrity: sha512-Sc0ebl3aD6RNUx4WkWgBOucI/azyVYGBpmO8oLnyCX6GBtF+YSQv8jODQ2sf/szkimhqTXrFYk6pEhA74CGtYg==}
     engines: {node: '>=v14.0.0', npm: '>=7.0.0'}
 
-  '@sapphire/decorators@6.1.0':
-    resolution: {integrity: sha512-LAml5F/JN1PMm0krKsuZQ7R32DboQZE1A1ULyEK/m1hkxRt/ympYWSBKVwnurDb+kyPD2CaHMOgKgDW2Gt6mwA==}
+  '@sapphire/decorators@6.1.1':
+    resolution: {integrity: sha512-slUP6KauUC1wRcBcT0Ke7Fva2AGVAmX9/ZgE0K15Jzd0S3v2ggleECayFTWOjql5sZDS5x6mYtpIAxmuRkqE8Q==}
     engines: {node: '>=v14.0.0', npm: '>=7.0.0'}
 
   '@sapphire/discord-utilities@3.4.1':
@@ -931,6 +931,9 @@ packages:
   tslib@2.8.0:
     resolution: {integrity: sha512-jWVzBLplnCmoaTr13V9dYbiQ99wvZRd0vNWaDRg+aVYRcjDF3nDksxFDE/+fkXnKhpnUUkmx5pK/v8mCtLVqZA==}
 
+  tslib@2.8.1:
+    resolution: {integrity: sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w==}
+
   type-check@0.4.0:
     resolution: {integrity: sha512-XleUoc9uwGXqjWwXaUTZAmzMcFZ5858QA2vvx1Ur5xIcixXIP+8LnFDgRplU30us6teqdlskFfu+ae4K79Ooew==}
     engines: {node: '>= 0.8.0'}
@@ -1001,7 +1004,7 @@ snapshots:
       discord-api-types: 0.37.97
       fast-deep-equal: 3.1.3
       ts-mixer: 6.0.4
-      tslib: 2.8.0
+      tslib: 2.8.1
 
   '@discordjs/collection@1.5.3': {}
 
@@ -1166,9 +1169,9 @@ snapshots:
     dependencies:
       '@sapphire/utilities': 3.17.0
 
-  '@sapphire/decorators@6.1.0':
+  '@sapphire/decorators@6.1.1':
     dependencies:
-      tslib: 2.8.0
+      tslib: 2.8.1
 
   '@sapphire/discord-utilities@3.4.1':
     dependencies:
@@ -1189,7 +1192,7 @@ snapshots:
       '@typescript-eslint/parser': 7.18.0(eslint@8.57.1)(typescript@5.4.5)
       eslint: 8.57.1
       eslint-config-prettier: 9.1.0(eslint@8.57.1)
-      eslint-plugin-prettier: 5.2.1(eslint-config-prettier@9.1.0(eslint@9.13.0))(eslint@8.57.1)(prettier@3.3.3)
+      eslint-plugin-prettier: 5.2.1(eslint-config-prettier@9.1.0(eslint@8.57.1))(eslint@8.57.1)(prettier@3.3.3)
       prettier: 3.3.3
       typescript: 5.4.5
     transitivePeerDependencies:
@@ -1218,7 +1221,7 @@ snapshots:
     dependencies:
       '@discordjs/collection': 1.5.3
       '@sapphire/utilities': 3.17.0
-      tslib: 2.8.0
+      tslib: 2.8.1
 
   '@sapphire/plugin-logger@4.0.2':
     dependencies:
@@ -1238,7 +1241,7 @@ snapshots:
 
   '@sapphire/stopwatch@1.5.2':
     dependencies:
-      tslib: 2.8.0
+      tslib: 2.8.1
 
   '@sapphire/time-utilities@1.7.12':
     dependencies:
@@ -1545,7 +1548,7 @@ snapshots:
     dependencies:
       eslint: 8.57.1
 
-  eslint-plugin-prettier@5.2.1(eslint-config-prettier@9.1.0(eslint@9.13.0))(eslint@8.57.1)(prettier@3.3.3):
+  eslint-plugin-prettier@5.2.1(eslint-config-prettier@9.1.0(eslint@8.57.1))(eslint@8.57.1)(prettier@3.3.3):
     dependencies:
       eslint: 8.57.1
       prettier: 3.3.3
@@ -1934,7 +1937,7 @@ snapshots:
   synckit@0.9.2:
     dependencies:
       '@pkgr/core': 0.1.1
-      tslib: 2.8.0
+      tslib: 2.8.1
 
   text-table@0.2.0: {}
 
@@ -1949,6 +1952,8 @@ snapshots:
   ts-mixer@6.0.4: {}
 
   tslib@2.8.0: {}
+
+  tslib@2.8.1: {}
 
   type-check@0.4.0:
     dependencies:
