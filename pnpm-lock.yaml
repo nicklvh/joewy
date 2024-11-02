@@ -22,7 +22,7 @@ importers:
         version: 7.3.0
       '@sapphire/fetch':
         specifier: ^3.0.3
-        version: 3.0.3
+        version: 3.0.4
       '@sapphire/framework':
         specifier: ^5.2.1
         version: 5.2.1
@@ -235,8 +235,8 @@ packages:
     resolution: {integrity: sha512-fDDBEWbeYRDkQdU7yiqJ2OV3okSMAIFqpaez+pS8RpkPUO8SIZdefhPOiW/09Www+1setE3u6ahNz7Eqxv1oyA==}
     engines: {node: '>=v14.0.0', npm: '>=7.0.0'}
 
-  '@sapphire/fetch@3.0.3':
-    resolution: {integrity: sha512-oGfffX3vfO79PnIUKrxwhU7sTT11CRGdQVzEyfL4TqSiZaULJVtCns3PYA2lg+8FkPv7gQYzwB1FpA4bNS4jnQ==}
+  '@sapphire/fetch@3.0.4':
+    resolution: {integrity: sha512-0zpuUqXyRZXUps8c3eEHp1rsYcDxRHSiLwdKXsd2iqexTpO0mIpzgASo03oi90hNjQ4mBduaeL36mJ2FPquzag==}
     engines: {node: '>=v18'}
 
   '@sapphire/framework@5.2.1':
@@ -1189,14 +1189,14 @@ snapshots:
       '@typescript-eslint/parser': 7.18.0(eslint@8.57.1)(typescript@5.4.5)
       eslint: 8.57.1
       eslint-config-prettier: 9.1.0(eslint@8.57.1)
-      eslint-plugin-prettier: 5.2.1(eslint-config-prettier@9.1.0(eslint@9.13.0))(eslint@8.57.1)(prettier@3.3.3)
+      eslint-plugin-prettier: 5.2.1(eslint-config-prettier@9.1.0(eslint@8.57.1))(eslint@8.57.1)(prettier@3.3.3)
       prettier: 3.3.3
       typescript: 5.4.5
     transitivePeerDependencies:
       - '@types/eslint'
       - supports-color
 
-  '@sapphire/fetch@3.0.3': {}
+  '@sapphire/fetch@3.0.4': {}
 
   '@sapphire/framework@5.2.1':
     dependencies:
@@ -1545,7 +1545,7 @@ snapshots:
     dependencies:
       eslint: 8.57.1
 
-  eslint-plugin-prettier@5.2.1(eslint-config-prettier@9.1.0(eslint@9.13.0))(eslint@8.57.1)(prettier@3.3.3):
+  eslint-plugin-prettier@5.2.1(eslint-config-prettier@9.1.0(eslint@8.57.1))(eslint@8.57.1)(prettier@3.3.3):
     dependencies:
       eslint: 8.57.1
       prettier: 3.3.3
