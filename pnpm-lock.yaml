@@ -19,7 +19,7 @@ importers:
         version: 6.1.0
       '@sapphire/discord.js-utilities':
         specifier: ^7.3.0
-        version: 7.3.0
+        version: 7.3.1
       '@sapphire/fetch':
         specifier: ^3.0.3
         version: 3.0.3
@@ -223,12 +223,20 @@ packages:
     resolution: {integrity: sha512-DmBrle7uorAJUoh1mJo6aZ5pVjVnAOt9n5DXcZRN3ZWlu28cz0g3X6JYdwjAFdvBHlJIt9nobVPDMNDLUg6O4Q==}
     engines: {node: '>=v14.0.0', npm: '>=7.0.0'}
 
-  '@sapphire/discord.js-utilities@7.3.0':
-    resolution: {integrity: sha512-SOacsoV8eqPz0YqyXwNNZChNhz09QEhTrrGm+rnG+xZbglODtnoYmEgmLIemr2t6eyxPRerwhakacfyNYGapVg==}
+  '@sapphire/discord-utilities@3.4.2':
+    resolution: {integrity: sha512-UcvznqANszKaYYS56ld4xHIycE0xI4fzrLZ86Z5Dnssn5FTGNJEZpNn6tbB5QeGTTONJRsXbDgqmraWdSMa2gQ==}
+    engines: {node: '>=v14.0.0', npm: '>=7.0.0'}
+
+  '@sapphire/discord.js-utilities@7.3.1':
+    resolution: {integrity: sha512-TTgJUvhw6EWjJUv45AVPVStN34LYvATHz/vsAoUw2KFJTrzIaC45P8c65x83AESzfe9G5x1/gi7lT0o3MR1m8Q==}
     engines: {node: '>=16.6.0', npm: '>=7.0.0'}
 
   '@sapphire/duration@1.1.2':
     resolution: {integrity: sha512-m+DpXedUHdnH3rM6P9Hiyb9dpdXKb8WeTAVIug0QuN8tarQedbymbOor+UFmBfCbKOkoW9HvGK10xDwDvSfKrw==}
+    engines: {node: '>=v14.0.0', npm: '>=7.0.0'}
+
+  '@sapphire/duration@1.1.3':
+    resolution: {integrity: sha512-7GZ34rAR8mDO075tD47LY2S28N3EdyWf5D0jywNnRVSNOX2375mGVAt6MSddelEa2jjU8FfSGMP19jeswtFioQ==}
     engines: {node: '>=v14.0.0', npm: '>=7.0.0'}
 
   '@sapphire/eslint-config@5.0.5':
@@ -293,6 +301,10 @@ packages:
 
   '@sapphire/utilities@3.17.0':
     resolution: {integrity: sha512-bbqjnKKrCgyT0C3+KOjIBzE6z6/v764EFuV7Uxw9WeIdkqGhwepl6tuNEzgiek/JdtEcODaPeX0K1aCt53yCcA==}
+    engines: {node: '>=v14.0.0'}
+
+  '@sapphire/utilities@3.18.0':
+    resolution: {integrity: sha512-C9vxSOYwQywjBn0TPiB9vVyhS7a6Y3GyvON8Q4tvVJYRrr9d2+ad/0jN1r7ObPlYK98YSBi/IoI1B+kWUKGFxg==}
     engines: {node: '>=v14.0.0'}
 
   '@types/estree@1.0.6':
@@ -931,6 +943,9 @@ packages:
   tslib@2.8.0:
     resolution: {integrity: sha512-jWVzBLplnCmoaTr13V9dYbiQ99wvZRd0vNWaDRg+aVYRcjDF3nDksxFDE/+fkXnKhpnUUkmx5pK/v8mCtLVqZA==}
 
+  tslib@2.8.1:
+    resolution: {integrity: sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w==}
+
   type-check@0.4.0:
     resolution: {integrity: sha512-XleUoc9uwGXqjWwXaUTZAmzMcFZ5858QA2vvx1Ur5xIcixXIP+8LnFDgRplU30us6teqdlskFfu+ae4K79Ooew==}
     engines: {node: '>= 0.8.0'}
@@ -1001,7 +1016,7 @@ snapshots:
       discord-api-types: 0.37.97
       fast-deep-equal: 3.1.3
       ts-mixer: 6.0.4
-      tslib: 2.8.0
+      tslib: 2.8.1
 
   '@discordjs/collection@1.5.3': {}
 
@@ -1174,14 +1189,20 @@ snapshots:
     dependencies:
       discord-api-types: 0.37.103
 
-  '@sapphire/discord.js-utilities@7.3.0':
+  '@sapphire/discord-utilities@3.4.2':
     dependencies:
-      '@sapphire/discord-utilities': 3.4.1
-      '@sapphire/duration': 1.1.2
-      '@sapphire/utilities': 3.17.0
-      tslib: 2.8.0
+      discord-api-types: 0.37.100
+
+  '@sapphire/discord.js-utilities@7.3.1':
+    dependencies:
+      '@sapphire/discord-utilities': 3.4.2
+      '@sapphire/duration': 1.1.3
+      '@sapphire/utilities': 3.18.0
+      tslib: 2.8.1
 
   '@sapphire/duration@1.1.2': {}
+
+  '@sapphire/duration@1.1.3': {}
 
   '@sapphire/eslint-config@5.0.5':
     dependencies:
@@ -1189,7 +1210,7 @@ snapshots:
       '@typescript-eslint/parser': 7.18.0(eslint@8.57.1)(typescript@5.4.5)
       eslint: 8.57.1
       eslint-config-prettier: 9.1.0(eslint@8.57.1)
-      eslint-plugin-prettier: 5.2.1(eslint-config-prettier@9.1.0(eslint@9.13.0))(eslint@8.57.1)(prettier@3.3.3)
+      eslint-plugin-prettier: 5.2.1(eslint-config-prettier@9.1.0(eslint@8.57.1))(eslint@8.57.1)(prettier@3.3.3)
       prettier: 3.3.3
       typescript: 5.4.5
     transitivePeerDependencies:
@@ -1202,7 +1223,7 @@ snapshots:
     dependencies:
       '@discordjs/builders': 1.9.0
       '@sapphire/discord-utilities': 3.4.1
-      '@sapphire/discord.js-utilities': 7.3.0
+      '@sapphire/discord.js-utilities': 7.3.1
       '@sapphire/lexure': 1.1.7
       '@sapphire/pieces': 4.3.1
       '@sapphire/ratelimits': 2.4.9
@@ -1218,7 +1239,7 @@ snapshots:
     dependencies:
       '@discordjs/collection': 1.5.3
       '@sapphire/utilities': 3.17.0
-      tslib: 2.8.0
+      tslib: 2.8.1
 
   '@sapphire/plugin-logger@4.0.2':
     dependencies:
@@ -1238,7 +1259,7 @@ snapshots:
 
   '@sapphire/stopwatch@1.5.2':
     dependencies:
-      tslib: 2.8.0
+      tslib: 2.8.1
 
   '@sapphire/time-utilities@1.7.12':
     dependencies:
@@ -1257,6 +1278,8 @@ snapshots:
       typescript: 5.4.5
 
   '@sapphire/utilities@3.17.0': {}
+
+  '@sapphire/utilities@3.18.0': {}
 
   '@types/estree@1.0.6': {}
 
@@ -1545,7 +1568,7 @@ snapshots:
     dependencies:
       eslint: 8.57.1
 
-  eslint-plugin-prettier@5.2.1(eslint-config-prettier@9.1.0(eslint@9.13.0))(eslint@8.57.1)(prettier@3.3.3):
+  eslint-plugin-prettier@5.2.1(eslint-config-prettier@9.1.0(eslint@8.57.1))(eslint@8.57.1)(prettier@3.3.3):
     dependencies:
       eslint: 8.57.1
       prettier: 3.3.3
@@ -1934,7 +1957,7 @@ snapshots:
   synckit@0.9.2:
     dependencies:
       '@pkgr/core': 0.1.1
-      tslib: 2.8.0
+      tslib: 2.8.1
 
   text-table@0.2.0: {}
 
@@ -1949,6 +1972,8 @@ snapshots:
   ts-mixer@6.0.4: {}
 
   tslib@2.8.0: {}
+
+  tslib@2.8.1: {}
 
   type-check@0.4.0:
     dependencies:
