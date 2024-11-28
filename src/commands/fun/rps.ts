@@ -3,8 +3,8 @@ import { EmbedBuilder } from "discord.js";
 import { ApplyOptions } from "@sapphire/decorators";
 
 @ApplyOptions<Command.Options>({
-    name: "rps",
-    description: "will it be: rock, paper, or scissors? 🤔",
+  name: "rps",
+  description: "will it be: rock, paper, or scissors? 🤔",
 })
 export class RockPaperScissorsCommand extends Command {
   public override registerApplicationCommands(registry: Command.Registry) {
@@ -33,7 +33,7 @@ export class RockPaperScissorsCommand extends Command {
                 }
               )
           ),
-      { idHints: ["1171945619875696672"] }
+      {idHints: ["1171945619875696672"]}
     );
   }
 
@@ -62,8 +62,8 @@ export class RockPaperScissorsCommand extends Command {
             iconURL: interaction.user.avatarURL()!,
           })
           .addFields([
-            { name: "You picked", value: `\`${choice}\``, inline: true },
-            { name: "I picked", value: `\`${myChoice}\``, inline: true },
+            {name: "You picked", value: `\`${choice}\``, inline: true},
+            {name: "I picked", value: `\`${myChoice}\``, inline: true},
             {
               name: "Result",
               value: `\`${

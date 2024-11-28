@@ -4,8 +4,8 @@ import {
   ButtonBuilder,
   ButtonStyle,
   EmbedBuilder,
-  PermissionFlagsBits,
   inlineCode,
+  PermissionFlagsBits,
 } from "discord.js";
 import { ModerationType } from "@prisma/client";
 import { handleInfraction } from "../../utils";
@@ -95,7 +95,7 @@ export class MuteCommand extends Command {
           )
           .setDefaultMemberPermissions(PermissionFlagsBits.ModerateMembers);
       },
-      { idHints: ["1180633819628458004"] }
+      {idHints: ["1180633819628458004"]}
     );
   }
 

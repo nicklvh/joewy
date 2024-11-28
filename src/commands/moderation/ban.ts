@@ -4,8 +4,8 @@ import {
   ButtonBuilder,
   ButtonStyle,
   EmbedBuilder,
-  PermissionFlagsBits,
   inlineCode,
+  PermissionFlagsBits,
 } from "discord.js";
 import { ModerationType } from "@prisma/client";
 import { handleInfraction } from "../../utils";
@@ -65,7 +65,7 @@ export class BanCommand extends Command {
           )
           .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers);
       },
-      { idHints: ["1169766210443956264"] }
+      {idHints: ["1169766210443956264"]}
     );
   }
 

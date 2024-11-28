@@ -1,10 +1,10 @@
 import { Events, Listener } from "@sapphire/framework";
-import { EmbedBuilder, roleMention, type Role } from "discord.js";
+import { EmbedBuilder, type Role, roleMention } from "discord.js";
 import { logChecks, LoggingTypes } from "../../utils";
 import { ApplyOptions } from "@sapphire/decorators";
 
 @ApplyOptions<Listener.Options>({
-    event: Events.GuildRoleDelete,
+  event: Events.GuildRoleDelete,
 })
 export class RoleDeleteListener extends Listener {
   public async run(role: Role) {

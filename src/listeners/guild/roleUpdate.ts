@@ -1,10 +1,10 @@
 import { Events, Listener } from "@sapphire/framework";
-import { EmbedBuilder, roleMention, type Role } from "discord.js";
+import { EmbedBuilder, type Role, roleMention } from "discord.js";
 import { logChecks, LoggingTypes } from "../../utils";
 import { ApplyOptions } from "@sapphire/decorators";
 
 @ApplyOptions<Listener.Options>({
-    event: Events.GuildRoleUpdate,
+  event: Events.GuildRoleUpdate,
 })
 export class RoleUpdateListener extends Listener {
   public async run(oldRole: Role, newRole: Role) {
@@ -26,10 +26,10 @@ export class RoleUpdateListener extends Listener {
       ])
       .setColor(newRole.hexColor);
 
-    const colorChanged = newRole.hexColor === oldRole.hexColor ? false : true;
-    const hoistedChanged = newRole.hoist === oldRole.hoist ? false : true;
+    const colorChanged = newRole.hexColor !== oldRole.hexColor;
+    const hoistedChanged = newRole.hoist !== oldRole.hoist;
     const mentionableChanged =
-      newRole.mentionable === oldRole.mentionable ? false : true;
+      newRole.mentionable !== oldRole.mentionable;
 
     if (colorChanged) {
       embed.addFields([

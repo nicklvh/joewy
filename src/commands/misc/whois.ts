@@ -19,7 +19,7 @@ export class WhoisCommand extends Command {
               .setDescription("the user to show information about")
               .setRequired(false)
           ),
-      { idHints: ["1171934682846330916"] }
+      {idHints: ["1171934682846330916"]}
     );
   }
 
@@ -49,7 +49,7 @@ export class WhoisCommand extends Command {
             },
           ])
 
-          .setFooter({ text: `ID: ${user.id}` }),
+          .setFooter({text: `ID: ${user.id}`}),
       ],
     });
   }

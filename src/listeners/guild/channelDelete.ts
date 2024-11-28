@@ -1,10 +1,10 @@
 import { ChannelTypeNames, logChecks, LoggingTypes } from "../../utils";
 import { Events, Listener } from "@sapphire/framework";
-import { EmbedBuilder, channelMention, type GuildChannel } from "discord.js";
+import { channelMention, EmbedBuilder, type GuildChannel } from "discord.js";
 import { ApplyOptions } from "@sapphire/decorators";
 
 @ApplyOptions<Listener.Options>({
-    event: Events.ChannelDelete,
+  event: Events.ChannelDelete,
 })
 export class ChannelDeleteListener extends Listener {
   public async run(channel: GuildChannel) {

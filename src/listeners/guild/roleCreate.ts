@@ -1,10 +1,10 @@
 import { Events, Listener } from "@sapphire/framework";
-import { EmbedBuilder, roleMention, type Role } from "discord.js";
+import { EmbedBuilder, type Role, roleMention } from "discord.js";
 import { logChecks, LoggingTypes } from "../../utils";
 import { ApplyOptions } from "@sapphire/decorators";
 
 @ApplyOptions<Listener.Options>({
-    event: Events.GuildRoleCreate,
+  event: Events.GuildRoleCreate,
 })
 export class RoleCreateListener extends Listener {
   public async run(role: Role) {

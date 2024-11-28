@@ -4,8 +4,8 @@ import {
   ButtonBuilder,
   ButtonStyle,
   EmbedBuilder,
-  PermissionFlagsBits,
   inlineCode,
+  PermissionFlagsBits,
 } from "discord.js";
 import { ModerationType } from "@prisma/client";
 import { handleInfraction } from "../../utils";
@@ -38,7 +38,7 @@ export class WarnCommand extends Command {
           )
           .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild);
       },
-      { idHints: ["1175535354334421063"] }
+      {idHints: ["1175535354334421063"]}
     );
   }
 

@@ -1,7 +1,6 @@
 import { ModerationType } from "@prisma/client";
 import { container } from "@sapphire/framework";
-import { EmbedBuilder } from "discord.js";
-import { ChatInputCommandInteraction, User } from "discord.js";
+import { ChatInputCommandInteraction, EmbedBuilder, User } from "discord.js";
 import { logChecks } from ".";
 import { LoggingTypes, ModerationTypeNamesPast } from "..";
 
@@ -12,7 +11,7 @@ export default async function handleInfraction(
   reason: string,
   days?: number
 ) {
-  const { guild } = interaction;
+  const {guild} = interaction;
   const moderator = interaction.user;
 
   if (days && type === ModerationType.BAN) {
@@ -58,7 +57,8 @@ export default async function handleInfraction(
     .setColor("Blue")
     .setTimestamp();
 
-  await user.send({ embeds: [embed] }).catch(() => {});
+  await user.send({embeds: [embed]}).catch(() => {
+  });
 
   // Send modlog message
   const modlogChannel = await logChecks(guild, LoggingTypes.MODLOG);
@@ -83,5 +83,5 @@ export default async function handleInfraction(
     .setColor("Blue")
     .setTimestamp();
 
-  return modlogChannel.send({ embeds: [modlogEmbed] });
+  return modlogChannel.send({embeds: [modlogEmbed]});
 }

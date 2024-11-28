@@ -1,11 +1,5 @@
 import { Command, CommandOptionsRunTypeEnum } from "@sapphire/framework";
-import {
-  PermissionFlagsBits,
-  TimestampStyles,
-  bold,
-  inlineCode,
-  time,
-} from "discord.js";
+import { bold, inlineCode, PermissionFlagsBits, time, TimestampStyles, } from "discord.js";
 import { PaginatedMessage } from "@sapphire/discord.js-utilities";
 import { chunk } from "@sapphire/utilities";
 import { ModerationTypeNamesPresent } from "../../utils";
@@ -14,7 +8,7 @@ import { ApplyOptions } from "@sapphire/decorators";
 @ApplyOptions<Command.Options>({
   name: "infractions",
   description:
-      "show all of a members infractions: warns/bans/mutes/kicks...",
+    "show all of a members infractions: warns/bans/mutes/kicks...",
   requiredUserPermissions: [PermissionFlagsBits.ManageMessages],
   runIn: CommandOptionsRunTypeEnum.GuildAny,
 })
@@ -33,7 +27,7 @@ export class InfractionsCommand extends Command {
           )
           .setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages);
       },
-      { idHints: ["1175550972718747740"] }
+      {idHints: ["1175550972718747740"]}
     );
   }
 

@@ -1,15 +1,11 @@
 import "@sapphire/plugin-logger/register";
 import { config } from "dotenv";
-config();
 import { PrismaClient } from "@prisma/client";
-import {
-  BucketScope,
-  LogLevel,
-  SapphireClient,
-  container,
-} from "@sapphire/framework";
+import { BucketScope, container, LogLevel, SapphireClient, } from "@sapphire/framework";
 import { GatewayIntentBits } from "discord.js";
 import { Time } from "@sapphire/time-utilities";
+
+config();
 
 const client = new SapphireClient({
   intents: [

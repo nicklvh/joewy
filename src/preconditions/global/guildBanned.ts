@@ -1,9 +1,5 @@
 import { AllFlowsPrecondition } from "@sapphire/framework";
-import type {
-  ChatInputCommandInteraction,
-  ContextMenuCommandInteraction,
-  Message,
-} from "discord.js";
+import type { ChatInputCommandInteraction, ContextMenuCommandInteraction, Message, } from "discord.js";
 import { ApplyOptions } from "@sapphire/decorators";
 
 @ApplyOptions<AllFlowsPrecondition.Options>({
@@ -26,7 +22,7 @@ export class GuildBannedPrecondition extends AllFlowsPrecondition {
     if (!guildId) return this.ok();
 
     const banned = await this.container.prisma.guild.findUnique({
-      where: { id: guildId, banned: true },
+      where: {id: guildId, banned: true},
     });
 
     if (!banned) return this.ok();

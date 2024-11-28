@@ -3,7 +3,7 @@ import type { Client } from "discord.js";
 import { ApplyOptions } from "@sapphire/decorators";
 
 @ApplyOptions<Listener.Options>({
-    event: Events.ClientReady,
+  event: Events.ClientReady,
 })
 export class ReadyListener extends Listener {
   public run(client: Client) {

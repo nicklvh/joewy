@@ -1,17 +1,17 @@
-import { Listener, Events } from "@sapphire/framework";
+import { Events, Listener } from "@sapphire/framework";
 import { EmbedBuilder, type GuildMember } from "discord.js";
 import { logChecks, LoggingTypes } from "../../utils";
 import { ApplyOptions } from "@sapphire/decorators";
 
 @ApplyOptions<Listener.Options>({
-    event: Events.GuildMemberRemove,
+  event: Events.GuildMemberRemove,
 })
 export class GuildMemberRemoveListener extends Listener {
   public override async run(member: GuildMember) {
     const welcomeChannel = await logChecks(member.guild, LoggingTypes.WELCOME);
     if (!welcomeChannel) return;
 
-    const { guild } = member;
+    const {guild} = member;
 
     return welcomeChannel
       .send({
@@ -31,7 +31,7 @@ export class GuildMemberRemoveListener extends Listener {
               },
             ])
             .setColor("Red")
-            .setFooter({ text: `ID: ${member.id}` })
+            .setFooter({text: `ID: ${member.id}`})
             .setTimestamp(),
         ],
       })

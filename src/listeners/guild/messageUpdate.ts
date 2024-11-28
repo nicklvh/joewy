@@ -4,7 +4,7 @@ import { logChecks, LoggingTypes } from "../../utils";
 import { ApplyOptions } from "@sapphire/decorators";
 
 @ApplyOptions<Listener.Options>({
-    event: Events.MessageUpdate,
+  event: Events.MessageUpdate,
 })
 export class MessageUpdateListener extends Listener {
   public async run(oldMessage: Message<true>, newMessage: Message<true>) {

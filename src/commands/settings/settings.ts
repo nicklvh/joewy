@@ -1,6 +1,7 @@
 import { Command, CommandOptionsRunTypeEnum } from "@sapphire/framework";
 import {
   ActionRowBuilder,
+  bold,
   ButtonBuilder,
   ButtonStyle,
   ChannelSelectMenuBuilder,
@@ -8,16 +9,15 @@ import {
   EmbedBuilder,
   MessageComponentInteraction,
   PermissionFlagsBits,
-  bold,
 } from "discord.js";
 import { getGuild } from "../../utils";
 import { ApplyOptions } from "@sapphire/decorators";
 
 @ApplyOptions<Command.Options>({
-    name: "settings",
-    description: "change the settings of the bot for the current server",
-    requiredUserPermissions: ["ManageGuild"],
-    runIn: CommandOptionsRunTypeEnum.GuildAny,
+  name: "settings",
+  description: "change the settings of the bot for the current server",
+  requiredUserPermissions: ["ManageGuild"],
+  runIn: CommandOptionsRunTypeEnum.GuildAny,
 })
 export class SettingsCommand extends Command {
   public override registerApplicationCommands(registry: Command.Registry) {
@@ -27,7 +27,7 @@ export class SettingsCommand extends Command {
           .setName(this.name)
           .setDescription(this.description)
           .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild),
-      { idHints: ["1170836355543212052"] }
+      {idHints: ["1170836355543212052"]}
     );
   }
 
@@ -70,7 +70,7 @@ export class SettingsCommand extends Command {
       exitButton
     );
 
-    const { logging, fun, starboard } = guildInDB;
+    const {logging, fun, starboard} = guildInDB;
 
     const message = await interaction.reply({
       embeds: [
@@ -105,7 +105,7 @@ export class SettingsCommand extends Command {
       async (componentInteraction: MessageComponentInteraction<"cached">) => {
         collector.resetTimer();
 
-        const { logging, fun, starboard } = await getGuild(interaction.guildId);
+        const {logging, fun, starboard} = await getGuild(interaction.guildId);
 
         const goBackButton = new ButtonBuilder()
           .setCustomId("goBack")
@@ -155,7 +155,7 @@ export class SettingsCommand extends Command {
               });
             }
 
-            const { starboard } = await getGuild(interaction.guildId);
+            const {starboard} = await getGuild(interaction.guildId);
 
             const leftButton = new ButtonBuilder()
               .setEmoji("⬅")
@@ -234,7 +234,7 @@ export class SettingsCommand extends Command {
           }
 
           if (id === "logging" || id === "starboard" || id === "fun") {
-            const { logging, starboard } = await getGuild(interaction.guildId);
+            const {logging, starboard} = await getGuild(interaction.guildId);
 
             const toggleButton = new ButtonBuilder()
               .setCustomId(
@@ -650,7 +650,7 @@ export class SettingsCommand extends Command {
         )
         .setColor("Blue");
 
-      await componentInteraction.update({ embeds: [embed], components: [] });
+      await componentInteraction.update({embeds: [embed], components: []});
     });
   }
 }

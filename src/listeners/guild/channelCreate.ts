@@ -4,7 +4,7 @@ import { EmbedBuilder, type GuildChannel } from "discord.js";
 import { ApplyOptions } from "@sapphire/decorators";
 
 @ApplyOptions<Listener.Options>({
-    event: Events.ChannelCreate,
+  event: Events.ChannelCreate,
 })
 export class ChannelCreateListener extends Listener {
   public async run(channel: GuildChannel) {

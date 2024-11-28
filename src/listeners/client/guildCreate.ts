@@ -3,7 +3,7 @@ import type { Guild } from "discord.js";
 import { ApplyOptions } from "@sapphire/decorators";
 
 @ApplyOptions<Listener.Options>({
-    event: Events.GuildCreate,
+  event: Events.GuildCreate,
 })
 export class GuildCreateListener extends Listener {
   public run(guild: Guild) {

@@ -1,12 +1,5 @@
 import { Command, CommandOptionsRunTypeEnum } from "@sapphire/framework";
-import {
-  ChannelType,
-  EmbedBuilder,
-  TimestampStyles,
-  bold,
-  inlineCode,
-  time,
-} from "discord.js";
+import { bold, ChannelType, EmbedBuilder, inlineCode, time, TimestampStyles, } from "discord.js";
 import { ApplyOptions } from "@sapphire/decorators";
 
 @ApplyOptions<Command.Options>({
@@ -18,7 +11,7 @@ export class ServerInfoCommand extends Command {
   public override registerApplicationCommands(registry: Command.Registry) {
     registry.registerChatInputCommand(
       (builder) => builder.setName(this.name).setDescription(this.description),
-      { idHints: ["1171934681726468106"] }
+      {idHints: ["1171934681726468106"]}
     );
   }
 
@@ -78,7 +71,7 @@ export class ServerInfoCommand extends Command {
               inline: true,
             },
           ])
-          .setFooter({ text: `ID: ${interaction.guild.id}` }),
+          .setFooter({text: `ID: ${interaction.guild.id}`}),
       ],
     });
   }

@@ -1,9 +1,4 @@
-import {
-  Events,
-  Listener,
-  type ChatInputCommandDeniedPayload,
-  type UserError,
-} from "@sapphire/framework";
+import { type ChatInputCommandDeniedPayload, Events, Listener, type UserError, } from "@sapphire/framework";
 import { ChatInputCommandInteraction } from "discord.js";
 import { ApplyOptions } from "@sapphire/decorators";
 
@@ -13,7 +8,7 @@ import { ApplyOptions } from "@sapphire/decorators";
 export class ChatInputCommandDeniedListener extends Listener {
   public async run(
     error: UserError,
-    { interaction }: ChatInputCommandDeniedPayload
+    {interaction}: ChatInputCommandDeniedPayload
   ) {
     if (error.identifier === "preconditionCooldown") {
       if (interaction.deferred || interaction.replied) {
@@ -35,7 +30,7 @@ export class ChatInputCommandDeniedListener extends Listener {
     } seconds\``;
 
     response === "reply"
-      ? interaction.reply({ content, ephemeral: true })
-      : interaction.editReply({ content });
+      ? interaction.reply({content, ephemeral: true})
+      : interaction.editReply({content});
   }
 }
