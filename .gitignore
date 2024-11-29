@@ -8,4 +8,4 @@ dist
 # Yarn files
 .yarn/install-state.gz
 .yarn/build-state.yml
-pnpm-lock.yaml
+package-lock.json

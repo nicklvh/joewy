@@ -1,9 +1,7 @@
-import "@sapphire/plugin-logger/register";
 import { config } from "dotenv";
 import { PrismaClient } from "@prisma/client";
 import { BucketScope, container, LogLevel, SapphireClient, } from "@sapphire/framework";
 import { GatewayIntentBits } from "discord.js";
-import { Time } from "@sapphire/time-utilities";
 
 config();
 
@@ -12,25 +10,31 @@ const client = new SapphireClient({
     GatewayIntentBits.Guilds,
     GatewayIntentBits.GuildMembers,
     GatewayIntentBits.GuildMessageReactions,
-    GatewayIntentBits.GuildEmojisAndStickers,
+    GatewayIntentBits.GuildMessages,
+    GatewayIntentBits.GuildModeration,
+    GatewayIntentBits.MessageContent,
   ],
   defaultCooldown: {
-    delay: Time.Second * 3,
+    delay: 3000, // 3 seconds
     limit: 2,
     scope: BucketScope.User,
   },
   logger: {
-    level: LogLevel.Debug,
-  },
+    level: LogLevel.Trace,
+  }
 });
 
-void client.login(process.env.TOKEN);
+client.login(process.env.TOKEN).catch((error) => {
+  container.logger.error(error);
+});
 
 const prisma = new PrismaClient();
 container.prisma = prisma;
 
 prisma.$connect().then(() => {
   container.logger.info("Connected to the database successfully!");
+}).catch((error) => {
+  container.logger.error(error);
 });
 
 declare module "@sapphire/pieces" {

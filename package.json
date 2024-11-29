@@ -14,17 +14,11 @@
   },
   "author": "nicklvh",
   "license": "GPL-3.0-or-later",
-  "eslintConfig": {
-    "extends": "@sapphire/eslint-config"
-  },
   "dependencies": {
     "@prisma/client": "^6.0.0",
     "@sapphire/decorators": "^6.1.1",
     "@sapphire/discord.js-utilities": "^7.3.1",
-    "@sapphire/fetch": "^3.0.5",
     "@sapphire/framework": "^5.3.1",
-    "@sapphire/plugin-logger": "^4.0.2",
-    "@sapphire/time-utilities": "^1.7.14",
     "@sapphire/utilities": "^3.18.1",
     "discord.js": "^14.16.3",
     "dotenv": "^16.4.5"
@@ -34,6 +28,5 @@
     "@types/node": "^22.10.1",
     "prisma": "^6.0.0",
     "typescript": "~5.4.5"
-  },
-  "packageManager": "pnpm@9.12.3+sha512.cce0f9de9c5a7c95bef944169cc5dfe8741abfb145078c0d508b868056848a87c81e626246cb60967cbd7fd29a6c062ef73ff840d96b3c86c40ac92cf4a813ee"
+  }
 }
