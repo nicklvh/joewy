@@ -240,7 +240,7 @@ export class MuteCommand extends Command {
         });
       }
     } catch (error) {
-      console.error(error);
+      this.container.logger.error(error);
 
       await interaction.editReply({
         embeds: [
@@ -251,7 +251,6 @@ export class MuteCommand extends Command {
         components: [],
       });
     }
-    // eslint-disable-next-line no-useless-return
     return;
   }
 }
