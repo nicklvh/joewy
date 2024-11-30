@@ -10,7 +10,7 @@ import {
   MessageComponentInteraction,
   PermissionFlagsBits,
 } from "discord.js";
-import { getGuild } from "../../utils";
+import getGuild from "../../utils/helpers/getGuild";
 import { ApplyOptions } from "@sapphire/decorators";
 
 @ApplyOptions<Command.Options>({
@@ -27,7 +27,6 @@ export class SettingsCommand extends Command {
           .setName(this.name)
           .setDescription(this.description)
           .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild),
-      {idHints: ["1170836355543212052"]}
     );
   }
 

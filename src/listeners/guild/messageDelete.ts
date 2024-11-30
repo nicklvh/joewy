@@ -1,7 +1,8 @@
 import { Events, Listener } from "@sapphire/framework";
 import { EmbedBuilder, type Message } from "discord.js";
-import { logChecks, LoggingTypes } from "../../utils";
 import { ApplyOptions } from "@sapphire/decorators";
+import { LoggingTypes } from "../../utils/types";
+import logChecks from "../../utils/helpers/logChecks";
 
 @ApplyOptions<Listener.Options>({
   event: Events.MessageDelete,

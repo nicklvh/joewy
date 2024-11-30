@@ -49,7 +49,6 @@ export class AvatarCommand extends Command {
                 {name: "gif", value: "gif"}
               )
           ),
-      {idHints: ["1171494645918875718"]}
     );
   }
 

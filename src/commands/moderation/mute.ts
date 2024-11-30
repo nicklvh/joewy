@@ -8,7 +8,7 @@ import {
   PermissionFlagsBits,
 } from "discord.js";
 import { ModerationType } from "@prisma/client";
-import { handleInfraction } from "../../utils";
+import handleInfraction from "../../utils/helpers/handleInfraction";
 import { ApplyOptions } from "@sapphire/decorators";
 
 @ApplyOptions<Command.Options>({
@@ -95,7 +95,6 @@ export class MuteCommand extends Command {
           )
           .setDefaultMemberPermissions(PermissionFlagsBits.ModerateMembers);
       },
-      {idHints: ["1180633819628458004"]}
     );
   }
 
@@ -103,7 +102,7 @@ export class MuteCommand extends Command {
     interaction: Command.ChatInputCommandInteraction<"cached">
   ) {
     const user = interaction.options.getUser("user", true);
-    const duration = interaction.options.getNumber("duration", true);
+    const duration = interaction.options.getInteger("duration", true);
 
     const errorEmbed = new EmbedBuilder()
       .setAuthor({
@@ -133,7 +132,7 @@ export class MuteCommand extends Command {
       return interaction.reply({
         embeds: [
           errorEmbed.setDescription(
-            `An error occured with finding the member.`
+            `An error occurred with finding the member.`
           ),
         ],
       });
@@ -144,7 +143,7 @@ export class MuteCommand extends Command {
         interaction.guild.ownerId !== interaction.user.id) ||
       (interaction.guild.ownerId === user.id &&
         interaction.guild.ownerId !== interaction.user.id) ||
-      member.moderatable
+      !member.moderatable
     ) {
       return interaction.reply({
         embeds: [
@@ -159,10 +158,7 @@ export class MuteCommand extends Command {
     let reason =
       interaction.options.getString("reason", false) ?? "No reason provided";
 
-    reason =
-      reason.length > 100
-        ? (reason = `${reason.substring(0, 100)}...`)
-        : reason;
+    if (reason.length > 100) reason = `${reason.substring(0, 100)}...`;
 
     const cancelButton = new ButtonBuilder()
       .setCustomId("cancel")
@@ -243,7 +239,9 @@ export class MuteCommand extends Command {
           components: [],
         });
       }
-    } catch {
+    } catch (error) {
+      console.error(error);
+
       await interaction.editReply({
         embeds: [
           errorEmbed.setDescription(

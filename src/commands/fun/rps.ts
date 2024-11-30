@@ -4,7 +4,7 @@ import { ApplyOptions } from "@sapphire/decorators";
 
 @ApplyOptions<Command.Options>({
   name: "rps",
-  description: "will it be: rock, paper, or scissors? 🤔",
+  description: "will it be: rock, paper, or scissors?",
 })
 export class RockPaperScissorsCommand extends Command {
   public override registerApplicationCommands(registry: Command.Registry) {
@@ -33,7 +33,6 @@ export class RockPaperScissorsCommand extends Command {
                 }
               )
           ),
-      {idHints: ["1171945619875696672"]}
     );
   }
 

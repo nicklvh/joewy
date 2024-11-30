@@ -8,12 +8,12 @@ import {
   PermissionFlagsBits,
 } from "discord.js";
 import { ModerationType } from "@prisma/client";
-import { handleInfraction } from "../../utils";
+import handleInfraction from "../../utils/helpers/handleInfraction";
 import { ApplyOptions } from "@sapphire/decorators";
 
 @ApplyOptions<Command.Options>({
   name: "ban",
-  description: "ban a member 🔨",
+  description: "ban a member",
   requiredUserPermissions: [PermissionFlagsBits.BanMembers],
   requiredClientPermissions: [PermissionFlagsBits.BanMembers],
   runIn: CommandOptionsRunTypeEnum.GuildAny,
@@ -41,7 +41,7 @@ export class BanCommand extends Command {
             option
               .setName("days")
               .setDescription(
-                "the amount of days to ban the user for, default is a perma ban"
+                "the amount of days to ban the user for, default is a permanent ban"
               )
               .setRequired(false)
               .addChoices(
@@ -65,7 +65,6 @@ export class BanCommand extends Command {
           )
           .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers);
       },
-      {idHints: ["1169766210443956264"]}
     );
   }
 
@@ -102,7 +101,7 @@ export class BanCommand extends Command {
       return interaction.reply({
         embeds: [
           errorEmbed.setDescription(
-            `An error occured with finding the member.`
+            `An error occurred with finding the member.`
           ),
         ],
       });
@@ -128,10 +127,8 @@ export class BanCommand extends Command {
     let reason =
       interaction.options.getString("reason", false) ?? "No reason provided";
 
-    reason =
-      reason.length > 100
-        ? (reason = `${reason.substring(0, 100)}...`)
-        : reason;
+    if (reason.length > 100) reason = `${reason.substring(0, 100)}...`;
+
 
     const cancelButton = new ButtonBuilder()
       .setCustomId("cancel")

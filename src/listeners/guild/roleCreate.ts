@@ -1,6 +1,7 @@
 import { Events, Listener } from "@sapphire/framework";
 import { EmbedBuilder, type Role, roleMention } from "discord.js";
-import { logChecks, LoggingTypes } from "../../utils";
+import { LoggingTypes } from "../../utils/types";
+import logChecks from "../../utils/helpers/logChecks";
 import { ApplyOptions } from "@sapphire/decorators";
 
 @ApplyOptions<Listener.Options>({

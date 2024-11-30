@@ -8,7 +8,7 @@ import {
   PermissionFlagsBits,
 } from "discord.js";
 import { ModerationType } from "@prisma/client";
-import { handleInfraction } from "../../utils";
+import handleInfraction from "../../utils/helpers/handleInfraction";
 import { ApplyOptions } from "@sapphire/decorators";
 
 @ApplyOptions<Command.Options>({
@@ -39,7 +39,6 @@ export class KickCommand extends Command {
           )
           .setDefaultMemberPermissions(PermissionFlagsBits.KickMembers);
       },
-      {idHints: ["1180299697680822332"]}
     );
   }
 
@@ -102,10 +101,7 @@ export class KickCommand extends Command {
     let reason =
       interaction.options.getString("reason", false) ?? "No reason provided";
 
-    reason =
-      reason.length > 100
-        ? (reason = `${reason.substring(0, 100)}...`)
-        : reason;
+    if (reason.length > 100) reason = `${reason.substring(0, 100)}...`;
 
     const cancelButton = new ButtonBuilder()
       .setCustomId("cancel")

@@ -1,8 +1,8 @@
 import { ModerationType } from "@prisma/client";
 import { container } from "@sapphire/framework";
 import { ChatInputCommandInteraction, EmbedBuilder, User } from "discord.js";
-import { logChecks } from ".";
-import { LoggingTypes, ModerationTypeNamesPast } from "..";
+import logChecks from "./logChecks";
+import { LoggingTypes, ModerationTypeNamesPast } from "../types";
 
 export default async function handleInfraction(
   type: ModerationType,

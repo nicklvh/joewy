@@ -1,4 +1,4 @@
-import { ModerationType } from "@prisma/client";
+import { ModerationType, PrismaClient } from "@prisma/client";
 import { ChannelType } from "discord.js";
 
 export const ModerationTypeNamesPast = {
@@ -28,3 +28,15 @@ export const ChannelTypeNames = {
   [ChannelType.GuildDirectory]: "Directory",
   [ChannelType.GuildMedia]: "Media",
 };
+
+export enum LoggingTypes {
+  AUDITLOG = "auditlog",
+  WELCOME = "welcome",
+  MODLOG = "modlog",
+}
+
+declare module "@sapphire/pieces" {
+  interface Container {
+    prisma: PrismaClient;
+  }
+}

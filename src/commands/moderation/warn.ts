@@ -8,7 +8,7 @@ import {
   PermissionFlagsBits,
 } from "discord.js";
 import { ModerationType } from "@prisma/client";
-import { handleInfraction } from "../../utils";
+import handleInfraction from "../../utils/helpers/handleInfraction";
 import { ApplyOptions } from "@sapphire/decorators";
 
 @ApplyOptions<Command.Options>({
@@ -38,7 +38,6 @@ export class WarnCommand extends Command {
           )
           .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild);
       },
-      {idHints: ["1175535354334421063"]}
     );
   }
 
@@ -100,10 +99,7 @@ export class WarnCommand extends Command {
     let reason =
       interaction.options.getString("reason", false) ?? "No reason provided";
 
-    reason =
-      reason.length > 100
-        ? (reason = `${reason.substring(0, 100)}...`)
-        : reason;
+    if (reason.length > 100) reason = `${reason.substring(0, 100)}...`;
 
     const cancelButton = new ButtonBuilder()
       .setCustomId("cancel")

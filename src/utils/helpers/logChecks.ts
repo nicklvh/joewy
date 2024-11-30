@@ -1,7 +1,7 @@
 import { container } from "@sapphire/framework";
 import { Guild, GuildTextBasedChannel } from "discord.js";
-import { getGuild } from ".";
-import { LoggingTypes } from "..";
+import getGuild from "./getGuild";
+import { LoggingTypes } from "../types";
 
 export default async function logChecks(
   guild: Guild,

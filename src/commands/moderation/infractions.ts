@@ -2,7 +2,7 @@ import { Command, CommandOptionsRunTypeEnum } from "@sapphire/framework";
 import { bold, inlineCode, PermissionFlagsBits, time, TimestampStyles, } from "discord.js";
 import { PaginatedMessage } from "@sapphire/discord.js-utilities";
 import { chunk } from "@sapphire/utilities";
-import { ModerationTypeNamesPresent } from "../../utils";
+import { ModerationTypeNamesPresent } from "../../utils/types";
 import { ApplyOptions } from "@sapphire/decorators";
 
 @ApplyOptions<Command.Options>({
@@ -25,9 +25,8 @@ export class InfractionsCommand extends Command {
               .setDescription("the user to show infractions for")
               .setRequired(false)
           )
-          .setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages);
+          .setDefaultMemberPermissions(PermissionFlagsBits.ModerateMembers);
       },
-      {idHints: ["1175550972718747740"]}
     );
   }
 
@@ -55,7 +54,7 @@ export class InfractionsCommand extends Command {
     });
 
     if (!guildInDB) {
-      guildInDB = await this.container.prisma.guild.create({
+       await this.container.prisma.guild.create({
         data: {
           id: interaction.guildId,
         },
