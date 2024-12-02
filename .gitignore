@@ -1,11 +1,10 @@
 # Environment variables
 .env
 
-node_modules
-dist
-.idea
+node_modules/
+dist/
+.idea/
 
 # Yarn files
 .yarn/install-state.gz
 .yarn/build-state.yml
-package-lock.json
