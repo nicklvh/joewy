@@ -1,32 +1,27 @@
 {
-  "name": "joewy",
-  "version": "1.1.0",
-  "description": "Discord bot made in Sapphire, Discord.js and TypeScript",
   "main": "./dist/index.js",
   "scripts": {
     "build": "tsc",
     "start": "tsc && node ."
   },
-  "private": true,
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/nicklvh/joewy.git"
-  },
-  "author": "nicklvh",
-  "license": "GPL-3.0-or-later",
   "dependencies": {
     "@prisma/client": "^6.0.0",
     "@sapphire/decorators": "^6.1.1",
     "@sapphire/discord.js-utilities": "^7.3.1",
     "@sapphire/framework": "^5.3.1",
+    "@sapphire/plugin-logger": "^4.0.2",
+    "@sapphire/plugin-utilities-store": "^2.0.2",
+    "@sapphire/time-utilities": "^1.7.14",
     "@sapphire/utilities": "^3.18.1",
     "discord.js": "^14.16.3",
     "dotenv": "^16.4.5"
   },
   "devDependencies": {
+    "@sapphire/eslint-config": "^5.0.5",
     "@sapphire/ts-config": "^5.0.1",
     "@types/node": "^22.10.1",
     "prisma": "^6.0.0",
     "typescript": "~5.4.5"
-  }
+  },
+  "packageManager": "pnpm@9.14.4+sha512.c8180b3fbe4e4bca02c94234717896b5529740a6cbadf19fa78254270403ea2f27d4e1d46a08a0f56c89b63dc8ebfd3ee53326da720273794e6200fcf0d184ab"
 }
