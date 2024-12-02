@@ -1,11 +1,11 @@
 import { container } from "@sapphire/framework";
 import { Guild, GuildTextBasedChannel } from "discord.js";
 import getGuild from "./getGuild";
-import { LoggingTypes } from "../types";
+import { LoggingTypes } from "../../types/types";
 
 export default async function logChecks(
   guild: Guild,
-  type: LoggingTypes
+  type: LoggingTypes,
 ): Promise<GuildTextBasedChannel | null> {
   const guildInDB = await getGuild(guild.id);
 
@@ -16,8 +16,8 @@ export default async function logChecks(
     .fetch(guildInDB.logging[`${type}Id`]!)
     .catch(() =>
       container.logger.error(
-        `Invalid ${type} channel ID for Guild ${guild.name} (${guild.id})`
-      )
+        `Invalid ${type} channel ID for Guild ${guild.name} (${guild.id})`,
+      ),
     );
 
   if (!loggingChannel || !loggingChannel.isTextBased()) return null;

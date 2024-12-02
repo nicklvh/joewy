@@ -1,13 +1,17 @@
-import { config } from "dotenv";
+import "@sapphire/plugin-logger/register";
+import "@sapphire/plugin-utilities-store/register";
+import "dotenv/config";
 import { PrismaClient } from "@prisma/client";
+import { Time } from "@sapphire/time-utilities";
 import {
+  ApplicationCommandRegistries,
   BucketScope,
   container,
+  LogLevel,
+  RegisterBehavior,
   SapphireClient,
 } from "@sapphire/framework";
 import { GatewayIntentBits, Partials } from "discord.js";
-
-config();
 
 const client = new SapphireClient({
   intents: [
@@ -25,9 +29,12 @@ const client = new SapphireClient({
     Partials.Reaction,
   ],
   defaultCooldown: {
-    delay: 3000, // 3 seconds
+    delay: Time.Second * 3,
     limit: 2,
     scope: BucketScope.User,
+  },
+  logger: {
+    level: LogLevel.Debug,
   },
 });
 
@@ -37,6 +44,10 @@ client.login(process.env.TOKEN).catch((error) => {
 
 const prisma = new PrismaClient();
 container.prisma = prisma;
+
+ApplicationCommandRegistries.setDefaultBehaviorWhenNotIdentical(
+  RegisterBehavior.BulkOverwrite,
+);
 
 prisma
   .$connect()

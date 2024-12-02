@@ -8,7 +8,7 @@ import {
   PermissionFlagsBits,
 } from "discord.js";
 import { ModerationType } from "@prisma/client";
-import handleInfraction from "../../utils/helpers/handleInfraction";
+import handleInfraction from "../../lib/helpers/handleInfraction";
 import { ApplyOptions } from "@sapphire/decorators";
 
 @ApplyOptions<Command.Options>({
@@ -20,56 +20,54 @@ import { ApplyOptions } from "@sapphire/decorators";
 })
 export class BanCommand extends Command {
   public override registerApplicationCommands(registry: Command.Registry) {
-    registry.registerChatInputCommand(
-      (builder) => {
-        builder
-          .setName(this.name)
-          .setDescription(this.description)
-          .addUserOption((option) =>
-            option
-              .setName("user")
-              .setDescription("the user to ban")
-              .setRequired(true)
-          )
-          .addStringOption((option) =>
-            option
-              .setName("reason")
-              .setDescription("the reason for the ban")
-              .setRequired(false)
-          )
-          .addIntegerOption((option) =>
-            option
-              .setName("days")
-              .setDescription(
-                "the amount of days to ban the user for, default is a permanent ban"
-              )
-              .setRequired(false)
-              .addChoices(
-                {
-                  name: "1 day",
-                  value: 1,
-                },
-                {
-                  name: "1 week",
-                  value: 7,
-                },
-                {
-                  name: "2 weeks",
-                  value: 14,
-                },
-                {
-                  name: "1 month",
-                  value: 28,
-                }
-              )
-          )
-          .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers);
-      },
-    );
+    registry.registerChatInputCommand((builder) => {
+      builder
+        .setName(this.name)
+        .setDescription(this.description)
+        .addUserOption((option) =>
+          option
+            .setName("user")
+            .setDescription("the user to ban")
+            .setRequired(true),
+        )
+        .addStringOption((option) =>
+          option
+            .setName("reason")
+            .setDescription("the reason for the ban")
+            .setRequired(false),
+        )
+        .addIntegerOption((option) =>
+          option
+            .setName("days")
+            .setDescription(
+              "the amount of days to ban the user for, default is a permanent ban",
+            )
+            .setRequired(false)
+            .addChoices(
+              {
+                name: "1 day",
+                value: 1,
+              },
+              {
+                name: "1 week",
+                value: 7,
+              },
+              {
+                name: "2 weeks",
+                value: 14,
+              },
+              {
+                name: "1 month",
+                value: 28,
+              },
+            ),
+        )
+        .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers);
+    });
   }
 
   public override async chatInputRun(
-    interaction: Command.ChatInputCommandInteraction<"cached">
+    interaction: Command.ChatInputCommandInteraction<"cached">,
   ) {
     const user = interaction.options.getUser("user", true);
 
@@ -84,7 +82,7 @@ export class BanCommand extends Command {
       return interaction.reply({
         embeds: [
           errorEmbed.setDescription(
-            `You cannot ban yourself, you silly goose!`
+            `You cannot ban yourself, you silly goose!`,
           ),
         ],
         ephemeral: true,
@@ -92,7 +90,7 @@ export class BanCommand extends Command {
     }
 
     const interactionMember = await interaction.guild.members.fetch(
-      interaction.user.id
+      interaction.user.id,
     );
 
     const member = await interaction.guild.members.fetch(user.id);
@@ -101,7 +99,7 @@ export class BanCommand extends Command {
       return interaction.reply({
         embeds: [
           errorEmbed.setDescription(
-            `An error occurred with finding the member.`
+            `An error occurred with finding the member.`,
           ),
         ],
       });
@@ -117,7 +115,7 @@ export class BanCommand extends Command {
       return interaction.reply({
         embeds: [
           errorEmbed.setDescription(
-            `You cannot ban ${user} because they either have a higher or equal positioned role than you or me, or they are the owner of the server!`
+            `You cannot ban ${user} because they either have a higher or equal positioned role than you or me, or they are the owner of the server!`,
           ),
         ],
         ephemeral: true,
@@ -128,7 +126,6 @@ export class BanCommand extends Command {
       interaction.options.getString("reason", false) ?? "No reason provided";
 
     if (reason.length > 100) reason = `${reason.substring(0, 100)}...`;
-
 
     const cancelButton = new ButtonBuilder()
       .setCustomId("cancel")
@@ -142,7 +139,7 @@ export class BanCommand extends Command {
 
     const row = new ActionRowBuilder<ButtonBuilder>().addComponents(
       cancelButton,
-      proceedButton
+      proceedButton,
     );
 
     const message = await interaction.reply({
@@ -153,7 +150,7 @@ export class BanCommand extends Command {
             iconURL: interaction.user.displayAvatarURL(),
           })
           .setDescription(
-            `Are you sure you want to ban ${user}?\n\nThis will be cancelled in 1 minute if you don't respond.`
+            `Are you sure you want to ban ${user}?\n\nThis will be cancelled in 1 minute if you don't respond.`,
           )
           .setColor("Blue"),
       ],
@@ -210,7 +207,7 @@ export class BanCommand extends Command {
       return interaction.editReply({
         embeds: [
           errorEmbed.setDescription(
-            `You took too long to respond, so the ban has been cancelled.`
+            `You took too long to respond, so the ban has been cancelled.`,
           ),
         ],
         components: [],

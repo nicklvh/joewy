@@ -8,36 +8,35 @@ import { ApplyOptions } from "@sapphire/decorators";
 })
 export class RockPaperScissorsCommand extends Command {
   public override registerApplicationCommands(registry: Command.Registry) {
-    registry.registerChatInputCommand(
-      (builder) =>
-        builder
-          .setName(this.name)
-          .setDescription(this.description)
-          .addStringOption((option) =>
-            option
-              .setName("choice")
-              .setDescription("your choice of rock, paper, or scissors")
-              .setRequired(true)
-              .setChoices(
-                {
-                  name: "Rock",
-                  value: "Rock",
-                },
-                {
-                  name: "Paper",
-                  value: "Paper",
-                },
-                {
-                  name: "Scissors",
-                  value: "Scissors",
-                }
-              )
-          ),
+    registry.registerChatInputCommand((builder) =>
+      builder
+        .setName(this.name)
+        .setDescription(this.description)
+        .addStringOption((option) =>
+          option
+            .setName("choice")
+            .setDescription("your choice of rock, paper, or scissors")
+            .setRequired(true)
+            .setChoices(
+              {
+                name: "Rock",
+                value: "Rock",
+              },
+              {
+                name: "Paper",
+                value: "Paper",
+              },
+              {
+                name: "Scissors",
+                value: "Scissors",
+              },
+            ),
+        ),
     );
   }
 
   public override chatInputRun(
-    interaction: Command.ChatInputCommandInteraction
+    interaction: Command.ChatInputCommandInteraction,
   ) {
     const random = Math.random();
     const choice = interaction.options.getString("choice", true);
@@ -61,8 +60,8 @@ export class RockPaperScissorsCommand extends Command {
             iconURL: interaction.user.avatarURL()!,
           })
           .addFields([
-            {name: "You picked", value: `\`${choice}\``, inline: true},
-            {name: "I picked", value: `\`${myChoice}\``, inline: true},
+            { name: "You picked", value: `\`${choice}\``, inline: true },
+            { name: "I picked", value: `\`${myChoice}\``, inline: true },
             {
               name: "Result",
               value: `\`${

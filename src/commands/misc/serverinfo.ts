@@ -1,5 +1,12 @@
 import { Command, CommandOptionsRunTypeEnum } from "@sapphire/framework";
-import { bold, ChannelType, EmbedBuilder, inlineCode, time, TimestampStyles, } from "discord.js";
+import {
+  bold,
+  ChannelType,
+  EmbedBuilder,
+  inlineCode,
+  time,
+  TimestampStyles,
+} from "discord.js";
 import { ApplyOptions } from "@sapphire/decorators";
 
 @ApplyOptions<Command.Options>({
@@ -9,13 +16,13 @@ import { ApplyOptions } from "@sapphire/decorators";
 })
 export class ServerInfoCommand extends Command {
   public override registerApplicationCommands(registry: Command.Registry) {
-    registry.registerChatInputCommand(
-      (builder) => builder.setName(this.name).setDescription(this.description),
+    registry.registerChatInputCommand((builder) =>
+      builder.setName(this.name).setDescription(this.description),
     );
   }
 
   public override async chatInputRun(
-    interaction: Command.ChatInputCommandInteraction<"cached">
+    interaction: Command.ChatInputCommandInteraction<"cached">,
   ) {
     const roles = interaction.guild.roles.cache
       .sort((a, b) => b.position - a.position)
@@ -70,7 +77,7 @@ export class ServerInfoCommand extends Command {
               inline: true,
             },
           ])
-          .setFooter({text: `ID: ${interaction.guild.id}`}),
+          .setFooter({ text: `ID: ${interaction.guild.id}` }),
       ],
     });
   }

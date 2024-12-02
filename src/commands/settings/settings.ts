@@ -10,7 +10,7 @@ import {
   MessageComponentInteraction,
   PermissionFlagsBits,
 } from "discord.js";
-import getGuild from "../../utils/helpers/getGuild";
+import getGuild from "../../lib/helpers/getGuild";
 import { ApplyOptions } from "@sapphire/decorators";
 
 @ApplyOptions<Command.Options>({
@@ -21,17 +21,16 @@ import { ApplyOptions } from "@sapphire/decorators";
 })
 export class SettingsCommand extends Command {
   public override registerApplicationCommands(registry: Command.Registry) {
-    registry.registerChatInputCommand(
-      (builder) =>
-        builder
-          .setName(this.name)
-          .setDescription(this.description)
-          .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild),
+    registry.registerChatInputCommand((builder) =>
+      builder
+        .setName(this.name)
+        .setDescription(this.description)
+        .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild),
     );
   }
 
   public override async chatInputRun(
-    interaction: Command.ChatInputCommandInteraction<"cached">
+    interaction: Command.ChatInputCommandInteraction<"cached">,
   ) {
     const guildInDB = await getGuild(interaction.guildId);
 
@@ -56,7 +55,7 @@ export class SettingsCommand extends Command {
     const mainRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
       loggingButton,
       starboardButton,
-      funButton
+      funButton,
     );
 
     const exitButton = new ButtonBuilder()
@@ -66,10 +65,10 @@ export class SettingsCommand extends Command {
       .setStyle(ButtonStyle.Secondary);
 
     const exitRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
-      exitButton
+      exitButton,
     );
 
-    const {logging, fun, starboard} = guildInDB;
+    const { logging, fun, starboard } = guildInDB;
 
     const message = await interaction.reply({
       embeds: [
@@ -104,7 +103,7 @@ export class SettingsCommand extends Command {
       async (componentInteraction: MessageComponentInteraction<"cached">) => {
         collector.resetTimer();
 
-        const {logging, fun, starboard} = await getGuild(interaction.guildId);
+        const { logging, fun, starboard } = await getGuild(interaction.guildId);
 
         const goBackButton = new ButtonBuilder()
           .setCustomId("goBack")
@@ -113,7 +112,7 @@ export class SettingsCommand extends Command {
           .setStyle(ButtonStyle.Secondary);
 
         const goBackRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
-          goBackButton
+          goBackButton,
         );
 
         const id = componentInteraction.customId;
@@ -154,7 +153,7 @@ export class SettingsCommand extends Command {
               });
             }
 
-            const {starboard} = await getGuild(interaction.guildId);
+            const { starboard } = await getGuild(interaction.guildId);
 
             const leftButton = new ButtonBuilder()
               .setEmoji("⬅")
@@ -184,7 +183,7 @@ export class SettingsCommand extends Command {
               components: [
                 new ActionRowBuilder<ButtonBuilder>().addComponents(
                   leftButton,
-                  rightButton
+                  rightButton,
                 ),
                 goBackRow,
               ],
@@ -204,7 +203,7 @@ export class SettingsCommand extends Command {
             const goBackAndDisableRow =
               new ActionRowBuilder<ButtonBuilder>().addComponents(
                 goBackButton,
-                disableButton
+                disableButton,
               );
 
             const channel = starboard!.channelId;
@@ -220,12 +219,12 @@ export class SettingsCommand extends Command {
                   .setDescription(
                     `Pick a channel below to set as the starboard channel for \`${
                       interaction.guild!.name
-                    }\`${channel ? "\nDisable it by selecting `Disable`" : ""}`
+                    }\`${channel ? "\nDisable it by selecting `Disable`" : ""}`,
                   ),
               ],
               components: [
                 new ActionRowBuilder<ChannelSelectMenuBuilder>().addComponents(
-                  channelSelector
+                  channelSelector,
                 ),
                 channel ? goBackAndDisableRow : goBackRow,
               ],
@@ -233,17 +232,17 @@ export class SettingsCommand extends Command {
           }
 
           if (id === "logging" || id === "starboard" || id === "fun") {
-            const {logging, starboard} = await getGuild(interaction.guildId);
+            const { logging, starboard } = await getGuild(interaction.guildId);
 
             const toggleButton = new ButtonBuilder()
               .setCustomId(
-                `${id}${guildInDB[id]!.enabled ? "Disable" : "Enable"}`
+                `${id}${guildInDB[id]!.enabled ? "Disable" : "Enable"}`,
               )
               .setLabel(guildInDB[id]!.enabled ? "Disable" : "Enable")
               .setStyle(
                 guildInDB[id]!.enabled
                   ? ButtonStyle.Danger
-                  : ButtonStyle.Success
+                  : ButtonStyle.Success,
               );
 
             if (id === "logging") {
@@ -292,7 +291,7 @@ export class SettingsCommand extends Command {
                       .setCustomId("welcome")
                       .setLabel("Welcome")
                       .setStyle(ButtonStyle.Primary),
-                    toggleButton
+                    toggleButton,
                   ),
                   goBackRow,
                 ],
@@ -321,11 +320,11 @@ export class SettingsCommand extends Command {
                     .addFields([
                       {
                         name: `Use the buttons below to edit the settings for ${bold(
-                          `${interaction.guild.name}'s`
+                          `${interaction.guild.name}'s`,
                         )} starboard!`,
                         value: [
                           `**Stars Required:** ${bold(
-                            starboard?.starsRequired?.toString()!
+                            starboard?.starsRequired?.toString()!,
                           )} ${
                             starboard?.starsRequired === 5 ? "(Default)" : ""
                           }`,
@@ -343,7 +342,7 @@ export class SettingsCommand extends Command {
                   new ActionRowBuilder<ButtonBuilder>().addComponents(
                     starsButton,
                     channelSelectButton,
-                    toggleButton
+                    toggleButton,
                   ),
                   goBackRow,
                 ],
@@ -363,13 +362,13 @@ export class SettingsCommand extends Command {
 
             const channelRow =
               new ActionRowBuilder<ChannelSelectMenuBuilder>().addComponents(
-                channelSelector
+                channelSelector,
               );
 
             const goBackAndDisableRow =
               new ActionRowBuilder<ButtonBuilder>().addComponents(
                 goBackButton,
-                disableButton
+                disableButton,
               );
 
             const name = `${id}Id` as "modlogId" | "auditlogId" | "welcomeId";
@@ -387,7 +386,7 @@ export class SettingsCommand extends Command {
                   .setDescription(
                     `Pick a channel below to edit the ${id} channel for \`${
                       interaction.guild!.name
-                    }\`${channel ? "\nDisable it by selecting `Disable`" : ""}`
+                    }\`${channel ? "\nDisable it by selecting `Disable`" : ""}`,
                   ),
               ],
               components: [
@@ -448,7 +447,7 @@ export class SettingsCommand extends Command {
                   .setDescription(
                     `Successfully ${bold("enabled")} the ${name} system for \`${
                       interaction.guild!.name
-                    }\``
+                    }\``,
                   ),
               ],
               components: [goBackRow],
@@ -516,7 +515,7 @@ export class SettingsCommand extends Command {
                       name.endsWith("Id") ? name.split("Id")[0] : name
                     } ${name.endsWith("Id") ? "channel" : "system"} for \`${
                       interaction.guild!.name
-                    }\``
+                    }\``,
                   ),
               ],
               components: [goBackRow],
@@ -542,7 +541,7 @@ export class SettingsCommand extends Command {
                     })
                     .setColor("Blue")
                     .setDescription(
-                      `<#${channelId}> is already set as the starboard channel!`
+                      `<#${channelId}> is already set as the starboard channel!`,
                     ),
                 ],
                 components: [goBackRow],
@@ -572,7 +571,7 @@ export class SettingsCommand extends Command {
                   })
                   .setColor("Blue")
                   .setDescription(
-                    `Successfully set the starboard channel to <#${channelId}>`
+                    `Successfully set the starboard channel to <#${channelId}>`,
                   ),
               ],
               components: [goBackRow],
@@ -597,7 +596,7 @@ export class SettingsCommand extends Command {
                   })
                   .setColor("Blue")
                   .setDescription(
-                    `<#${channelId}> is already set as the ${name} channel!`
+                    `<#${channelId}> is already set as the ${name} channel!`,
                   ),
               ],
               components: [goBackRow],
@@ -627,13 +626,13 @@ export class SettingsCommand extends Command {
                 })
                 .setColor("Blue")
                 .setDescription(
-                  `Successfully set the ${name} channel to <#${channelId}>`
+                  `Successfully set the ${name} channel to <#${channelId}>`,
                 ),
             ],
             components: [goBackRow],
           });
         }
-      }
+      },
     );
 
     collector.on("dispose", async (componentInteraction) => {
@@ -645,11 +644,11 @@ export class SettingsCommand extends Command {
         .setDescription(
           `Run the \`/settings\` command again to change the settings for \`${
             interaction.guild!.name
-          }\``
+          }\``,
         )
         .setColor("Blue");
 
-      await componentInteraction.update({embeds: [embed], components: []});
+      await componentInteraction.update({ embeds: [embed], components: [] });
     });
   }
 }

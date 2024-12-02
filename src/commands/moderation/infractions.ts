@@ -1,37 +1,40 @@
 import { Command, CommandOptionsRunTypeEnum } from "@sapphire/framework";
-import { bold, inlineCode, PermissionFlagsBits, time, TimestampStyles, } from "discord.js";
+import {
+  bold,
+  inlineCode,
+  PermissionFlagsBits,
+  time,
+  TimestampStyles,
+} from "discord.js";
 import { PaginatedMessage } from "@sapphire/discord.js-utilities";
 import { chunk } from "@sapphire/utilities";
-import { ModerationTypeNamesPresent } from "../../utils/types";
+import { ModerationTypeNamesPresent } from "../../types/types";
 import { ApplyOptions } from "@sapphire/decorators";
 
 @ApplyOptions<Command.Options>({
   name: "infractions",
-  description:
-    "show all of a members infractions: warns/bans/mutes/kicks...",
+  description: "show all of a members infractions: warns/bans/mutes/kicks...",
   requiredUserPermissions: [PermissionFlagsBits.ManageMessages],
   runIn: CommandOptionsRunTypeEnum.GuildAny,
 })
 export class InfractionsCommand extends Command {
   public override registerApplicationCommands(registry: Command.Registry) {
-    registry.registerChatInputCommand(
-      (builder) => {
-        builder
-          .setName(this.name)
-          .setDescription(this.description)
-          .addUserOption((option) =>
-            option
-              .setName("user")
-              .setDescription("the user to show infractions for")
-              .setRequired(false)
-          )
-          .setDefaultMemberPermissions(PermissionFlagsBits.ModerateMembers);
-      },
-    );
+    registry.registerChatInputCommand((builder) => {
+      builder
+        .setName(this.name)
+        .setDescription(this.description)
+        .addUserOption((option) =>
+          option
+            .setName("user")
+            .setDescription("the user to show infractions for")
+            .setRequired(false),
+        )
+        .setDefaultMemberPermissions(PermissionFlagsBits.ModerateMembers);
+    });
   }
 
   public override async chatInputRun(
-    interaction: Command.ChatInputCommandInteraction<"cached">
+    interaction: Command.ChatInputCommandInteraction<"cached">,
   ) {
     const user = interaction.options.getUser("user", false) ?? interaction.user;
 
@@ -43,8 +46,8 @@ export class InfractionsCommand extends Command {
             "@sapphire/paginated-messages.previousPage",
             "@sapphire/paginated-messages.stop",
             "@sapphire/paginated-messages.nextPage",
-          ].includes(action.customId)
-      )
+          ].includes(action.customId),
+      ),
     );
 
     let guildInDB = await this.container.prisma.guild.findUnique({
@@ -54,7 +57,7 @@ export class InfractionsCommand extends Command {
     });
 
     if (!guildInDB) {
-       await this.container.prisma.guild.create({
+      await this.container.prisma.guild.create({
         data: {
           id: interaction.guildId,
         },
@@ -92,12 +95,12 @@ export class InfractionsCommand extends Command {
 
         for (const infraction of arr) {
           const moderator = this.container.client.users.cache.get(
-            infraction.moderatorId
+            infraction.moderatorId,
           )!;
 
           const id =
             guildInfractions.findIndex(
-              (inf) => inf.createdAt === infraction.createdAt
+              (inf) => inf.createdAt === infraction.createdAt,
             ) + 1;
 
           embed.addFields([
@@ -105,12 +108,12 @@ export class InfractionsCommand extends Command {
               name: `${ModerationTypeNamesPresent[infraction.type]} - Case #${id}`,
               value: [
                 `${bold("❯ Moderator:")} ${moderator} (${inlineCode(
-                  moderator.id
+                  moderator.id,
                 )})`,
                 `${bold("❯ Reason:")} ${inlineCode(infraction.reason)}`,
                 `${bold("❯ Date:")} ${time(
                   Math.floor(infraction.createdAt.valueOf() / 1000),
-                  TimestampStyles.ShortDateTime
+                  TimestampStyles.ShortDateTime,
                 )}`,
               ].join("\n"),
             },

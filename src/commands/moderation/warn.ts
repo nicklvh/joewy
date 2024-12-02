@@ -8,7 +8,7 @@ import {
   PermissionFlagsBits,
 } from "discord.js";
 import { ModerationType } from "@prisma/client";
-import handleInfraction from "../../utils/helpers/handleInfraction";
+import handleInfraction from "../../lib/helpers/handleInfraction";
 import { ApplyOptions } from "@sapphire/decorators";
 
 @ApplyOptions<Command.Options>({
@@ -19,30 +19,28 @@ import { ApplyOptions } from "@sapphire/decorators";
 })
 export class WarnCommand extends Command {
   public override registerApplicationCommands(registry: Command.Registry) {
-    registry.registerChatInputCommand(
-      (builder) => {
-        builder
-          .setName(this.name)
-          .setDescription(this.description)
-          .addUserOption((option) =>
-            option
-              .setName("user")
-              .setDescription("the user to warn")
-              .setRequired(true)
-          )
-          .addStringOption((option) =>
-            option
-              .setName("reason")
-              .setDescription("the reason for the warn")
-              .setRequired(false)
-          )
-          .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild);
-      },
-    );
+    registry.registerChatInputCommand((builder) => {
+      builder
+        .setName(this.name)
+        .setDescription(this.description)
+        .addUserOption((option) =>
+          option
+            .setName("user")
+            .setDescription("the user to warn")
+            .setRequired(true),
+        )
+        .addStringOption((option) =>
+          option
+            .setName("reason")
+            .setDescription("the reason for the warn")
+            .setRequired(false),
+        )
+        .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild);
+    });
   }
 
   public override async chatInputRun(
-    interaction: Command.ChatInputCommandInteraction<"cached">
+    interaction: Command.ChatInputCommandInteraction<"cached">,
   ) {
     const user = interaction.options.getUser("user", true);
 
@@ -57,7 +55,7 @@ export class WarnCommand extends Command {
       return interaction.reply({
         embeds: [
           errorEmbed.setDescription(
-            `You cannot warn yourself, you silly goose!`
+            `You cannot warn yourself, you silly goose!`,
           ),
         ],
         ephemeral: true,
@@ -65,7 +63,7 @@ export class WarnCommand extends Command {
     }
 
     const interactionMember = await interaction.guild.members.fetch(
-      interaction.user.id
+      interaction.user.id,
     );
 
     const member = await interaction.guild.members.fetch(user.id);
@@ -74,7 +72,7 @@ export class WarnCommand extends Command {
       return interaction.reply({
         embeds: [
           errorEmbed.setDescription(
-            `An error occured with finding the member.`
+            `An error occured with finding the member.`,
           ),
         ],
       });
@@ -89,7 +87,7 @@ export class WarnCommand extends Command {
       return interaction.reply({
         embeds: [
           errorEmbed.setDescription(
-            `You cannot warn ${user} because they either have a higher or equal positioned role than you, or they are the owner of the server!`
+            `You cannot warn ${user} because they either have a higher or equal positioned role than you, or they are the owner of the server!`,
           ),
         ],
         ephemeral: true,
@@ -113,7 +111,7 @@ export class WarnCommand extends Command {
 
     const row = new ActionRowBuilder<ButtonBuilder>().addComponents(
       cancelButton,
-      proceedButton
+      proceedButton,
     );
 
     const message = await interaction.reply({
@@ -124,7 +122,7 @@ export class WarnCommand extends Command {
             iconURL: interaction.user.displayAvatarURL(),
           })
           .setDescription(
-            `Are you sure you want to warn ${user}?\n\nThis will be cancelled in 1 minute if you don't respond.`
+            `Are you sure you want to warn ${user}?\n\nThis will be cancelled in 1 minute if you don't respond.`,
           )
           .setColor("Blue"),
       ],
@@ -177,7 +175,7 @@ export class WarnCommand extends Command {
       await interaction.editReply({
         embeds: [
           errorEmbed.setDescription(
-            `You took too long to respond, so the warn has been cancelled.`
+            `You took too long to respond, so the warn has been cancelled.`,
           ),
         ],
         components: [],

@@ -8,13 +8,13 @@ import { ApplyOptions } from "@sapphire/decorators";
 })
 export class CoinflipCommand extends Command {
   public override registerApplicationCommands(registry: Command.Registry) {
-    registry.registerChatInputCommand(
-      (builder) => builder.setName(this.name).setDescription(this.description),
+    registry.registerChatInputCommand((builder) =>
+      builder.setName(this.name).setDescription(this.description),
     );
   }
 
   public override chatInputRun(
-    interaction: Command.ChatInputCommandInteraction
+    interaction: Command.ChatInputCommandInteraction,
   ) {
     return interaction.reply({
       embeds: [

@@ -8,22 +8,21 @@ import { ApplyOptions } from "@sapphire/decorators";
 })
 export class WhoisCommand extends Command {
   public override registerApplicationCommands(registry: Command.Registry) {
-    registry.registerChatInputCommand(
-      (builder) =>
-        builder
-          .setName(this.name)
-          .setDescription(this.description)
-          .addUserOption((option) =>
-            option
-              .setName("user")
-              .setDescription("the user to show information about")
-              .setRequired(false)
-          ),
+    registry.registerChatInputCommand((builder) =>
+      builder
+        .setName(this.name)
+        .setDescription(this.description)
+        .addUserOption((option) =>
+          option
+            .setName("user")
+            .setDescription("the user to show information about")
+            .setRequired(false),
+        ),
     );
   }
 
   public override async chatInputRun(
-    interaction: Command.ChatInputCommandInteraction
+    interaction: Command.ChatInputCommandInteraction,
   ) {
     const user = interaction.options.getUser("user") ?? interaction.user;
 
@@ -48,7 +47,7 @@ export class WhoisCommand extends Command {
             },
           ])
 
-          .setFooter({text: `ID: ${user.id}`}),
+          .setFooter({ text: `ID: ${user.id}` }),
       ],
     });
   }
