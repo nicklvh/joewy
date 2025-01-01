@@ -1,10 +1,9 @@
-# Joewy <img src="https://i.imgur.com/1NNM5e6.png" alt= "joewy pfp" width="39" height="39" />
+# Joewy <img src="https://i.imgur.com/1NNM5e6.png" alt= "joewy pfp" width="30" height="30" />
 
-**Feature-packed, fast, clean:** Joewy is a discord bot from the future.
+Joewy is a discord bot made with discord.js, it's still in development however we are currently shipping the following features:
 
-Joewy will replace all your bots in your discord server with it's **intense list of features**, such as:
-
-- **Moderation System:** to moderate your server, and stop rule breakers
+- **Basic Moderation System:** to moderate your server, and stop rule breakers
 - **Economy System:** for fun with all your discord members
-- **Pet Commands:** to look at cute animals in awe
 - **Starboard:** show ⭐ messages
+
+Invite it to your server by clicking [here](https://discord.com/oauth2/authorize?client_id=1169630274615783454&permissions=8&integration_type=0&scope=bot)
