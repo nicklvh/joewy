@@ -34,7 +34,7 @@ const client = new SapphireClient({
     scope: BucketScope.User,
   },
   logger: {
-    level: LogLevel.Debug,
+    level: LogLevel.Info,
   },
 });
 

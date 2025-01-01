@@ -22,12 +22,6 @@ export class StarboardUtility extends Utility {
     return starboard;
   }
 
-  public async getStarredMessages(guildId: string) {
-    const starboard = await this.getStarboard(guildId);
-
-    return starboard.starredMessages;
-  }
-
   public async addMessageToDB(guildId: string, messageId: string) {
     return this.container.prisma.starboard.update({
       where: {
@@ -42,7 +36,7 @@ export class StarboardUtility extends Utility {
   }
 
   public async removeMessageFromDB(guildId: string, messageId: string) {
-    const starredMessages = await this.getStarredMessages(guildId);
+    const { starredMessages } = await this.getStarboard(guildId);
 
     await this.container.prisma.starboard.update({
       where: {
