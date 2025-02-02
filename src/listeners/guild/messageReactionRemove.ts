@@ -1,16 +1,11 @@
 import { Events, Listener } from "@sapphire/framework";
 import { ApplyOptions } from "@sapphire/decorators";
-import {
-  EmbedBuilder,
-  GuildTextBasedChannel,
-  MessageReaction,
-  User,
-} from "discord.js";
+import { GuildTextBasedChannel, MessageReaction, User } from "discord.js";
 
 @ApplyOptions<Listener.Options>({
-  event: Events.MessageReactionAdd,
+  event: Events.MessageReactionRemove,
 })
-export class MessageReactionAddListener extends Listener {
+export class MessageReactionRemoveListener extends Listener {
   public async run(messageReaction: MessageReaction, user: User) {
     if (messageReaction.partial) await messageReaction.fetch();
     if (user.partial) await user.fetch();
@@ -28,13 +23,13 @@ export class MessageReactionAddListener extends Listener {
 
     if (
       !starboard.enabled ||
-      messageReaction.count < starboard.starsRequired ||
-      starboard.starredMessages.includes(messageReaction.message.id) ||
+      messageReaction.count > starboard.starsRequired ||
+      !starboard.starredMessages.includes(messageReaction.message.id) ||
       !starboard.channelId
     )
       return;
 
-    await this.container.utilities.starboard.addMessageToDB(
+    await this.container.utilities.starboard.removeMessageFromDB(
       messageReaction.message.guild.id,
       messageReaction.message.id,
     );
@@ -43,17 +38,14 @@ export class MessageReactionAddListener extends Listener {
       .fetch(starboard.channelId)
       .catch(() => null)) as GuildTextBasedChannel;
 
-    const embed = new EmbedBuilder()
-      .setColor("Yellow")
-      .setDescription(
-        messageReaction.message.content
-          ? messageReaction.message.content.substring(0, 512)
-          : "",
-      )
-      .setFooter({
-        text: `⭐ ${messageReaction.count} | ${messageReaction.message.id}`,
-      });
+    const messages = await channel.messages.fetch();
 
-    await channel.send({ embeds: [embed] });
+    const message = messages.find(
+      (m) =>
+        m.embeds[0].footer &&
+        m.embeds[0].footer.text.includes(messageReaction.message.id),
+    );
+
+    if (message) await message.delete();
   }
 }

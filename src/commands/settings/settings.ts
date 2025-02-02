@@ -90,7 +90,7 @@ export class SettingsCommand extends Command {
           ]),
       ],
       components: [mainRow, exitRow],
-      fetchReply: true,
+      withResponse: false,
     });
 
     const collector = message.createMessageComponentCollector({
@@ -324,7 +324,7 @@ export class SettingsCommand extends Command {
                         )} starboard!`,
                         value: [
                           `**Stars Required:** ${bold(
-                            starboard?.starsRequired?.toString()!,
+                            `${starboard?.starsRequired}`,
                           )} ${
                             starboard?.starsRequired === 5 ? "(Default)" : ""
                           }`,
@@ -469,7 +469,11 @@ export class SettingsCommand extends Command {
               };
             }
 
-            if (name === "modlog" || name == "auditlog" || name === "welcome") {
+            if (
+              name === "modlog" ||
+              name === "auditlog" ||
+              name === "welcome"
+            ) {
               name += "Id";
               data = {
                 logging: {

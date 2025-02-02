@@ -1,23 +1,21 @@
 import { Utility } from "@sapphire/plugin-utilities-store";
 import { ApplyOptions } from "@sapphire/decorators";
+import getGuild from "../lib/helpers/getGuild";
 
 @ApplyOptions<Utility.Options>({
   name: "starboard",
 })
 export class StarboardUtility extends Utility {
   public async getStarboard(guildId: string) {
-    let starboard = await this.container.prisma.starboard.findUnique({
-      where: {
-        guildId,
-      },
-    });
+    let starboard = await getGuild(guildId).then((guild) => guild.starboard);
 
-    if (!starboard)
+    if (!starboard) {
       starboard = await this.container.prisma.starboard.create({
         data: {
           guildId,
         },
       });
+    }
 
     return starboard;
   }
