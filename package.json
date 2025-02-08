@@ -5,7 +5,7 @@
     "start": "tsc && node ."
   },
   "dependencies": {
-    "@prisma/client": "^6.1.0",
+    "@prisma/client": "^6.3.1",
     "@sapphire/decorators": "^6.1.1",
     "@sapphire/discord.js-utilities": "^7.3.1",
     "@sapphire/framework": "^5.3.1",
@@ -17,10 +17,9 @@
     "dotenv": "^16.4.7"
   },
   "devDependencies": {
-    "@sapphire/eslint-config": "^5.0.5",
     "@sapphire/ts-config": "^5.0.1",
-    "@types/node": "^22.10.3",
-    "prisma": "^6.1.0",
+    "@types/node": "^22.13.1",
+    "prisma": "^6.3.1",
     "typescript": "~5.4.5"
   }
 }
