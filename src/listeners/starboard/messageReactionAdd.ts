@@ -23,8 +23,39 @@ export class MessageReactionAddListener extends Listener {
       return;
 
     const starboard = await this.container.utilities.starboard.getStarboard(
-      messageReaction.message.guild.id,
+      messageReaction.message.guild.id
     );
+
+    if (
+      starboard.enabled &&
+      starboard.starredMessages.includes(messageReaction.message.id) &&
+      messageReaction.count > starboard.starsRequired && starboard.channelId
+    ) {
+      const channel = (await messageReaction.message.guild.channels
+        .fetch(starboard.channelId)
+        .catch(() => null)) as GuildTextBasedChannel;
+
+      const messages = await channel.messages.fetch();
+      const starredMessage = messages.find((m) =>
+        m.embeds.length
+          ? m.embeds[0].footer?.text?.includes(messageReaction.message.id)
+          : false
+      );
+
+      const embed = new EmbedBuilder()
+      .setColor("Yellow")
+      .setDescription(
+        messageReaction.message.content
+          ? messageReaction.message.content.substring(0, 512)
+          : ""
+      )
+      .setFooter({
+        text: `⭐ ${messageReaction.count} | ${messageReaction.message.id}`,
+      });
+
+      starredMessage?.edit({ embeds: [embed]});
+      return;
+    }
 
     if (
       !starboard.enabled ||
@@ -36,7 +67,7 @@ export class MessageReactionAddListener extends Listener {
 
     await this.container.utilities.starboard.addMessageToDB(
       messageReaction.message.guild.id,
-      messageReaction.message.id,
+      messageReaction.message.id
     );
 
     const channel = (await messageReaction.message.guild.channels
@@ -48,7 +79,7 @@ export class MessageReactionAddListener extends Listener {
       .setDescription(
         messageReaction.message.content
           ? messageReaction.message.content.substring(0, 512)
-          : "",
+          : ""
       )
       .setFooter({
         text: `⭐ ${messageReaction.count} | ${messageReaction.message.id}`,
